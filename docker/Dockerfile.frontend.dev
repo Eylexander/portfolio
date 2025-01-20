@@ -1,0 +1,19 @@
+# syntax=docker/dockerfile:1
+
+#############
+# build-env #
+#############
+
+FROM node:18-buster
+
+WORKDIR /app
+
+COPY . .
+
+RUN apt-get update \
+  && apt-get install openssh-client -y \
+  && apt-get clean
+
+EXPOSE 3000/tcp
+
+ENTRYPOINT ["npm", "run", "dev"]
