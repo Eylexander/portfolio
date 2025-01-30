@@ -7,28 +7,12 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"gopkg.in/mgo.v2/bson"
 )
 
-type Storage interface {
-	doDebug() (*storeResponse, error)
-	getTodoList() ([]Todo, error)
-	addTodoList(todo Todo) error
-	deleteTodoList(id string) error
-	updateTodoList(id string, todo Todo) error
-}
-
-type MongoDBStore struct {
-	db *mongo.Client
-}
-
-type storeResponse struct {
-	Message string `json:"message"`
-}
-
-func newMongoDBStore() (*MongoDBStore, error) {
+func newMongoDBStore(dbName string) (*MongoDBStore, error) {
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found")
 	}
@@ -48,20 +32,12 @@ func newMongoDBStore() (*MongoDBStore, error) {
 	log.Printf("Connected to MongoDB")
 
 	return &MongoDBStore{
-		db: client,
+		db: client.Database(dbName),
 	}, nil
 }
 
 func (s *MongoDBStore) init() error {
-	db := s.db.Database("VirtuBackend")
-
-	// Create the users Database
-	if err := db.CreateCollection(context.TODO(), "todos"); err != nil {
-		return fmt.Errorf("failed to create users collection: %w", err)
-	}
-
-	// Create the debug Collection
-	if err := db.CreateCollection(context.TODO(), "debug"); err != nil {
+	if err := s.db.CreateCollection(context.TODO(), "debug"); err != nil {
 		return fmt.Errorf("failed to create debug collection: %w", err)
 	}
 
@@ -69,47 +45,29 @@ func (s *MongoDBStore) init() error {
 }
 
 func (s *MongoDBStore) doDebug() (*storeResponse, error) {
-	s.db.Database("VirtuBackend").Collection("debug").InsertOne(context.TODO(), map[string]string{"debug": "debug"})
+	if _, err := s.db.Collection("debug").InsertOne(context.TODO(), map[string]string{"debug": "debug"}); err != nil {
+		return nil, fmt.Errorf("failed to insert debug: %w", err)
+	}
+
 	return &storeResponse{Message: "debug"}, nil
 }
 
-func (s *MongoDBStore) getTodoList() ([]Todo, error) {
-	var todos []Todo
-	cursor, err := s.db.Database("VirtuBackend").Collection("todos").Find(context.Background(), bson.M{})
+func (s *MongoDBStore) getDebugs() ([]Debug, error) {
+	cursor, err := s.db.Collection("debug").Find(context.Background(), bson.M{})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to find debugs: %w", err)
 	}
-	defer cursor.Close(context.Background())
+	defer cursor.Close(context.TODO())
 
+	var debugs []Debug
 	for cursor.Next(context.Background()) {
-		var todo Todo
-		if err := cursor.Decode(&todo); err != nil {
-			return nil, err
+		var debug Debug
+		if err := cursor.Decode(&debug); err != nil {
+			return nil, fmt.Errorf("failed to decode debug: %w", err)
 		}
-		todos = append(todos, todo)
+
+		debugs = append(debugs, debug)
 	}
 
-	if err := cursor.Err(); err != nil {
-		return nil, err
-	}
-
-	return todos, nil
-}
-
-func (s *MongoDBStore) addTodoList(todo Todo) error {
-	_, err := s.db.Database("VirtuBackend").Collection("todos").InsertOne(context.TODO(), todo)
-	return err
-}
-
-func (s *MongoDBStore) deleteTodoList(id string) error {
-	_, err := s.db.Database("VirtuBackend").Collection("todos").DeleteOne(context.TODO(), map[string]string{"id": id})
-	return err
-}
-
-func (s *MongoDBStore) updateTodoList(id string, todo Todo) error {
-	update := bson.M{
-		"$set": todo,
-	}
-	_, err := s.db.Database("VirtuBackend").Collection("todos").UpdateOne(context.TODO(), bson.M{"id": id}, update)
-	return err
+	return debugs, nil
 }

@@ -8,10 +8,11 @@ import (
 func main() {
 	addr := "0.0.0.0"
 	port := 8000
+	dbName := "Portfolio"
 
 	address := fmt.Sprintf("%s:%d", addr, port)
 
-	store, err := newMongoDBStore()
+	store, err := newMongoDBStore(dbName)
 	if err != nil {
 		log.Fatal(err)
 	}

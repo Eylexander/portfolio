@@ -12,3 +12,9 @@ docker:
 docker-dev:
 	@(cd backend && bash build.sh -dev)
 	@(cd frontend && bash build.sh -dev)
+
+compose:
+	@docker compose up
+
+compose-b:
+	@docker compose up --build
