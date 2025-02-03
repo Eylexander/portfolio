@@ -14,6 +14,8 @@ RUN apt-get update \
   && apt-get install openssh-client -y \
   && apt-get clean
 
+RUN npm install
+
 EXPOSE 3000/tcp
 
 ENTRYPOINT ["npm", "run", "dev"]

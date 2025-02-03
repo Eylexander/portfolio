@@ -14,7 +14,7 @@ docker-dev:
 	@(cd frontend && bash build.sh -dev)
 
 compose:
-	@docker compose up
+	@docker compose up --no-attach database
 
 compose-b:
-	@docker compose up --build
+	@docker compose up --build --no-attach database
