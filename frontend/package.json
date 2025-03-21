@@ -1,31 +1,56 @@
 {
-  "name": "nuxt-app",
+  "name": "eylexander.xyz",
+  "version": "0.7.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "fmt": "pnpm rome check . --apply-unsafe && pnpm rome format . --write"
   },
   "dependencies": {
-    "@formkit/auto-animate": "0.8.2",
-    "@nuxt/eslint": "1.0.0",
-    "@nuxt/icon": "1.10.3",
-    "@nuxt/test-utils": "3.15.4",
-    "@nuxt/ui": "2.21.0",
-    "@nuxtjs/color-mode": "3.5.2",
-    "@nuxtjs/i18n": "9.1.4",
-    "@nuxtjs/robots": "5.2.2",
-    "@nuxtjs/sitemap": "7.2.4",
-    "@nuxtjs/tailwindcss": "6.13.1",
-    "@vueuse/nuxt": "12.5.0",
-    "eslint": "^9.0.0",
-    "i18n": "0.15.1",
-    "nuxt": "^3.15.2",
-    "vue": "latest",
-    "vue-router": "latest"
+    "@next/mdx": "^13.5.4",
+    "@upstash/redis": "^1.23.3",
+    "contentlayer": "^0.3.4",
+    "framer-motion": "^10.16.4",
+    "lucide-react": "^0.284.0",
+    "markdown-wasm": "^1.2.0",
+    "next": "^13.5.4",
+    "next-contentlayer": "^0.3.4",
+    "react": "^18.2.0",
+    "react-animated-cursor": "^2.11.2",
+    "react-dom": "^18.2.0",
+    "react-icons": "^5.5.0",
+    "react-wrap-balancer": "^1.1.0",
+    "rehype-autolink-headings": "^7.0.0",
+    "rehype-pretty-code": "^0.10.1",
+    "rehype-slug": "^6.0.0",
+    "remark-gfm": "3.0.1",
+    "typescript": "^5.2.2"
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "devDependencies": {
+    "@opentelemetry/api": "1.6.0",
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "@tailwindcss/typography": "^0.5.10",
+    "@types/node": "^20.8.4",
+    "@types/react": "^18.2.28",
+    "@types/react-dom": "^18.2.13",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.31",
+    "postcss-nesting": "^12.0.1",
+    "rome": "^12.1.3",
+    "tailwindcss": "^3.3.3",
+    "tailwindcss-debug-screens": "^2.2.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "@opentelemetry/api": "1.4.1",
+      "@opentelemetry/core": "1.13.0",
+      "@opentelemetry/exporter-trace-otlp-grpc": "0.39.1",
+      "@opentelemetry/resources": "1.13.0",
+      "@opentelemetry/sdk-trace-base": "1.13.0",
+      "@opentelemetry/sdk-trace-node": "1.13.0",
+      "@opentelemetry/semantic-conventions": "1.13.0"
+    }
+  }
 }
