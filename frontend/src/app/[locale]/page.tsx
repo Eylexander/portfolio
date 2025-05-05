@@ -1,14 +1,27 @@
-import Link from "next/link";
+import { Link } from "@/src/i18n/navigation";
 import React from "react";
-import Particles from "./components/particles";
+import { use } from "react";
+import Particles from "@/src/components/particles";
+import { Locale, useTranslations } from 'next-intl';
+import { setRequestLocale } from "next-intl/server";
 
-const navigation = [
-  { name: "Projects", href: "/projects" },
-  { name: "About Me", href: "/about" },
-  { name: "Contact", href: "/contact" },
-];
+type Props = {
+  params: Promise<{ locale: Locale }>;
+};
 
-export default function Home() {
+export default function Home({ params }: Props) {
+  const { locale } = use(params);
+
+  setRequestLocale(locale);
+
+  const t = useTranslations();
+
+  const navigation = [
+    { name: t('navigation.projects'), href: "/projects" },
+    { name: t('navigation.about'), href: "/about" },
+    { name: t('navigation.contact'), href: "/contact" },
+  ];
+
   return (
     <div className="flex flex-col items-center justify-center w-screen h-screen overflow-hidden bg-gradient-to-tl from-black via-zinc-600/20 to-black">
       <nav className="my-16 animate-fade-in">
@@ -17,7 +30,7 @@ export default function Home() {
             <Link
               key={item.href}
               href={item.href}
-              className="text-sm duration-500 text-zinc-500 hover:text-zinc-300"
+              className="text-base duration-500 text-zinc-500 hover:text-zinc-300"
             >
               {item.name}
             </Link>
@@ -35,8 +48,8 @@ export default function Home() {
 
       <div className="hidden w-screen h-px animate-glow md:block animate-fade-right bg-gradient-to-r from-zinc-300/0 via-zinc-300/50 to-zinc-300/0" />
       <div className="my-16 text-center animate-fade-in">
-        <h2 className="text-sm text-zinc-500 ">
-          I am a software engineer, student, and sysadmin.
+        <h2 className="text-base text-zinc-500 ">
+          {t('home.description')}
         </h2>
       </div>
     </div>

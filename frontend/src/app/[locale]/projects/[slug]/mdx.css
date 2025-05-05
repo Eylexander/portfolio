@@ -1,0 +1,47 @@
+/* Code block styling without rehype-pretty-code */
+pre {
+  @apply mt-4 overflow-x-auto rounded-md bg-zinc-800 p-4;
+}
+
+pre > code {
+  @apply grid min-w-full break-words rounded-none border-0 bg-transparent p-0 text-sm text-white;
+  counter-reset: line;
+  box-decoration-break: clone;
+}
+
+code {
+  @apply rounded-md bg-zinc-300 bg-opacity-25 py-[0.2rem] px-[0.3rem] font-mono text-sm;
+}
+
+pre code {
+  @apply p-0 bg-transparent;
+}
+
+/* Add some basic syntax highlighting through CSS variables that can be customized */
+.language-javascript, 
+.language-js, 
+.language-typescript, 
+.language-ts {
+  color: #f8f8f2;
+}
+
+.language-javascript .keyword, 
+.language-js .keyword,
+.language-typescript .keyword,
+.language-ts .keyword {
+  color: #ff79c6;
+}
+
+.language-javascript .string, 
+.language-js .string,
+.language-typescript .string,
+.language-ts .string {
+  color: #f1fa8c;
+}
+
+.language-javascript .comment, 
+.language-js .comment,
+.language-typescript .comment,
+.language-ts .comment {
+  color: #6272a4;
+}

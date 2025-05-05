@@ -1,6 +1,7 @@
 "use client";
+
 import { LuArrowLeft, LuAtSign, LuEye, LuGithub, LuTwitter } from "react-icons/lu";
-import Link from "next/link";
+import {Link} from "@/src/i18n/navigation";
 import React, { useEffect, useRef, useState } from "react";
 
 type Props = {

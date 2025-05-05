@@ -1,0 +1,69 @@
+{
+  "navigation": {
+    "home": "home",
+    "about": "about me",
+    "projects": "projects",
+    "contact": "contact",
+    "legal": "legal notice"
+  },
+  "home": {
+    "description": "I am a software engineer, student, and sysadmin."
+  },
+  "projects": {
+    "title": "projects",
+    "description": "Most project are done in my free time, but some come from my job.",
+    "more": "Read more",
+    "soon": "Coming soon"
+  },
+  "about": {
+    "title": {
+      "name": "about me",
+      "description": "A small introduction to myself."
+    },
+    "presentation" : {
+      "title": "Eylexander",
+      "content": "I am a software engineer, student, and sysadmin. I have a passion for technology and enjoy learning new things. I am currently studying at [Your University] and working on various projects in my spare time."
+    },
+    "experience": {
+      "title": "professional experience",
+      "job1": {
+        "title": "Software Engineer Intern at Tech Company",
+        "duration": "June 2022 - August 2022",
+        "description": "Worked on developing a web application using React and Node.js."
+      },
+      "job2": {
+        "title": "Sysadmin Intern",
+        "company": "IT Company",
+        "duration": "June 2021 - August 2021",
+        "description": "Assisted in managing and maintaining server infrastructure."
+      }
+    },
+    "techstack": "tech stack"
+  },
+  "legal": {
+    "title": "Legal Notice",
+    "subtitle": "Information in accordance with legal requirements.",
+    "siteOwner": {
+      "title": "Site Owner",
+      "name": "Name",
+      "address": "Address",
+      "email": "Email"
+    },
+    "disclaimer": {
+      "title": "Disclaimer",
+      "content": "The information contained in this website is for general information purposes only. The information is provided by [Your Name] and while we endeavor to keep the information up to date and correct, we make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability or availability with respect to the website or the information, products, services, or related graphics contained on the website for any purpose."
+    },
+    "copyright": {
+      "title": "Copyright",
+      "content": "© {year} [Your Name]. All rights reserved. All content on this website, including text, images, graphics, and code, is the property of [Your Name] and is protected by international copyright laws. Unauthorized use and/or duplication of this material without express and written permission is strictly prohibited."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "content": "This website uses cookies to enhance the user experience. By using this website, you consent to the use of cookies in accordance with our privacy policy."
+    },
+    "contact": {
+      "title": "Contact",
+      "content": "If you have any questions or concerns about the legal aspects of this website, please contact us at:"
+    }
+  }
+}

@@ -1,6 +1,6 @@
-import { Footer } from "../components/footer";
+import { Footer } from "@/src/components/footer";
 
-export default function ProjectsLayout({
+export default function LegalLayout({
     children,
 }: { children: React.ReactNode }) {
     return (

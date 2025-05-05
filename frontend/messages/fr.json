@@ -1,0 +1,38 @@
+{
+  "navigation": {
+    "home": "accueil",
+    "about": "à propos",
+    "projects": "projets",
+    "contact": "contact",
+    "legal": "mentions légales"
+  },
+  "home": {
+    "description": "Je suis ingénieur, étudiant et administrateur système."
+  },
+  "legal": {
+    "title": "Mentions Légales",
+    "subtitle": "Informations conformément aux exigences légales.",
+    "siteOwner": {
+      "title": "Propriétaire du site",
+      "name": "Nom",
+      "address": "Adresse",
+      "email": "Email"
+    },
+    "disclaimer": {
+      "title": "Avertissement",
+      "content": "Les informations contenues sur ce site web sont destinées à des fins d'information générale uniquement. Les informations sont fournies par [Votre Nom] et bien que nous nous efforcions de maintenir les informations à jour et correctes, nous ne faisons aucune représentation ou garantie d'aucune sorte, expresse ou implicite, concernant l'exhaustivité, l'exactitude, la fiabilité, la pertinence ou la disponibilité du site web ou des informations, produits, services ou graphiques connexes contenus sur le site web à quelque fin que ce soit."
+    },
+    "copyright": {
+      "title": "Droits d'auteur",
+      "content": "© {year} [Votre Nom]. Tous droits réservés. Tout le contenu de ce site Web, y compris le texte, les images, les graphiques et le code, est la propriété de [Votre Nom] et est protégé par les lois internationales sur les droits d'auteur. L'utilisation et/ou la duplication non autorisées de ce matériel sans l'autorisation expresse et écrite sont strictement interdites."
+    },
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "content": "Ce site web utilise des cookies pour améliorer l'expérience utilisateur. En utilisant ce site web, vous consentez à l'utilisation de cookies conformément à notre politique de confidentialité."
+    },
+    "contact": {
+      "title": "Contact",
+      "content": "Si vous avez des questions ou des préoccupations concernant les aspects juridiques de ce site web, veuillez nous contacter à:"
+    }
+  }
+}
