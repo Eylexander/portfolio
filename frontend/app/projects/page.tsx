@@ -4,21 +4,9 @@ import { allProjects } from "contentlayer/generated";
 import { Navigation } from "../components/nav";
 import { Card } from "../components/card";
 import { Article } from "./article";
-// import { Redis } from "@upstash/redis";
-import { LuEye } from "react-icons/lu";
-
-// const redis = Redis.fromEnv();
 
 export const revalidate = 60;
 export default async function ProjectsPage() {
-  // const views = (
-  //   await redis.mget<number[]>(
-  //     ...allProjects.map((p) => ["pageviews", "projects", p.slug].join(":")),
-  //   )
-  // ).reduce((acc, v, i) => {
-  //   acc[allProjects[i].slug] = v ?? 0;
-  //   return acc;
-  // }, {} as Record<string, number>);
 
   const featured = allProjects.find((project) => project.slug === "unkey")!;
   const top2 = allProjects.find((project) => project.slug === "planetfall")!;
@@ -46,7 +34,7 @@ export default async function ProjectsPage() {
             Projects
           </h2>
           <p className="mt-4 text-zinc-400">
-            Most project are from my free time, but some from work.
+            Most project are done in my free time, but some come from my job.
           </p>
         </div>
         <div className="w-full h-px bg-zinc-800" />
@@ -58,28 +46,18 @@ export default async function ProjectsPage() {
                 <div className="flex items-center justify-between gap-2">
                   <div className="text-xs text-zinc-100">
                     {featured.date ? (
-                        <time dateTime={new Date(featured.date).toISOString()}>
-                        {Intl.DateTimeFormat(undefined, {
+                      <time dateTime={new Date(featured.date).toISOString()}>
+                        {new Intl.DateTimeFormat(undefined, {
                           year: "numeric",
                           month: "long",
-                        }).format(new Date(featured.date))}
-                        </time>
+                        })
+                          .format(new Date(featured.date))
+                          .replace(/^./, (str) => str.toUpperCase())}
+                      </time>
                     ) : (
                       <span>SOON</span>
                     )}
                   </div>
-                  <span className="flex items-center gap-1 text-xs text-zinc-500">
-                    <LuEye className="w-4 h-4" />{" "}
-                    {Intl.NumberFormat("en-US", { notation: "compact" }).format(
-                      0,
-                    )}
-                  </span>
-                  {/* <span className="flex items-center gap-1 text-xs text-zinc-500">
-                    <Eye className="w-4 h-4" />{" "}
-                    {Intl.NumberFormat("en-US", { notation: "compact" }).format(
-                      views[featured.slug] ?? 0,
-                    )}
-                  </span> */}
                 </div>
 
                 <h2
@@ -103,8 +81,7 @@ export default async function ProjectsPage() {
           <div className="flex flex-col w-full gap-8 mx-auto border-t border-gray-900/10 lg:mx-0 lg:border-t-0 ">
             {[top2, top3].map((project) => (
               <Card key={project.slug}>
-                <Article project={project} views={0} />
-                {/* <Article project={project} views={views[project.slug] ?? 0} /> */}
+                <Article project={project} />
               </Card>
             ))}
           </div>
@@ -117,8 +94,7 @@ export default async function ProjectsPage() {
               .filter((_, i) => i % 3 === 0)
               .map((project) => (
                 <Card key={project.slug}>
-                  <Article project={project} views={0} />
-                  {/* <Article project={project} views={views[project.slug] ?? 0} /> */}
+                  <Article project={project} />
                 </Card>
               ))}
           </div>
@@ -127,8 +103,7 @@ export default async function ProjectsPage() {
               .filter((_, i) => i % 3 === 1)
               .map((project) => (
                 <Card key={project.slug}>
-                  <Article project={project} views={0} />
-                  {/* <Article project={project} views={views[project.slug] ?? 0} /> */}
+                  <Article project={project} />
                 </Card>
               ))}
           </div>
@@ -137,8 +112,7 @@ export default async function ProjectsPage() {
               .filter((_, i) => i % 3 === 2)
               .map((project) => (
                 <Card key={project.slug}>
-                  <Article project={project} views={0} />
-                  {/* <Article project={project} views={views[project.slug] ?? 0} /> */}
+                  <Article project={project} />
                 </Card>
               ))}
           </div>

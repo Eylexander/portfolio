@@ -8,15 +8,15 @@ import { Analytics } from "./components/analytics";
 export const metadata: Metadata = {
   metadataBase: new URL("https://eylexander.xyz"),
   title: {
-    default: "chronark.com",
-    template: "%s | chronark.com",
+    default: "eylexander.xyz",
+    template: "%s | eylexander.xyz",
   },
-  description: "Co-founder of unkey.dev and founder of planetfall.io",
+  description: "Engineer, student, and sysadmin.",
   openGraph: {
-    title: "chronark.com",
-    description: "Co-founder of unkey.dev and founder of planetfall.io",
-    url: "https://chronark.com",
-    siteName: "chronark.com",
+    title: "eylexander.xyz",
+    description: "Engineer, student, and sysadmin.",
+    url: "https://eylexander.xyz",
+    siteName: "eylexander.xyz",
     images: [
       {
         url: "https://chronark.com/og.png",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: "Chronark",
+    title: "Eylexander",
     card: "summary_large_image",
   },
   icons: {
@@ -67,7 +67,7 @@ export default function RootLayout({
         <Analytics />
       </head>
       <body
-        className={`bg-black ${
+        className={`bg-black selection:bg-[rgb(253,251,212)] selection:text-[rgb(2,4,43)] ${
           process.env.NODE_ENV === "development" ? "debug-screens" : undefined
         }`}
       >
@@ -76,15 +76,15 @@ export default function RootLayout({
           innerSize={8}
           innerScale={1}
           innerStyle={{
-            backgroundColor: "rgb(253,251,212)",
-            mixBlendMode: "difference",
+        backgroundColor: "rgb(253,251,212)",
+        mixBlendMode: "difference",
           }}
           outerSize={35}
           outerScale={2}
           outerAlpha={0}
           outerStyle={{
-            border: "3px solid rgb(253,251,212)",
-            mixBlendMode: "difference",
+        border: "3px solid rgb(253,251,212)",
+        mixBlendMode: "difference",
           }}
           showSystemCursor={false}
         />

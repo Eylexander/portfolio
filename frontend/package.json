@@ -26,6 +26,7 @@
     "rehype-pretty-code": "^0.10.1",
     "rehype-slug": "^6.0.0",
     "remark-gfm": "3.0.1",
+    "swc": "^1.0.11",
     "typescript": "^5.2.2"
   },
   "devDependencies": {
