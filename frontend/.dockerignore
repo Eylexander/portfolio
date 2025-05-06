@@ -1,0 +1,8 @@
+.env
+.env.local
+next-env.d.ts
+package-lock.json
+
+build.sh
+Makefile
+README.md

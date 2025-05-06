@@ -37,8 +37,9 @@ module.exports = {
 					"radial-gradient(50% 50% at 50% 50%, var(--tw-gradient-stops))",
 			},
 			animation: {
-				"fade-in": "fade-in 3s ease-in-out forwards",
+				"fade-in": "fade-in 2s ease-in-out forwards",
 				title: "title 3s ease-out forwards",
+				"title-alt": "title-alt 2s ease-out forwards",
 				"fade-left": "fade-left 3s ease-in-out forwards",
 				"fade-right": "fade-right 3s ease-in-out forwards",
 			},
@@ -101,6 +102,25 @@ module.exports = {
 						opacity: "100%",
 					},
 				},
+				"title-alt": {
+					"0%": {
+						"line-height": "0%",
+						"letter-spacing": "0.4em",
+						opacity: "0",
+					},
+					"25%": {
+						"line-height": "0%",
+						opacity: "0%",
+					},
+					"80%": {
+						opacity: "100%",
+					},
+
+					"100%": {
+						"line-height": "100%",
+						opacity: "100%",
+					},
+				}
 			},
 		},
 	},

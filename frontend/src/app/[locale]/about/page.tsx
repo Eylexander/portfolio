@@ -17,12 +17,12 @@ const stack = [
     url: "https://reactjs.org/",
   },
   {
-    name: "VSCode",
+    name: "VsCode",
     Icon: VscVscodeInsiders,
     url: "https://code.visualstudio.com/",
   },
   {
-    name: "Go",
+    name: "Golang",
     Icon: BiLogoGoLang,
     url: "https://golang.org/",
   },

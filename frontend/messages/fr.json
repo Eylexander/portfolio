@@ -9,6 +9,36 @@
   "home": {
     "description": "Je suis ingénieur, étudiant et administrateur système."
   },
+  "projects": {
+    "title": "projets",
+    "description": "La plupart des projets sont réalisés pendant mon temps libre.",
+    "more": "Plus d'infos",
+    "soon": "Bientôt disponible"
+  },
+  "about": {
+    "title": {
+      "name": "à propos de moi",
+      "description": "Une petite introduction sur moi."
+    },
+    "presentation" : {
+      "title": "Eylexander",
+      "content": "Je suis ingénieur, étudiant et administrateur système. J'ai une passion pour la technologie et j'aime apprendre de nouvelles choses. Je suis actuellement étudiant à [Votre Université] et je travaille sur divers projets pendant mon temps libre."
+    },
+    "experience": {
+      "title": "expérience professionnelle",
+      "job1": {
+        "title": "Stagiaire Ingénieur Logiciel chez Tech Company",
+        "duration": "juin 2022 - août 2022",
+        "description": "J'ai travaillé sur le développement d'une application web utilisant React et Node.js."
+      },
+      "job2": {
+        "title": "Stagiaire Administrateur Système chez IT Company",
+        "duration": "juin 2021 - août 2021",
+        "description": "J'ai assisté à la gestion et à la maintenance de l'infrastructure serveur."
+      }
+    },
+    "techstack": "stack technologique"
+  },
   "legal": {
     "title": "Mentions Légales",
     "subtitle": "Informations conformément aux exigences légales.",

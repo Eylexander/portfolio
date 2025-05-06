@@ -2,7 +2,7 @@ services:
   frontend:
     build:
       context: ../frontend
-      dockerfile: ../../docker/Dockerfile.frontend.dev
+      dockerfile: ../docker/Dockerfile.frontend.dev
     volumes:
       - ../frontend:/app
     ports:
@@ -13,7 +13,7 @@ services:
   backend:
     build:
       context: ../backend
-      dockerfile: ../../docker/Dockerfile.backend.dev
+      dockerfile: ../docker/Dockerfile.backend.dev
     volumes:
       - ../backend:/go/src
     ports:
@@ -23,7 +23,7 @@ services:
 
   database:
     image: mongo:latest
-    container_name: mongo
+    container_name: portfolio_mongo
     ports:
       - "27017:27017"
     volumes:

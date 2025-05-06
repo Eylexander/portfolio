@@ -28,13 +28,13 @@
       "title": "professional experience",
       "job1": {
         "title": "Software Engineer Intern at Tech Company",
-        "duration": "June 2022 - August 2022",
+        "duration": "june 2022 - august 2022",
         "description": "Worked on developing a web application using React and Node.js."
       },
       "job2": {
         "title": "Sysadmin Intern",
         "company": "IT Company",
-        "duration": "June 2021 - August 2021",
+        "duration": "june 2021 - august 2021",
         "description": "Assisted in managing and maintaining server infrastructure."
       }
     },
