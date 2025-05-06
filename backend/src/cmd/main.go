@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
+
+	"eylexander/portfolio/backend/src/ctrl"
+	"eylexander/portfolio/backend/src/server"
 )
 
 func main() {
@@ -12,15 +15,15 @@ func main() {
 
 	address := fmt.Sprintf("%s:%d", addr, port)
 
-	store, err := newMongoDBStore(dbName)
+	store, err := ctrl.NewMongoDBStore(dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if err := store.init(); err != nil {
+	if err := store.Init(); err != nil {
 		log.Fatal(err)
 	}
 
-	server := newAPIServer(address, store)
-	server.start()
+	server := server.NewAPIServer(address, store)
+	server.Start()
 }
