@@ -22,48 +22,41 @@
     },
     "presentation" : {
       "title": "Eylexander",
-      "content": "I am a software engineer, student, and sysadmin. I have a passion for technology and enjoy learning new things. I am currently studying at [Your University] and working on various projects in my spare time."
+      "content": "I am a software engineer, student, and sysadmin. I have a passion for technology and enjoy learning new things. I am currently studying at UnivLorraine and working on various projects in my spare time."
     },
     "experience": {
       "title": "professional experience",
       "job1": {
-        "title": "Software Engineer Intern at Tech Company",
-        "duration": "june 2022 - august 2022",
-        "description": "Worked on developing a web application using React and Node.js."
+        "title": "Part-time Software Engineer at Netlor",
+        "duration": "september 2024 - august 2025",
+        "description": "I worked on the production launch of a microservices application using Golang and VueJS with Kubernetes, Docker and Ansible."
       },
       "job2": {
-        "title": "Sysadmin Intern",
-        "company": "IT Company",
-        "duration": "june 2021 - august 2021",
-        "description": "Assisted in managing and maintaining server infrastructure."
+        "title": "Microservices Developer Trainee at Netlor",
+        "duration": "february 2024 - may 2024",
+        "description": "I contributed to the development of a microservices application using Golang and VueJS."
       }
     },
     "techstack": "tech stack"
   },
   "legal": {
-    "title": "Legal Notice",
+    "title": "legal notice",
     "subtitle": "Information in accordance with legal requirements.",
-    "siteOwner": {
-      "title": "Site Owner",
-      "name": "Name",
-      "address": "Address",
-      "email": "Email"
+    "law" : "In accordance with the provisions of French Law No. 2004-575 of 21 June 2004 on confidence in the digital economy digital economy, users and visitors, hereinafter the ‘User’, to the site eylexander.xyz website, hereinafter referred to as the ‘Site’, are hereby informed of the present legal notice.",
+    "acceptance": "Connection to and browsing of the Site by the User implies full and unreserved acceptance of this legal notice.",
+    "reference": "These are available on the Site under the heading ‘Legal notice’.",
+    "editor": {
+      "title": "Site Edition",
+      "content": "The Site is edited and published by Eylexander, whose e-mail address is eylexander88@gmail.com."
     },
-    "disclaimer": {
-      "title": "Disclaimer",
-      "content": "The information contained in this website is for general information purposes only. The information is provided by [Your Name] and while we endeavor to keep the information up to date and correct, we make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability or availability with respect to the website or the information, products, services, or related graphics contained on the website for any purpose."
+    "hoster": {
+      "title": "Hosting",
+      "content": "The Site's host is Eylexander, whose registered office is at Nancy, France."
     },
-    "copyright": {
-      "title": "Copyright",
-      "content": "© {year} [Your Name]. All rights reserved. All content on this website, including text, images, graphics, and code, is the property of [Your Name] and is protected by international copyright laws. Unauthorized use and/or duplication of this material without express and written permission is strictly prohibited."
+    "access": {
+      "title": "Access to the Site",
+      "content": "The Site is normally accessible to Users at all times. However, the Publisher may, at any time, suspend, limit or interrupt the Site in order, in particular, to update or modify its content. The Publisher may under no circumstances be held responsible for the possible consequences of this unavailability on the User's activities."
     },
-    "privacy": {
-      "title": "Privacy Policy",
-      "content": "This website uses cookies to enhance the user experience. By using this website, you consent to the use of cookies in accordance with our privacy policy."
-    },
-    "contact": {
-      "title": "Contact",
-      "content": "If you have any questions or concerns about the legal aspects of this website, please contact us at:"
-    }
+    "copyright" : "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so."
   }
 }

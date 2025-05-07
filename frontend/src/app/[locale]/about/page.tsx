@@ -165,7 +165,7 @@ export default function AboutPage() {
               <h3 className="text-2xl font-bold text-zinc-100 font-display">
               {t('experience.job1.title')}
               </h3>
-              <p className="text-zinc-600 text-xs">
+              <p className="text-zinc-500 text-s">
               {t('experience.job1.duration')}
               </p>
             </div>
@@ -178,7 +178,7 @@ export default function AboutPage() {
               <h3 className="text-2xl font-bold text-zinc-100 font-display">
               {t('experience.job2.title')}
               </h3>
-              <p className="text-zinc-600 text-xs">
+              <p className="text-zinc-500 text-s">
               {t('experience.job2.duration')}
               </p>
             </div>

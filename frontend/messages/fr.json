@@ -7,7 +7,7 @@
     "legal": "mentions légales"
   },
   "home": {
-    "description": "Je suis ingénieur, étudiant et administrateur système."
+    "description": "Je suis ingénieur logiciel, étudiant et administrateur système."
   },
   "projects": {
     "title": "projets",
@@ -22,47 +22,41 @@
     },
     "presentation" : {
       "title": "Eylexander",
-      "content": "Je suis ingénieur, étudiant et administrateur système. J'ai une passion pour la technologie et j'aime apprendre de nouvelles choses. Je suis actuellement étudiant à [Votre Université] et je travaille sur divers projets pendant mon temps libre."
+      "content": "Je suis ingénieur logiciel, étudiant et administrateur système. J'ai une passion pour la technologie et j'aime apprendre de nouvelles choses. Je suis actuellement étudiant à l'UnivLorraine et je travaille sur divers projets pendant mon temps libre."
     },
     "experience": {
       "title": "expérience professionnelle",
       "job1": {
-        "title": "Stagiaire Ingénieur Logiciel chez Tech Company",
-        "duration": "juin 2022 - août 2022",
-        "description": "J'ai travaillé sur le développement d'une application web utilisant React et Node.js."
+        "title": "Alternant Ingénieur Logiciel à Netlor",
+        "duration": "septembre 2024 - août 2025",
+        "description": "J'ai travaillé sur la mise en production d'une application de microservices utilisant Golang et VueJS avec Kubernetes, Docker et Ansible."
       },
       "job2": {
-        "title": "Stagiaire Administrateur Système chez IT Company",
-        "duration": "juin 2021 - août 2021",
-        "description": "J'ai assisté à la gestion et à la maintenance de l'infrastructure serveur."
+        "title": "Stagiaire Développeur Microservices à Netlor",
+        "duration": "février 2024 - mai 2024",
+        "description": "J'ai contribué au développement d'une application de microservices utilisant Golang et VueJS."
       }
     },
     "techstack": "stack technologique"
   },
   "legal": {
-    "title": "Mentions Légales",
-    "subtitle": "Informations conformément aux exigences légales.",
-    "siteOwner": {
-      "title": "Propriétaire du site",
-      "name": "Nom",
-      "address": "Adresse",
-      "email": "Email"
+    "title": "mentions légales",
+    "subtitle": "Information en conformité avec les exigences légales.",
+    "law" : "Conformément aux dispositions de la loi n°2004-575 du 21 juin 2004 pour la Confiance en l’économie numérique, il est porté à la connaissance des utilisateurs et visiteurs, ci-après l' 'Utilisateur', du site eylexander.xyz , ci-après le 'Site', les présentes mentions légales.",
+    "acceptance": "La connexion et la navigation sur le Site par l’Utilisateur implique acceptation intégrale et sans réserve des présentes mentions légales.",
+    "reference": "Ces dernières sont accessibles sur le Site à la rubrique 'Mentions légales'.",
+    "editor": {
+      "title": "Edition du site",
+      "content": "L’édition et la direction de la publication du Site est assurée par Eylexander, dont l'adresse e-mail est eylexander88@gmail.com."
     },
-    "disclaimer": {
-      "title": "Avertissement",
-      "content": "Les informations contenues sur ce site web sont destinées à des fins d'information générale uniquement. Les informations sont fournies par [Votre Nom] et bien que nous nous efforcions de maintenir les informations à jour et correctes, nous ne faisons aucune représentation ou garantie d'aucune sorte, expresse ou implicite, concernant l'exhaustivité, l'exactitude, la fiabilité, la pertinence ou la disponibilité du site web ou des informations, produits, services ou graphiques connexes contenus sur le site web à quelque fin que ce soit."
+    "hoster": {
+      "title": "Hebergeur",
+      "content": "L'hébergeur du Site est Eylexander, dont le siège social est situé à Nancy."
     },
-    "copyright": {
-      "title": "Droits d'auteur",
-      "content": "© {year} [Votre Nom]. Tous droits réservés. Tout le contenu de ce site Web, y compris le texte, les images, les graphiques et le code, est la propriété de [Votre Nom] et est protégé par les lois internationales sur les droits d'auteur. L'utilisation et/ou la duplication non autorisées de ce matériel sans l'autorisation expresse et écrite sont strictement interdites."
+    "access": {
+      "title": "Accès au site",
+      "content": "Le Site est normalement accessible, à tout moment, à l'Utilisateur. Toutefois, l'Editeur pourra, à tout moment, suspendre, limiter ou interrompre le Site afin de procéder, notamment, à des mises à jour ou des modifications de son contenu. L'Editeur ne pourra en aucun cas être tenu responsable des conséquences éventuelles de cette indisponibilité sur les activités de l'Utilisateur."
     },
-    "privacy": {
-      "title": "Politique de confidentialité",
-      "content": "Ce site web utilise des cookies pour améliorer l'expérience utilisateur. En utilisant ce site web, vous consentez à l'utilisation de cookies conformément à notre politique de confidentialité."
-    },
-    "contact": {
-      "title": "Contact",
-      "content": "Si vous avez des questions ou des préoccupations concernant les aspects juridiques de ce site web, veuillez nous contacter à:"
-    }
+    "copyright" : "L'autorisation est accordée par la présente, gratuitement, à toute personne obtenant une copie de ce logiciel et des fichiers de documentation associés (le « Logiciel »), d'utiliser le Logiciel sans restriction, y compris sans limitation les droits d'utiliser, de copier, de modifier, de fusionner, de publier, de distribuer, d'accorder des sous-licences et/ou de vendre des copies du Logiciel, et d'autoriser les personnes à qui le Logiciel est fourni à le faire."
   }
 }
