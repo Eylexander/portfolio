@@ -1,7 +1,10 @@
 .env
+.env.example
 .env.local
+.next
+.dockerignore
 next-env.d.ts
-package-lock.json
+node_modules
 
 build.sh
 Makefile

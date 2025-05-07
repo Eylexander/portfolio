@@ -24,6 +24,7 @@ const withMDX = createMDX({
  
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
 };
  
