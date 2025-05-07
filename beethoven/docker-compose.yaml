@@ -1,5 +1,6 @@
 services:
   frontend:
+    container_name: portfolio_frontend_dev
     build:
       context: ../frontend
       dockerfile: ../docker/Dockerfile.frontend.dev
@@ -11,6 +12,7 @@ services:
       - backend
 
   backend:
+    container_name: portfolio_backend_dev
     build:
       context: ../backend
       dockerfile: ../docker/Dockerfile.backend.dev
@@ -23,7 +25,7 @@ services:
 
   database:
     image: mongo:latest
-    container_name: portfolio_mongo
+    container_name: portfolio_mongo_dev
     ports:
       - "27017:27017"
     volumes:

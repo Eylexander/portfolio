@@ -1,2 +1,7 @@
 Makefile
 .env
+.dockerignore
+
+bin
+tmp
+vendor

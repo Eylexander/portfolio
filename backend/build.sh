@@ -25,5 +25,5 @@ done
 if [ $DEV = true ]; then
     DOCKER_BUILDKIT=1 docker build $OPTIONS -f ../docker/Dockerfile.backend.dev --tag backend-dev .
 else
-    DOCKER_BUILDKIT=1 docker build $OPTIONS -f ../docker/Dockerfile --tag backend .
+    DOCKER_BUILDKIT=1 docker build $OPTIONS -f ../docker/Dockerfile.backend --tag portfolio-backend ..
 fi

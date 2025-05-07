@@ -8,6 +8,7 @@ import (
 
 func (s *Handler) StartDebugger(w http.ResponseWriter, r *http.Request) error {
 	if r.Method == "GET" {
+		s.dataStore.DoDebug()
 		return s.GetDebugger(w, r)
 	}
 	if r.Method == "POST" {

@@ -1,0 +1,56 @@
+# syntax=docker/dockerfile:1
+
+###################
+# frontend-builder#
+###################
+
+FROM node:lts-bullseye-slim AS front-builder
+
+###################
+# deps-env-front  #
+###################
+
+FROM front-builder AS front-deps-env
+
+RUN apt update
+
+WORKDIR /app
+
+COPY ./frontend/package.json ./frontend/package-lock.json ./
+RUN \
+	npm ci
+
+###################
+# build-env-front #
+###################
+
+FROM front-builder AS front-build-env
+
+RUN apt update \
+	&& apt install -y openssh-client
+
+WORKDIR /app
+
+COPY --from=front-deps-env /app/node_modules ./node_modules
+
+COPY ./frontend .
+
+RUN yarn build
+
+################
+# target image #
+################
+
+FROM alpine:3.21
+
+WORKDIR /opt/frontend
+
+COPY --from=front-build-env /app/public ./public
+COPY --from=front-build-env /app/.next/standalone .
+COPY --from=front-build-env /app/.next/static ./.next/static
+
+RUN apk add nodejs npm
+
+EXPOSE 3000/tcp
+
+ENTRYPOINT ["node" , "server.js"]

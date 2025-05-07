@@ -1,0 +1,31 @@
+services:
+  proxy:
+    image: nginx:latest
+    container_name: portfolio_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - portfolio_frontend
+      - portfolio_backend
+
+  portfolio_frontend:
+    image: portfolio-frontend:latest
+    container_name: portfolio_frontend
+    depends_on:
+      - portfolio_backend
+
+  portfolio_backend:
+    image: portfolio-backend:latest
+    container_name: portfolio_backend
+    environment:
+      - MONGODB_URI=mongodb://database:27017/
+
+  database:
+    image: mongo:latest
+    container_name: portfolio_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ../data:/data/db
