@@ -1,0 +1,25 @@
+---
+title: proxmox clustering
+description: An open door to the selfhost world
+date: "2023-11-24"
+url: https://proxserv.eylexander.xyz/
+published: true
+---
+
+[![](https://eylexander.xyz/content/proxmox-overview.png)](https://status.eylexander.xyz/status/default)
+
+Proxmox is a powerful platform for managing virtualized environments, and this instance showcases its versatility by hosting a variety of services:
+
+- **Jellyfin**: A media server that allows you to stream your personal media library across devices.
+- **Nextcloud**: A self-hosted cloud storage solution for file sharing, collaboration, and data synchronization.
+- **Ollama**: A platform for hosting and running AI models locally, ensuring privacy and control over your data.
+- **Monero Node**: A cryptocurrency node that supports the Monero blockchain, enabling private and secure transactions.
+- **Pterodactyl**: A game server management panel that simplifies hosting and managing game servers.
+
+This Proxmox instance is a dynamic project, with the number and variety of services constantly evolving over time. As new needs arise or technologies emerge, additional services are integrated, making it a living example of the flexibility and scalability of self-hosted environments.
+
+It also contains multiple artifacts such as :
+
+- **SSD ZFS Pool** : There is about 7 TiB of storage made up from 5 different SSD assuring a huge volume of storage.
+- **RAID1 HDDs** : To provide a cheap and efficient solution to local backups, I installed 2x 2 TiB HDD with RAID1 assuring 2 TiB of secure storage.
+- **External Backup Storage** : As a fire can erupt at any moment, there is an off-site storage pool to keep the Nextcloud user data (using Borg and rClone).

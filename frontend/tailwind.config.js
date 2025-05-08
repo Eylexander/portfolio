@@ -38,8 +38,8 @@ module.exports = {
 			},
 			animation: {
 				"fade-in": "fade-in 2s ease-in-out forwards",
-				title: "title 3s ease-out forwards",
-				"title-alt": "title-alt 2s ease-out forwards",
+				title: "title 2s ease-out forwards",
+				"title-alt": "text-outline 4s ease-out forwards, title-alt 2s ease-out forwards",
 				"fade-left": "fade-left 3s ease-in-out forwards",
 				"fade-right": "fade-right 3s ease-in-out forwards",
 			},
@@ -120,7 +120,15 @@ module.exports = {
 						"line-height": "100%",
 						opacity: "100%",
 					},
-				}
+				},
+				"text-outline": {
+					"0%": {
+						"-webkit-text-stroke": "1px rgba(253,251,212,0.3)",
+					},
+					"100%": {
+						"-webkit-text-stroke": "0px rgba(253,251,212,0.3)",
+					},
+				},
 			},
 		},
 	},

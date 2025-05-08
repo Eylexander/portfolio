@@ -6,22 +6,33 @@ import {
 	useSpring,
 } from "framer-motion";
 
-import { MouseEventHandler, PropsWithChildren } from "react";
+import { MouseEventHandler, PropsWithChildren, useEffect, useRef } from "react";
 
 export const Card: React.FC<PropsWithChildren> = ({ children }) => {
+	const cardRef = useRef<HTMLDivElement>(null);
 	const mouseX = useSpring(0, { stiffness: 500, damping: 100 });
 	const mouseY = useSpring(0, { stiffness: 500, damping: 100 });
+
+	useEffect(() => {
+		if (cardRef.current) {
+			const { width, height } = cardRef.current.getBoundingClientRect();
+			mouseX.set(width); // Set initial X to the card's width (right edge)
+			mouseY.set(height); // Set initial Y to the card's height (bottom edge)
+		}
+	}, [mouseX, mouseY]);
 
 	function onMouseMove({ currentTarget, clientX, clientY }: any) {
 		const { left, top } = currentTarget.getBoundingClientRect();
 		mouseX.set(clientX - left);
 		mouseY.set(clientY - top);
 	}
+
 	const maskImage = useMotionTemplate`radial-gradient(240px at ${mouseX}px ${mouseY}px, white, transparent)`;
 	const style = { maskImage, WebkitMaskImage: maskImage };
 
 	return (
 		<div
+			ref={cardRef}
 			onMouseMove={onMouseMove}
 			className="overflow-hidden relative duration-700 border rounded-xl hover:bg-zinc-800/10 group md:gap-8 hover:border-zinc-400/50 border-zinc-600 "
 		>

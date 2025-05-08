@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "@/src/i18n/navigation";
 import { Navigation } from "@/src/components/nav";
 import { Card } from "@/src/components/card";
 import { Article } from "./article";
@@ -150,9 +149,9 @@ export default async function ProjectsPage() {
     const t = await getTranslations("projects");
 
     // Get featured project slugs from environment variables with fallbacks
-    const featuredSlug = process.env.NEXT_PUBLIC_FEATURED_PROJECT || "unkey";
-    const top2Slug = process.env.NEXT_PUBLIC_TOP2_PROJECT || "planetfall";
-    const top3Slug = process.env.NEXT_PUBLIC_TOP3_PROJECT || "highstorm";
+    const featuredSlug = process.env.NEXT_PUBLIC_FEATURED_PROJECT || "proxmox";
+    const top2Slug = process.env.NEXT_PUBLIC_TOP2_PROJECT || "eylexander";
+    const top3Slug = process.env.NEXT_PUBLIC_TOP3_PROJECT || "ollama";
 
     const featured = projects.find((project) => project.slug === featuredSlug);
     const top2 = projects.find((project) => project.slug === top2Slug);

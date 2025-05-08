@@ -30,7 +30,7 @@ WORKDIR /opt/backend
 
 COPY --from=back-build-env /go/src/bin/backend .
 COPY --from=back-build-env /go/src/scripts/startup.sh ./scripts/startup.sh
-COPY --from=back-build-env /go/src/.env .env
+# COPY --from=back-build-env /go/src/.env .env
 
 EXPOSE 8000/tcp
 

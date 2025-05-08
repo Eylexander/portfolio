@@ -1,0 +1,25 @@
+---
+title: proxmox
+description: Une porte ouverte sur le monde de l'auto-hébergement
+date: "2023-11-24"
+url: https://proxserv.eylexander.xyz/
+published: true
+---
+
+[![](https://eylexander.xyz/content/proxmox-overview.png)](https://status.eylexander.xyz/status/default)
+
+Proxmox est une plateforme puissante pour la gestion des environnements virtualisés, et cette instance illustre sa polyvalence en hébergeant une variété de services :
+
+- **Jellyfin** : Un serveur multimédia qui vous permet de diffuser votre bibliothèque multimédia personnelle sur tous les appareils.
+- **Nextcloud** : Une solution de stockage en nuage auto-hébergée pour le partage de fichiers, la collaboration et la synchronisation de données.
+- **Ollama** : Une plateforme pour héberger et exécuter localement des modèles d'IA, en garantissant la confidentialité et le contrôle de vos données.
+- **Nœud Monero** : Un nœud de crypto-monnaie qui prend en charge la blockchain Monero, permettant des transactions privées et sécurisées.
+- **Pterodactyl** : Un panneau de gestion de serveur de jeu qui simplifie l'hébergement et la gestion des serveurs de jeu.
+
+Cette instance Proxmox est un projet dynamique, le nombre et la variété des services évoluant constamment au fil du temps. Au fur et à mesure que de nouveaux besoins apparaissent ou que des technologies émergent, des services supplémentaires sont intégrés, ce qui en fait un exemple vivant de la flexibilité et de l'évolutivité des environnements auto-hébergés.
+
+Il contient également de nombreux artefacts tels que :
+
+- **SSD ZFS Pool** : Il y a environ 7 TiB de stockage composé de 5 SSD différents assurant un énorme volume de stockage.
+- **Disques durs RAID1** : Pour fournir une solution économique et efficace aux sauvegardes locales, j'ai installé 2 disques durs de 2 TiB avec RAID1 assurant 2 TiB de stockage sécurisé.
+- Stockage de sauvegarde externe** : Comme un incendie peut éclater à tout moment, il y a un pool de stockage externe pour conserver les données des utilisateurs de Nextcloud (en utilisant Borg et rClone).

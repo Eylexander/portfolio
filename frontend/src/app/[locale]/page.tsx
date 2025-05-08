@@ -11,17 +11,16 @@ type Props = {
 
 export default function Home({ params }: Props) {
   const { locale } = use(params);
+  const t = useTranslations();
 
   setRequestLocale(locale);
-
-  const t = useTranslations();
 
   const navigation = [
     { name: t('navigation.projects'), href: "/projects" },
     { name: t('navigation.about'), href: "/about" },
     { name: t('navigation.contact'), href: "/contact" },
   ];
-
+  
   return (
     <div className="flex flex-col items-center justify-center w-screen h-screen overflow-hidden bg-gradient-to-tl from-black via-zinc-600/20 to-black">
       <nav className="my-16 animate-fade-in">
@@ -42,7 +41,7 @@ export default function Home({ params }: Props) {
         className="absolute inset-0 -z-10 animate-fade-in"
         quantity={300}
       />
-      <h1 className="py-3.5 px-0.5 z-10 text-4xl text-transparent duration-1000 bg-white text-edge-outline animate-title-alt font-display sm:text-6xl md:text-9xl whitespace-nowrap bg-clip-text ">
+      <h1 className="py-3.5 px-0.5 z-10 text-4xl text-transparent duration-1000 bg-white animate-title-alt font-display sm:text-6xl md:text-9xl whitespace-nowrap bg-clip-text ">
         eylexander
       </h1>
 

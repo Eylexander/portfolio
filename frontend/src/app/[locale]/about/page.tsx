@@ -119,7 +119,7 @@ export default function AboutPage() {
       <Navigation />
       <div className="px-6 pt-20 mx-auto space-y-8 max-w-7xl lg:px-8 md:space-y-16 md:pt-24 lg:pt-32">
         <div className="max-w-2xl mx-auto lg:mx-0">
-          <h2 className="text-3xl font-bold tracking-tight text-zinc-100 sm:text-4xl">
+          <h2 className="text-3xl font-bold tracking-tight text-zinc-100 sm:text-4xl max-md:mt-8">
             {t('title.name')}
           </h2>
           <p className="mt-4 text-zinc-400">
@@ -131,7 +131,7 @@ export default function AboutPage() {
 
         <div className="grid grid-cols-1 place-items-center md:mx-32">
           <Card>
-            <article className="relative flex flex-col md:flex-row w-full h-full p-4 md:p-8">
+            <article className="relative flex flex-col md:flex-row w-full h-full p-8">
               <div className="flex-shrink-0 md:mr-8 flex items-center justify-center">
                 <img
                   src="/Myself.svg"

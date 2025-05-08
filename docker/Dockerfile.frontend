@@ -6,6 +6,10 @@
 
 FROM node:lts-bullseye-slim AS front-builder
 
+ARG NEXT_PUBLIC_FEATURED_PROJECT="proxmox"
+ARG NEXT_PUBLIC_TOP2_PROJECT="eylexander"
+ARG NEXT_PUBLIC_TOP3_PROJECT="ollama"
+
 ###################
 # deps-env-front  #
 ###################
