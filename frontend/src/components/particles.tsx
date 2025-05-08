@@ -9,6 +9,7 @@ interface ParticlesProps {
 	staticity?: number;
 	ease?: number;
 	refresh?: boolean;
+	colorful?: boolean; // New option to toggle colorful particles
 }
 
 export default function Particles({
@@ -17,6 +18,7 @@ export default function Particles({
 	staticity = 50,
 	ease = 50,
 	refresh = false,
+	colorful = true, // Default to colorful for galaxy effect
 }: ParticlesProps) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const canvasContainerRef = useRef<HTMLDivElement>(null);
@@ -78,6 +80,7 @@ export default function Particles({
 		dx: number;
 		dy: number;
 		magnetism: number;
+		color: string; // New property for color
 	};
 
 	const resizeCanvas = () => {
@@ -104,6 +107,9 @@ export default function Particles({
 		const dx = (Math.random() - 0.5) * 0.2;
 		const dy = (Math.random() - 0.5) * 0.2;
 		const magnetism = 0.1 + Math.random() * 4;
+		const color = colorful
+			? `hsl(${Math.random() * 360}, 100%, 70%)`
+			: "rgba(255, 255, 255, 1)"; // Assign color based on colorful option
 		return {
 			x,
 			y,
@@ -115,16 +121,19 @@ export default function Particles({
 			dx,
 			dy,
 			magnetism,
+			color,
 		};
 	};
 
 	const drawCircle = (circle: Circle, update = false) => {
 		if (context.current) {
-			const { x, y, translateX, translateY, size, alpha } = circle;
+			const { x, y, translateX, translateY, size, alpha, color } = circle;
 			context.current.translate(translateX, translateY);
 			context.current.beginPath();
 			context.current.arc(x, y, size, 0, 2 * Math.PI);
-			context.current.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+			context.current.fillStyle = colorful
+					? color.replace('hsl', 'hsla').replace(')', `, ${alpha})`) // Fix for applying alpha to HSL colors
+					: `rgba(255, 255, 255, ${alpha})`;
 			context.current.fill();
 			context.current.setTransform(dpr, 0, 0, dpr, 0, 0);
 
@@ -218,6 +227,7 @@ export default function Particles({
 						translateX: circle.translateX,
 						translateY: circle.translateY,
 						alpha: circle.alpha,
+						color: circle.color, // Pass color property
 					},
 					true,
 				);

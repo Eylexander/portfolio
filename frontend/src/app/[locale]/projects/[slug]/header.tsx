@@ -1,7 +1,7 @@
 "use client";
 
 import { LuArrowLeft, LuAtSign, LuEye, LuGithub, LuTwitter } from "react-icons/lu";
-import {Link} from "@/src/i18n/navigation";
+import { Link } from "@/src/i18n/navigation";
 import React, { useEffect, useRef, useState } from "react";
 
 type Props = {
@@ -44,42 +44,44 @@ export const Header: React.FC<Props> = ({ project }) => {
 			ref={ref}
 			className="relative isolate overflow-hidden bg-gradient-to-tl from-black via-zinc-900 to-black"
 		>
+			<div className="absolute inset-0 overflow-hidden">
+				<div className="absolute top-[10%] right-[-10%] w-[450px] h-[450px] bg-emerald-500/30 rounded-full blur-[140px] pointer-events-none firefly-2" />
+				<div className="absolute bottom-[-10%] left-[-10%] w-[450px] h-[450px] bg-purple-500/25 rounded-full blur-[140px] pointer-events-none firefly-3" />
+			</div>
 			<div
-				className={`fixed inset-x-0 top-0 z-50 backdrop-blur lg:backdrop-blur-none duration-200 border-b lg:bg-transparent ${
-					isIntersecting
-						? "bg-zinc-900/0 border-transparent"
-						: "bg-white/10  border-zinc-200 lg:border-transparent"
-				}`}
+				className={`fixed inset-x-0 top-0 z-50 backdrop-blur lg:backdrop-blur-none duration-200 border-b lg:bg-transparent ${isIntersecting
+					? "bg-zinc-900/0 border-transparent"
+					: "bg-white/10  border-zinc-200 lg:border-transparent"
+					}`}
 			>
 				<div className="container flex flex-row-reverse items-center justify-between p-6 mx-auto">
+
+
 					<div className="flex justify-between gap-8">
 						<Link target="_blank" href="https://twitter.com/eylexander">
 							<LuAtSign
-								className={`w-6 h-6 duration-200 hover:font-medium ${
-									isIntersecting
-										? " text-zinc-400 hover:text-zinc-100"
-										: "text-zinc-600 hover:text-zinc-900"
-								} `}
+								className={`w-6 h-6 duration-200 hover:font-medium ${isIntersecting
+									? " text-zinc-400 hover:text-zinc-100"
+									: "text-zinc-600 hover:text-zinc-900"
+									} `}
 							/>
 						</Link>
 						<Link target="_blank" href="https://github.com/Eylexander">
 							<LuGithub
-								className={`w-6 h-6 duration-200 hover:font-medium ${
-									isIntersecting
-										? " text-zinc-400 hover:text-zinc-100"
-										: "text-zinc-600 hover:text-zinc-900"
-								} `}
+								className={`w-6 h-6 duration-200 hover:font-medium ${isIntersecting
+									? " text-zinc-400 hover:text-zinc-100"
+									: "text-zinc-600 hover:text-zinc-900"
+									} `}
 							/>
 						</Link>
 					</div>
 
 					<Link
 						href="/projects"
-						className={`duration-200 hover:font-medium ${
-							isIntersecting
-								? " text-zinc-400 hover:text-zinc-100"
-								: "text-zinc-600 hover:text-zinc-900"
-						} `}
+						className={`duration-200 hover:font-medium ${isIntersecting
+							? " text-zinc-400 hover:text-zinc-100"
+							: "text-zinc-600 hover:text-zinc-900"
+							} `}
 					>
 						<LuArrowLeft className="w-6 h-6 " />
 					</Link>

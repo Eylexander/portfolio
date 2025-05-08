@@ -31,6 +31,14 @@ export default function Example() {
 	return (
 		<div className="flex flex-col min-h-screen bg-gradient-to-tl from-zinc-900/0 via-zinc-900 to-zinc-900/0">
 			<Navigation />
+
+			<div>
+				<div className="fixed top-[15%] left-[-5%] w-[500px] h-[500px] bg-indigo-600/25 rounded-full blur-[160px] pointer-events-none firefly-1" />
+				<div className="fixed top-[20%] right-[-15%] w-[400px] h-[400px] bg-cyan-500/30 rounded-full blur-[130px] pointer-events-none firefly-2" />
+				<div className="fixed bottom-[-5%] left-[30%] w-[550px] h-[550px] bg-rose-500/20 rounded-full blur-[150px] pointer-events-none firefly-3" />
+				<div className="fixed top-[10%] right-[20%] w-[500px] h-[500px] bg-orange-500/20 rounded-full blur-[150px] pointer-events-none firefly-4" />
+			</div>
+
 			<div className="flex-grow container flex items-center justify-center px-4 mx-auto">
 				<div className="grid w-full grid-cols-1 gap-8 mx-auto mt-32 md:mt-0 md:grid-cols-3 lg:gap-16">
 					{socials.map((s) => (

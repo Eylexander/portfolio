@@ -11,7 +11,7 @@
   },
   "projects": {
     "title": "projects",
-    "description": "Most project are done in my free time.",
+    "description": "These projects were mainly carried out on my own time.",
     "more": "Read more",
     "soon": "Coming soon"
   },
@@ -22,7 +22,7 @@
     },
     "presentation" : {
       "title": "Eylexander",
-      "content": "I am a software engineer, student, and sysadmin. I have a passion for technology and enjoy learning new things. I am currently studying at UnivLorraine and working on various projects in my spare time."
+      "content": "I am a software engineer, student, and sysadmin.\nI have a passion for technology and enjoy learning new things.\nI am currently studying at UnivLorraine and working on various projects in my spare time."
     },
     "experience": {
       "title": "professional experience",

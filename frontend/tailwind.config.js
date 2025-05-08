@@ -127,7 +127,7 @@ module.exports = {
 					},
 					"100%": {
 						"-webkit-text-stroke": "0px rgba(253,251,212,0.3)",
-					},
+						},
 				},
 			},
 		},

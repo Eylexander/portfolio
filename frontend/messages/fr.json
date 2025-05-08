@@ -11,7 +11,7 @@
   },
   "projects": {
     "title": "projets",
-    "description": "La plupart des projets sont réalisés pendant mon temps libre.",
+    "description": "Ces projets ont principalement été réalisés sur mon temps personnel.",
     "more": "Plus d'infos",
     "soon": "Bientôt disponible"
   },
@@ -22,7 +22,7 @@
     },
     "presentation" : {
       "title": "Eylexander",
-      "content": "Je suis ingénieur logiciel, étudiant et administrateur système. J'ai une passion pour la technologie et j'aime apprendre de nouvelles choses. Je suis actuellement étudiant à l'UnivLorraine et je travaille sur divers projets pendant mon temps libre."
+      "content": "Je suis ingénieur logiciel, étudiant et administrateur système.\nJ'ai une passion pour la technologie et j'aime apprendre de nouvelles choses.\nJe suis actuellement étudiant à l'UnivLorraine et je travaille sur divers projets pendant mon temps libre."
     },
     "experience": {
       "title": "expérience professionnelle",
