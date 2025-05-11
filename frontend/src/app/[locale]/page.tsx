@@ -39,30 +39,19 @@ export default function Home({ params }: Props) {
       </nav>
       <div className="hidden w-screen h-px animate-glow md:block animate-fade-left bg-gradient-to-r from-zinc-300/0 via-zinc-300/50 to-zinc-300/0" />
 
-      {/* <Particles
+      <Galaxy
         className="absolute inset-0 -z-10 animate-fade-in"
         quantity={300}
         colorful={false}
-      /> */}
-
-      <Galaxy
-        className="absolute inset-0 -z-10 animate-fade-in"
-        quantity={300} // Adjust number of stars
-        staticity={50}
-        ease={30}
-        colorful={false}
-        // Nebula configuration
-        enableNebula={true}
-        nebulaFrequency={1500} // One flash roughly every second
-        nebulaIntensity={1.2} // Slightly more intense than default
-        nebulaFadeDuration={5} // Make nebulas stay 2.5x longer on screen
+        nebulaFrequency={1500}
+        nebulaIntensity={1.2}
+        nebulaFadeDuration={5}
         nebulaColors={[
-          "rgba(64, 0, 255, 0.3)",    // Deep Blue
-          "rgba(138, 43, 226, 0.3)",  // Purple
-          "rgba(255, 0, 255, 0.3)",   // Pink
-          "rgba(0, 255, 127, 0.3)",   // Green
+          "rgba(97, 95, 255, 0.3)",
+          "rgba(0, 188, 125, 0.3)",
+          "rgba(246, 51, 154, 0.3)",
         ]}
-/>
+      />
 
       <h1 className="py-3.5 px-0.5 z-10 text-4xl text-transparent duration-1000 bg-white animate-title-alt font-display sm:text-6xl md:text-9xl whitespace-nowrap bg-clip-text ">
         eylexander

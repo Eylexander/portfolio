@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
-import { useMousePosition } from "../../util/mouse";
+import { useMousePosition } from "@/util/mouse";
 
 interface GalaxyProps {
 	className?: string;
@@ -10,27 +10,27 @@ interface GalaxyProps {
 	ease?: number;
 	refresh?: boolean;
 	colorful?: boolean;
-	// Nebula configuration
+	
 	enableNebula?: boolean;
-	nebulaFrequency?: number; // Time in ms between auto-generated nebula flashes
-	nebulaColors?: string[]; // Custom colors for nebula flashes
-	nebulaIntensity?: number; // Controls max opacity of nebula
-	nebulaFadeDuration?: number; // Controls how long nebulas stay visible (higher = longer)
+	nebulaFrequency?: number;
+	nebulaColors?: string[];
+	nebulaIntensity?: number;
+	nebulaFadeDuration?: number;
 }
 
 export default function Galaxy({
 	className = "",
 	quantity = 100,
 	staticity = 50,
-	ease = 50,
+	ease = 30,
 	refresh = false,
-	colorful = true,
-	// Nebula configuration
+	colorful = false,
+	
 	enableNebula = true,
-	nebulaFrequency = 7000, // Default: 7 seconds between flashes plus random addition
+	nebulaFrequency = 3000,
 	nebulaColors,
-	nebulaIntensity = 1.0, // Default intensity multiplier
-	nebulaFadeDuration = 1.0, // Default fade duration multiplier
+	nebulaIntensity = 1.0,
+	nebulaFadeDuration = 1.0,
 }: GalaxyProps) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const canvasContainerRef = useRef<HTMLDivElement>(null);
