@@ -1,9 +1,57 @@
 ---
-title: nextcloud
-description: Une solution de stockage cloud open source
+title: "nextcloud"
+description: "Une alternative open source à Google Drive, auto-hébergée et maîtrisée de bout en bout"
 date: "2023-12-06"
 url: https://cloud.eylexander.xyz/
 published: true
 ---
 
-Nextcloud
+## Pourquoi Nextcloud ?
+
+Au début de mon aventure dans l’auto-hébergement, j’utilisais un abonnement Google Drive de 100 Go. C’était abordable à court terme, mais en découvrant **Nextcloud**, j’ai vite changé d’avis.
+
+Nextcloud m’offrait **les mêmes services**, avec l'avantage d’un **contrôle total sur mes données** — et pour un coût largement inférieur. Plus question de dépendre d’un service tiers : j’avais enfin une alternative libre et auto-hébergée.
+
+---
+
+## Première installation : LXC et ses limites
+
+La première fois que j’ai installé Nextcloud, c’était dans un **conteneur LXC** sur mon serveur **Proxmox**, via un script automatisé. J’avais alors une CT (container) entièrement dédiée à Nextcloud.
+
+Mais au fil du temps, les données se sont accumulées… et un problème est vite apparu : **les sauvegardes devenaient trop lourdes**, car elles incluaient à la fois le système et mes fichiers personnels.
+
+---
+
+## Optimisation avec ZFS
+
+Pour résoudre ça, j’ai déplacé le stockage de mes données vers **ma piscine ZFS** montée sur **SSD**. Cela m’a permis de mieux structurer mes dossiers, de séparer les données du système, et surtout de rendre les backups **plus légers et efficaces**.
+
+---
+
+## Migration vers Docker
+
+Après plusieurs mois, j’ai atteint les limites de mon installation en LXC. J’ai alors migré vers une solution **Docker Compose**, accompagnée d’un **proxy Nginx personnalisé**.
+
+Cette nouvelle architecture me donne un **contrôle total** sur chaque composant : bases de données, cron jobs, stockage... et elle est bien plus **évolutive** et **modulaire**.
+
+---
+
+## Sauvegardes intelligentes
+
+Je suis ensuite arrivé à un constat un peu embarrassant : mes backups ne sauvegardaient que **la configuration** de Nextcloud, pas les **données utilisateur**.
+
+J’ai donc mis en place une solution complète :
+- **Borg Backup** pour des sauvegardes compressées et efficaces
+- **rClone** pour synchroniser ces backups vers un répertoire distant
+
+Aujourd’hui, mes données sont :
+- stockées localement en **RAID1 HDD**
+- dupliquées sur un **Raspberry Pi** situé dans un autre lieu géographique
+
+---
+
+## Conclusion
+
+Grâce à cette infrastructure, je peux dire que mes données sont **pérennes**, **sécurisées**, et **entièrement sous mon contrôle**.
+
+Nextcloud est bien plus qu’un simple cloud personnel : c’est une **brique essentielle** de mon architecture numérique libre.

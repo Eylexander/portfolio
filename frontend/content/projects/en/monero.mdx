@@ -1,8 +1,79 @@
 ---
-title: cryptocurrency 
-description: My understanding of the cryptocurrency world
+title: cryptocurrency
+description: My understanding of the world of cryptocurrency
 date: "2025-02-27"
 published: true
 ---
 
-Monero
+# My exploration of the world of cryptocurrency
+
+Like many people, I’ve had a casual interest in the topic without ever diving in seriously. Of course, I’ve followed the markets with curiosity, heard the stories surrounding **Bitcoin** and other crypto-assets...
+
+But my only real experience dates back to **2017**, when I tried to mine bitcoin. I had used:
+
+- Some obscure software (that kept everything for itself…)
+- A command-line tool so rudimentary it scared me
+
+---
+
+## Discovering Monero
+
+Years later, a simple explainer video about **Monero** reignited my interest.  
+I was drawn to the project by its **ideal of decentralization and anonymity**.
+
+I decided to dig deeper.
+
+---
+
+## First experiments
+
+I started by installing Monero’s official GUI wallet, connected to a remote node.  
+But that wasn’t good enough for me: **I wanted full control**.
+
+So I chose to **run my own Monero node**. Here’s how I did it:
+
+1. Downloaded precompiled binaries from the [GitHub releases](https://github.com/monero-project/monero/releases/)
+2. Encountered some bugs
+3. **Manually recompiled** each tool for a fully customized setup
+
+---
+
+## My current setup
+
+Here’s what my installation looks like today:
+
+- **Full Monero node** stored on a **ZFS SSD pool**
+  - Advantages: better backup management + smaller backup size (blockchain can be redownloaded)
+  - Current blockchain size: **~230 GB**
+
+- **P2Pool node**  
+  Allows for **decentralized mining** with other miners (lower fees and better privacy)
+
+- **Secure remote miner connection** via:
+  - A reverse proxy [FRP](https://github.com/fatedier/frp)
+  - No Tor relay: I consider the **secure reverse proxy to be sufficient**
+  - Only the P2Pool node is exposed, the wallet remains unreachable
+
+---
+
+## Result after 2 months
+
+After around **2 months of mining**, I’ve earned:
+
+> **0.025 Monero (~€7)**
+
+-> Totally not profitable in terms of electricity...  
+-> But it’s **highly profitable in terms of learning**.
+
+---
+
+## 🔚 Conclusion
+
+My journey into cryptocurrency has mainly helped me understand **what goes on behind the scenes**:  
+- The technical mechanics  
+- The security challenges  
+- The ideals behind projects like Monero
+
+I haven’t become rich, but **I’ve learned**, and that’s what I’m really after.
+
+---

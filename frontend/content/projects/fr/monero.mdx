@@ -5,4 +5,75 @@ date: "2025-02-27"
 published: true
 ---
 
-Monero
+# Mon exploration du monde de la crypto monnaie
+
+Je pense qu’un peu comme tout le monde, je m’intéresse de loin au sujet sans jamais vraiment y plonger sérieusement. Bien sûr, j’ai déjà suivi la bourse avec étonnement, entendu les histoires autour du **Bitcoin** et autres crypto-actifs... 
+
+Mais ma seule véritable expérience remonte à **2017**, lorsque j’ai tenté de miner du bitcoin. J’avais utilisé :
+
+- Un logiciel obscure (qui gardait tout pour lui...)
+- Un utilitaire en ligne de commande, tellement rustique qu’il m’effrayait
+
+---
+
+## La découverte de Monero
+
+Des années plus tard, une simple vidéo explicative sur **Monero** a ravivé mon intérêt.  
+Ce projet m’a séduit par **son idéal de décentralisation et d’anonymat**.
+
+J’ai décidé de creuser davantage.
+
+---
+
+## Les premières expérimentations
+
+J’ai commencé par installer l’interface GUI officielle de Monero, connectée à un nœud distant.  
+Mais cela ne me convenait pas : **je voulais le contrôle total**.
+
+J’ai donc fait le choix de **monter mon propre nœud Monero**. Voici comment je m’y suis pris :
+
+1. Téléchargement des binaires précompilés depuis les [releases GitHub](https://github.com/monero-project/monero/releases/)
+2. Constats de dysfonctionnements
+3. **Recompilation manuelle** de chaque outil, pour une utilisation totalement personnalisée
+
+---
+
+## Mon setup actuel
+
+Voici à quoi ressemble mon installation aujourd’hui :
+
+- **Nœud Monero complet** stocké sur un pool **ZFS SSD**
+  - Avantages : meilleure gestion des backups + réduction de leur taille (re-téléchargement possible de la blockchain)
+  - Taille actuelle de la blockchain : **~230 Go**
+
+- **Nœud P2Pool**  
+  Permet de miner **de manière décentralisée** avec d’autres mineurs (réduction des frais et meilleure confidentialité)
+
+- **Connexion sécurisée du mineur distant** via :
+  - Un reverse proxy [FRP](https://github.com/fatedier/frp)
+  - Pas de relais Tor : je considère que **le reverse proxy sécurisé suffit**
+  - Seul le nœud P2Pool est accessible, le wallet reste hors d’atteinte
+
+---
+
+## Résultat après 2 mois
+
+Après environ **2 mois de minage**, j’ai accumulé :
+
+> **0.025 Monero (~7€)**
+
+-> Ce n’est pas du tout rentable en termes d’électricité...  
+-> Mais c’est **hautement rentable en termes d’apprentissage**.
+
+---
+
+## 🔚 Conclusion
+
+Mon aventure dans la crypto monnaie m’a surtout permis de comprendre **l’envers du décor** :  
+- Les rouages techniques
+- Les enjeux de sécurité
+- Les idéaux derrière des projets comme Monero
+
+Je ne suis pas devenu riche, mais **j’ai appris**, et c'est ça, que je recherche avant tout.
+
+---

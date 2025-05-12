@@ -1,9 +1,57 @@
 ---
-title: nextcloud instance
-description: An opensource cloud storage solution
+title: "nextcloud"
+description: "An open-source alternative to Google Drive, self-hosted and fully controlled"
 date: "2023-12-06"
 url: https://cloud.eylexander.xyz/
 published: true
 ---
 
-Nextcloud
+## Why Nextcloud?
+
+At the start of my self-hosting journey, I was using a 100 GB Google Drive subscription. It was affordable in the short term, but after discovering **Nextcloud**, I quickly changed my mind.
+
+Nextcloud offered me **the same services**, with the added benefit of **full control over my data** — and at a much lower cost. No more depending on third-party services: I finally had a free, self-hosted alternative.
+
+---
+
+## First installation: LXC and its limitations
+
+The first time I installed Nextcloud, it was in an **LXC container** on my **Proxmox** server, using an automated script. I had a CT (container) fully dedicated to Nextcloud.
+
+But over time, data began to pile up… and a problem quickly emerged: **backups became too large**, since they included both the system and my personal files.
+
+---
+
+## Optimization with ZFS
+
+To fix this, I moved my data storage to my **ZFS pool** mounted on an **SSD**. This allowed me to better structure my folders, separate data from the system, and most importantly, make the backups **lighter and more efficient**.
+
+---
+
+## Migration to Docker
+
+After several months, I hit the limits of my LXC setup. I then migrated to a **Docker Compose** solution, accompanied by a **custom Nginx proxy**.
+
+This new architecture gives me **complete control** over each component: databases, cron jobs, storage... and it’s much more **scalable** and **modular**.
+
+---
+
+## Smart backups
+
+Then I came to a slightly embarrassing realization: my backups were only saving **Nextcloud’s configuration**, not the **user data**.
+
+So I set up a full solution:
+- **Borg Backup** for compressed, efficient backups
+- **rClone** to sync these backups to a remote directory
+
+Today, my data is:
+- stored locally on **RAID1 HDD**
+- duplicated to a **Raspberry Pi** in another geographic location
+
+---
+
+## Conclusion
+
+Thanks to this infrastructure, I can confidently say that my data is **durable**, **secure**, and **fully under my control**.
+
+Nextcloud is much more than just a personal cloud: it’s a **core building block** of my free and open digital architecture.
