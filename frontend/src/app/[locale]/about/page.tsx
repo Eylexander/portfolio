@@ -226,24 +226,13 @@ export default function AboutPage() {
                 <Link
                   href={item.url}
                   key={index}
-                  className="marquee-item transition-all hover:text-zinc-300"
+                  className="marquee-item transition-all text-zinc-500 hover:text-zinc-300"
                   target="_blank"
                 >
                   <item.Icon className="w-12 h-12" />
                   <span className="ml-2 text-zinc-400">{item.name}</span>
                 </Link>
               ))}
-              {/* {stack.map((item, index) => (
-                <Link
-                  href={item.url}
-                  key={index}
-                  className="marquee-item transition-all"
-                  target="_blank"
-                >
-                  <item.Icon className="w-12 h-12 text-zinc-300" />
-                  <span className="ml-2 text-fuchsia-500">{item.name}</span>
-                </Link>
-              ))} */}
             </div>
           </div>
         </div>

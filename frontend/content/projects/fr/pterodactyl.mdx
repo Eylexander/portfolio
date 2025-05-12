@@ -6,6 +6,66 @@ url: https://ptero.eylexander.xyz/
 published: true
 ---
 
-[![](https://eylexander.xyz/content/pterodactyl-overview.png)](https://pterodactyl.io/)
+[![Aperçu de Pterodactyl](https://eylexander.xyz/content/pterodactyl-overview.png)](https://pterodactyl.io/)
 
-Pterodactyl
+## Pourquoi héberger soi-même un serveur de jeux ?
+
+J'ai toujours voulu gérer mon propre serveur **Minecraft** pour pouvoir jouer avec mes amis.  
+Mais louer un serveur chez un hébergeur reconnu coûte de l'argent chaque mois, sans vraiment me donner un **contrôle total** sur l’infrastructure.
+
+Avec l’aide de mon serveur personnel, j’ai longtemps cherché la meilleure manière d’héberger moi-même un serveur de jeux, de façon **gratuite, stable et flexible**.
+
+## Mes débuts rudimentaires
+
+Au départ, j’utilisais simplement une **CT Proxmox** dans laquelle je faisais tourner le code du serveur.  
+C’était une solution très basique... et franchement instable.
+
+## La découverte de Pterodactyl
+
+Puis un jour, je suis tombé sur **[Pterodactyl](https://pterodactyl.io/)**, une solution open source conçue pour héberger plusieurs serveurs de jeux dans une interface claire et bien pensée.
+
+Un ami m’a conseillé de l’exécuter dans une **VM dédiée**, afin d’éviter les limitations liées à la virtualisation imbriquée. Sage conseil !
+
+### Une architecture Docker-friendly
+
+Pterodactyl repose sur **Docker**, ce qui permet :
+
+- de lancer des serveurs de jeux isolés,
+- d’avoir un accès console propre,
+- et de suivre les performances facilement.
+
+C’est aussi pratique pour lancer d’autres services non liés au gaming.
+
+## Installation : pas si simple !
+
+L’installation m’a donné un peu de fil à retordre.  
+La solution repose sur deux composants :
+
+- **Wings**, qui héberge concrètement les serveurs,
+- et le **Panel Pterodactyl**, qui fournit une interface web d’administration.
+
+Le vrai casse-tête ? La gestion des **certificats SSL** avec mon **reverse proxy Cloudflare**.  
+Mais j’ai fini par m’en sortir en important mes clés SSL via **Acme.sh**.
+
+## Rendre le serveur accessible (sans exposer son IP)
+
+Petit hic : un serveur Minecraft ne peut pas être exposé via le proxy Cloudflare car il utilise le port **25565**.
+Cloudflare ne supporte pas le **proxying** sur les ports non standards, ce qui rend l’accès direct impossible.
+
+De plus, je ne voulais pas exposer mon IP personnelle à mes amis.
+
+### La solution : FRP
+
+Pour contourner ce problème, j’utilise le logiciel **[FRP](https://github.com/fatedier/frp)**.  
+Il me permet de connecter mon serveur local à un **petit VPS** disposant d'une IP publique.
+
+En combinant :
+
+- une **redirection DNS de type A**,
+- avec un **enregistrement SRV**,
+
+je peux accéder à mon serveur Minecraft via une URL personnalisée **sans exposer mon IP personnelle**.
+
+---
+
+> 🧠 En résumé : Pterodactyl est une solution complète, puissante et gratuite pour gérer ses serveurs de jeux soi-même, à condition d’être prêt à mettre un peu les mains dans le cambouis.

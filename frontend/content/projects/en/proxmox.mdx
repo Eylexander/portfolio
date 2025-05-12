@@ -77,6 +77,26 @@ Except for Pterodactyl, all my services run in **dedicated LXC containers**, eac
 
 ---
 
+## The Network Infrastructure
+
+The question of external access to my services was a fascinating challenge. I ended up adopting a multi-layered approach:
+
+### Cloudflare as a Shield
+For the majority of my web applications, I use **Cloudflare tunnels**. This elegant solution allows me to:
+- Protect my services against DDoS attacks
+- Avoid exposing my home IP address
+- Benefit from cache and free SSL certificates
+
+### VPN for Sensitive Content
+My personal data, especially on **Jellyfin**, is only accessible via a **WireGuard VPN** that I manage. This additional layer ensures that only authorized devices can access my media.
+
+### FRP for Special Cases
+For my **Pterodactyl** server, I use a different system: **Fast Reverse Proxy** (FRP). This configuration connects my local server to a small VPS with a public IP, ideal for applications requiring special connections.
+
+This hybrid architecture allows me to maintain a balance between accessibility and security - an essential compromise in self-hosting.
+
+---
+
 ## A Constant Evolution
 
 My Proxmox instance is a **living project**. Services evolve over time, depending on needs and interests. That’s the beauty of self-hosting: everything is modular, customizable, and improvable.
