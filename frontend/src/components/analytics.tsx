@@ -2,13 +2,15 @@
 
 export function Analytics() {
 	const token = process.env.NEXT_PUBLIC_BEAM_TOKEN;
-	if (!token) {
+	const apiUri = process.env.NEXT_PUBLIC_BEAM_API_URI;
+	if (!token || !apiUri) {
 		return null;
 	}
 	return (
 		<script
-			src="https://beamanalytics.b-cdn.net/beam.min.js"
 			data-token={token}
+			data-api={apiUri + "/log"}
+			src={apiUri + "/script.js"}
 			async
 		/>
 	);
