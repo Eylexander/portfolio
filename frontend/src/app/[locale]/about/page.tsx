@@ -11,6 +11,7 @@ import {
   BiLogoDocker,
   BiLogoMongodb,
   BiLogoTailwindCss,
+  BiLinkExternal,
 } from "react-icons/bi";
 import { VscVscodeInsiders } from "react-icons/vsc";
 import { Navigation } from "@/src/components/nav";
@@ -170,8 +171,8 @@ export default function AboutPage() {
                         {line}
                         {index <
                           t("presentation.content").split("\n").length - 1 && (
-                            <br />
-                          )}
+                          <br />
+                        )}
                       </React.Fragment>
                     ))}
                 </p>
@@ -190,8 +191,17 @@ export default function AboutPage() {
 
         <div className="space-y-8 mx-auto">
           <div className="flex flex-col space-y-1">
-            <h3 className="text-2xl font-bold text-zinc-100 font-display">
-              {t("experience.job1.title")}
+            <h3 className="text-2xl font-bold text-zinc-100 font-display flex items-center">
+              <Link href="/projects/alternance" className="hover:underline">
+                {t("experience.job1.title")}
+              </Link>
+              <Link
+                href="/projects/alternance"
+                target="_blank"
+                className="ml-2 text-zinc-500 hover:text-zinc-300"
+              >
+                <BiLinkExternal />
+              </Link>
             </h3>
             <p className="text-zinc-500 text-s">
               {t("experience.job1.duration")}
@@ -212,6 +222,8 @@ export default function AboutPage() {
             {t("experience.job2.description")}
           </p>
         </div>
+
+        <div className="w-full h-px bg-zinc-800" />
 
         <div className="max-w-2xl mx-auto lg:mx-0">
           <h2 className="text-3xl font-bold tracking-tight text-zinc-100 sm:text-4xl">

@@ -1,8 +1,62 @@
 ---
 title: homeland
-description: Un raspberry pi boosté par Proxmox
+description: Un Raspberry Pi boosté par Proxmox
 date: "2023-10-14"
 published: true
 ---
 
-Homeland
+# Homeland – Un Raspberry Pi boosté par Proxmox
+
+Après avoir installé mon serveur Proxmox principal, j'ai voulu enrichir mon réseau personnel avec plusieurs adresses **Wireguard**. L'idée : pouvoir me connecter depuis différents endroits — notamment chez mes parents — pour les aider à distance, si besoin.
+
+---
+
+## Le choix du matériel
+
+Pour cela, j’ai investi dans un **Raspberry Pi 4B (4 Go de RAM)**. Léger, discret et parfaitement adapté à ce type de tâche, il allait devenir mon petit bastion décentralisé.
+
+---
+
+## Et le système d'exploitation ?
+
+Je me suis rapidement posé la question du système à utiliser. Très vite, mon choix s'est porté sur **Proxmox**, après avoir découvert une version *non-officielle* mais fonctionnelle pour le Pi. 
+
+Curieux, je l'ai testée, et elle répondait parfaitement à mes besoins. Depuis, je n’ai plus changé !
+
+---
+
+## Mise en place des services
+
+Une fois le système prêt, j’ai installé plusieurs services essentiels :
+
+- **Wireguard** – pour les connexions VPN
+- **Tunnel Cloudflare** – pour exposer certains services en toute sécurité
+- **Deluge** – pour du téléchargement en torrent
+
+---
+
+## Une carte qui ne dort jamais
+
+Le Raspberry Pi étant souvent en idle, j’ai décidé de lui faire faire quelque chose d’utile : **partager des distributions Linux en torrent** pour contribuer à l’open source (Ubuntu, Kali, EndeavourOS, etc.).
+
+---
+
+## Sauvegardes et stockage distant
+
+Avec l'amélioration du système de backups de mon **instance Nextcloud**, j'avais besoin d'un espace de stockage supplémentaire.
+
+J’ai donc ajouté un **SSD de 500 Go en USB**, et configuré un dépot **rClone** pour le stockage distant. Cela me permet de sauvegarder mes données de manière sécurisée et de les synchroniser avec d'autres services.
+
+---
+
+## 🔗 Résumé des services de Homeland
+
+Aujourd'hui, *Homeland* assure fièrement trois fonctions clés dans mon infrastructure :
+
+- **Wireguard** – Accès VPN privé
+- **Deluge** – Partage de distributions Linux
+- **rClone/Borg** – Sauvegardes sécurisées et distantes
+
+---
+
+Ce petit Raspberry, silencieux mais costaud, est devenu un maillon essentiel de mon réseau personnel. Et surtout, il me permet de rester connecté, même à distance.

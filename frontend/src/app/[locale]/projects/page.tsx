@@ -151,7 +151,7 @@ export default async function ProjectsPage() {
     // Get featured project slugs from environment variables with fallbacks
     const featuredSlug = process.env.NEXT_PUBLIC_FEATURED_PROJECT || "proxmox";
     const top2Slug = process.env.NEXT_PUBLIC_TOP2_PROJECT || "eylexander";
-    const top3Slug = process.env.NEXT_PUBLIC_TOP3_PROJECT || "ollama";
+    const top3Slug = process.env.NEXT_PUBLIC_TOP3_PROJECT || "alternance";
 
     const featured = projects.find((project) => project.slug === featuredSlug);
     const top2 = projects.find((project) => project.slug === top2Slug);

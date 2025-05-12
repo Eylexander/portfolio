@@ -1,8 +1,62 @@
 ---
 title: homeland
-description: A Proxmox-boosted Raspberry Pi
+description: A Raspberry Pi powered by Proxmox
 date: "2023-10-14"
 published: true
 ---
 
-Homeland
+# Homeland – A Raspberry Pi Powered by Proxmox
+
+After setting up my main Proxmox server, I wanted to expand my home network with several **Wireguard** addresses. The idea: to be able to connect from different locations — especially my parents' home — to help them remotely if needed.
+
+---
+
+## Choosing the Hardware
+
+For this, I invested in a **Raspberry Pi 4B (4 GB RAM)**. Lightweight, discreet, and perfectly suited for this kind of task, it was set to become my little decentralized stronghold.
+
+---
+
+## And the Operating System?
+
+I quickly wondered which OS to use. Before long, I settled on **Proxmox**, after discovering a *non-official* but working version for the Pi.
+
+Curious, I tested it, and it fit my needs perfectly. I haven’t looked back since!
+
+---
+
+## Setting Up the Services
+
+Once the system was ready, I installed several essential services:
+
+- **Wireguard** – for VPN connections  
+- **Cloudflare Tunnel** – to securely expose certain services  
+- **Deluge** – for torrent downloading
+
+---
+
+## A Board That Never Sleeps
+
+Since the Raspberry Pi often sits idle, I decided to make it useful: **sharing Linux distributions via torrent** to support open source (Ubuntu, Kali, EndeavourOS, etc.).
+
+---
+
+## Backups and Remote Storage
+
+With the improved backup system on my **Nextcloud instance**, I needed additional storage space.
+
+So I added a **500 GB SSD via USB**, and set up an **rClone** remote storage repository. This lets me back up my data securely and sync it with other services.
+
+---
+
+## 🔗 Homeland Service Summary
+
+Today, *Homeland* proudly fulfills three key roles in my infrastructure:
+
+- **Wireguard** – Private VPN access
+- **Deluge** – Sharing Linux distributions
+- **rClone/Borg** – Secure and remote backups
+
+---
+
+This small Raspberry Pi — silent but powerful — has become an essential link in my personal network. And above all, it keeps me connected, even from afar.
