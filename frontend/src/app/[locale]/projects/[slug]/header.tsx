@@ -54,19 +54,11 @@ export const Header: React.FC<Props> = ({ project }) => {
         <div className="absolute top-[10%] right-[-10%] w-[450px] h-[450px] bg-emerald-500/30 rounded-full blur-[140px] pointer-events-none firefly-2" />
         <div className="absolute bottom-[-10%] left-[-10%] w-[450px] h-[450px] bg-purple-500/25 rounded-full blur-[140px] pointer-events-none firefly-3" />
       </div>
-	  
-      {/* <div
-        className={`fixed inset-x-0 top-0 z-50 backdrop-blur lg:backdrop-blur-none duration-200 border-b lg:bg-transparent ${
-          isIntersecting
-            ? "bg-zinc-900/0 border-transparent"
-            : "bg-white/10 border-zinc-200 lg:border-transparent"
-        }`}
-      > */}
       <div
-        className={`fixed inset-x-0 top-0 z-50 backdrop-blur-none duration-200 bg-transparent ${
+        className={`fixed inset-x-0 top-0 z-50 backdrop-blur-none transition-all duration-75 bg-transparent ${
           isIntersecting
-            ? "bg-zinc-900/0 border-transparent"
-            : "bg-white/10 border-zinc-200 lg:border-transparent"
+        ? "bg-zinc-900/0 border-transparent"
+        : "border-zinc-200 lg:border-transparent hidden sm:block"
         }`}
       >
         <div className="container flex flex-row-reverse items-center justify-between p-6 mx-auto">
