@@ -6,4 +6,62 @@ url: https://chat.eylexander.xyz/
 published: true
 ---
 
-Ollama
+# Mon Parcours dans l’Intelligence Artificielle
+
+Depuis la montée en popularité des intelligences artificielles fin 2022, je me suis passionné pour ce domaine fascinant. Comme beaucoup, j’ai commencé avec **[Ollama](https://ollama.com/)**, un outil permettant d'interagir avec un modèle LLM en seulement deux commandes.
+
+---
+
+## Débuts sur Ordinateur Portable
+
+À mes débuts, je faisais tous mes tests sur mon **ordinateur portable**. Cela m’a permis de découvrir les bases du fonctionnement des modèles IA, mais rapidement, les limites matérielles et la chaleur se sont fait sentir.
+
+---
+
+## Passage au Serveur et à Docker
+
+Ayant une **carte graphique dédiée** sur mon serveur pour l'encodage/décodage vidéo avec Jellyfin, j’ai décidé d’y installer Ollama dans une **LXC dédiée via Docker**. J’y ai rapidement ajouté **Open WebUI** (anciennement Ollama WebUI) pour une interface plus intuitive.
+
+Pour optimiser les performances, j’ai monté une **partition SSD dédiée** depuis mon ZFS Pool dans ce conteneur afin de séparer le stockage des modèles de celui du système d’exploitation. Résultat : des **backups plus légers** et une **exécution bien plus rapide**.
+
+---
+
+## Vers des IA Visuelles
+
+Avec cette puissance, j’ai pu explorer des outils orientés **génération d’images et de vidéos**. C’est à ce moment que j’ai découvert les **modèles LoRA**, permettant de générer des images représentant une personnalité spécifique avec un simple prompt.
+
+Au début je me suis amusé à en télécharger quelques-uns, mais j’ai rapidement voulu créer mes propres modèles. J’ai donc commencé à m’entraîner sur des **LoRA** et des **DreamBooth**.
+
+Cependant, l'entraînement de ces modèles étant très gourmand en ressources, j’ai appris à utiliser **Google Colab** et **RunPod** pour louer de la puissance de calcul à l'heure, à moindre coût et performances pour l'un et à prix et perorformances intéressants pour l'autre.
+
+---
+
+## Un Écosystème Complet
+
+Aujourd’hui, mon Open WebUI est connecté à :
+
+- **SearxNG** : pour permettre aux modèles d’effectuer des recherches web directement depuis le serveur grâce à une instance auto-hébergée de SearxNG.
+- **Ollama** : pour exécuter des modèles LLM et générer du texte.
+- Une instance Docker de [**Stable Diffusion par AUTOMATIC1111**](https://github.com/AUTOMATIC1111/stable-diffusion-webui) pour générer des images à la volée.
+
+Cela me permet d’interagir avec mes modèles IA comme avec un véritable assistant personnel, capable de **chercher et illustrer en temps réel**.
+
+---
+
+## Limites Matérielles
+
+Mon serveur reste modeste, ce qui limite l'utilisation à des **modèles de 32B paramètres** maximum. Malgré cela, il reste suffisant pour une majorité d’expérimentations.
+
+---
+
+## Un Complément Théorique
+
+Enfin, j’ai pu renforcer mes connaissances grâce à un **cours universitaire** portant sur les fondements de l’intelligence artificielle. Nous y avons :
+
+- Créé notre propre **réseau neuronal**,
+- Travaillé avec **MNIST** (reconnaissance de chiffres) et **Fashion MNIST** (reconnaissance de vêtements),
+- Conçu un algorithme capable de **gagner presque à coup sûr au morpion**.
+
+---
+
+Ce parcours m’a permis de mieux comprendre les possibilités des IA modernes tout en mettant en place un environnement personnel pour les explorer librement.

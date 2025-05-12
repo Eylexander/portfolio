@@ -1,9 +1,67 @@
 ---
-title: ai studies
+title: AI studies
 description: All my studies and discoveries in the field of AI
 date: "2024-10-04"
 url: https://chat.eylexander.xyz/
 published: true
 ---
 
-Ollama
+# My Journey in Artificial Intelligence
+
+Since the rise in popularity of artificial intelligence at the end of 2022, I’ve become passionate about this fascinating field. Like many others, I started with **[Ollama](https://ollama.com/)**, a tool that lets you interact with an LLM model in just two commands.
+
+---
+
+## Starting Out on a Laptop
+
+In the beginning, I ran all my tests on my **laptop**. This helped me understand the basics of how AI models work, but I quickly hit hardware limitations and dealt with excessive heat.
+
+---
+
+## Moving to a Server and Docker
+
+Since I had a **dedicated graphics card** on my server for video encoding/decoding with Jellyfin, I decided to install Ollama there in a **dedicated LXC via Docker**. I soon added **Open WebUI** (formerly Ollama WebUI) for a more intuitive interface.
+
+To boost performance, I mounted a **dedicated SSD partition** from my ZFS pool into this container to separate model storage from the OS. The result: **lighter backups** and **much faster execution**.
+
+---
+
+## Toward Visual AIs
+
+With this power, I was able to explore tools focused on **image and video generation**. That’s when I discovered **LoRA models**, which allow you to generate images of a specific personality with just a simple prompt.
+
+At first, I downloaded a few for fun, but I quickly wanted to make my own. So I began training my own **LoRA** and **DreamBooth** models.
+
+However, since training these models is very resource-intensive, I learned how to use **Google Colab** and **RunPod** to rent computing power by the hour—low-cost but lower performance for the former, and more interesting price/performance balance for the latter.
+
+---
+
+## A Complete Ecosystem
+
+Today, my Open WebUI is connected to:
+
+- **SearxNG**: allowing models to perform web searches directly from the server using a self-hosted SearxNG instance.  
+- **Ollama**: to run LLM models and generate text.  
+- A Docker instance of [**Stable Diffusion by AUTOMATIC1111**](https://github.com/AUTOMATIC1111/stable-diffusion-webui) to generate images on the fly.
+
+This setup lets me interact with my AI models like a true personal assistant, capable of **searching and illustrating in real time**.
+
+---
+
+## Hardware Limitations
+
+My server remains modest, which limits me to using **models with up to 32B parameters**. Still, it’s sufficient for most experiments.
+
+---
+
+## A Theoretical Supplement
+
+Finally, I strengthened my knowledge through a **university course** on the fundamentals of artificial intelligence. In this course, we:
+
+- Created our own **neural network**,  
+- Worked with **MNIST** (digit recognition) and **Fashion MNIST** (clothing recognition),  
+- Designed an algorithm capable of **almost always winning at tic-tac-toe**.
+
+---
+
+This journey has helped me better understand the potential of modern AI while building a personal environment to explore it freely.

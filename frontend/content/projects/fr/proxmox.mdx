@@ -1,6 +1,6 @@
 ---
-title: proxmox
-description: Une porte ouverte sur le monde de l'auto-hébergement
+title: "mon aventure avec proxmox"
+description: "Une porte ouverte sur le monde de l'auto-hébergement"
 date: "2023-11-24"
 url: https://proxserv.eylexander.xyz/
 published: true
@@ -8,18 +8,77 @@ published: true
 
 [![](https://eylexander.xyz/content/proxmox-overview.png)](https://status.eylexander.xyz/status/default)
 
-Proxmox est une plateforme puissante pour la gestion des environnements virtualisés, et cette instance illustre sa polyvalence en hébergeant une variété de services :
+## Comment tout a commencé
 
-- **Jellyfin** : Un serveur multimédia qui vous permet de diffuser votre bibliothèque multimédia personnelle sur tous les appareils.
-- **Nextcloud** : Une solution de stockage en nuage auto-hébergée pour le partage de fichiers, la collaboration et la synchronisation de données.
-- **Ollama** : Une plateforme pour héberger et exécuter localement des modèles d'IA, en garantissant la confidentialité et le contrôle de vos données.
-- **Nœud Monero** : Un nœud de crypto-monnaie qui prend en charge la blockchain Monero, permettant des transactions privées et sécurisées.
-- **Pterodactyl** : Un panneau de gestion de serveur de jeu qui simplifie l'hébergement et la gestion des serveurs de jeu.
+J’ai commencé à expérimenter avec **Proxmox** autour de juin 2023, sur un vieil ordinateur portable. Un peu à l’étroit côté performances, je me suis fixé un budget en novembre pour construire une machine plus sérieuse, capable de tenir la route sur le long terme.
 
-Cette instance Proxmox est un projet dynamique, le nombre et la variété des services évoluant constamment au fil du temps. Au fur et à mesure que de nouveaux besoins apparaissent ou que des technologies émergent, des services supplémentaires sont intégrés, ce qui en fait un exemple vivant de la flexibilité et de l'évolutivité des environnements auto-hébergés.
+Plutôt que de partir sur une machine typiquement orientée “serveur”, j’ai préféré assembler une configuration **mainstream**, mais équilibrée, en fonction de mes moyens.
 
-Il contient également de nombreux artefacts tels que :
+---
 
-- **SSD ZFS Pool** : Il y a environ 7 TiB de stockage composé de 5 SSD différents assurant un énorme volume de stockage.
-- **Disques durs RAID1** : Pour fournir une solution économique et efficace aux sauvegardes locales, j'ai installé 2 disques durs de 2 TiB avec RAID1 assurant 2 TiB de stockage sécurisé.
-- Stockage de sauvegarde externe** : Comme un incendie peut éclater à tout moment, il y a un pool de stockage externe pour conserver les données des utilisateurs de Nextcloud (en utilisant Borg et rClone).
+## Ma configuration actuelle (2025)
+
+Voici la configuration matérielle de mon serveur auto-hébergé :
+
+- **Boîtier** : Fractal Design Node 804  
+- **Carte mère** : Gigabyte B550M Aorus Elite  
+- **Processeur** : AMD Ryzen 7 5800X  
+- **Ventirad** : be quiet! Pure Rock 2 Black  
+- **RAM** : 64 Go DDR4 (4×16 Go 3200 MHz Kingston Fury Beast)  
+- **Alimentation** : be quiet! Straight Power 12 – 750W  
+- **Stockage** :
+  - Crucial P3 2 To (NVMe)
+  - Crucial BX500
+  - 2× Seagate BarraCuda 2 To
+
+---
+
+## Organisation du stockage
+
+Pour exploiter au mieux le stockage disponible, j’ai mis en place plusieurs systèmes en m’appuyant sur **ZFS** et le RAID logiciel :
+
+- **ZFS Pool SSD** : Une grappe de 3 SSD (BX500) réunis dans un pool ZFS de **7 To**. Cela me garantit une excellente rapidité pour les services critiques. Cela me permet aussi de pouvoir séparer et mieux organiser mes différentes CTs.
+- **ZFS HDD** : Mes deux disques durs mécaniques tournent en **RAID1 logiciel**, idéal pour le stockage de backups longue durée.  
+- **Homeland** : Une **Raspberry Pi** hébergée à distance, avec un SSD de 500 Go, utilisée comme **point de backup** (via Borg et rClone).
+
+---
+
+## Mes services auto-hébergés
+
+Avec cette infrastructure, je me suis lancé dans l’univers passionnant (et parfois chaotique) du **self-hosting**. Voici quelques services que j’ai déployés :
+
+### Jellyfin  
+Serveur multimédia permettant de diffuser différents médias sur tous mes appareils.  
+-> Stockage : **ZFS SSD**
+
+### Nextcloud  
+Alternative open source aux GAFAM pour le cloud, le partage et la synchronisation de fichiers.  
+-> Stockage : **ZFS HDD** pour les backups (via Borg)
+
+### Ollama + Open WebUI  
+Plateforme locale pour exécuter des **modèles d’IA LLM**, avec une interface web conviviale.  
+Très utile pour tester des LLM sans dépendre du cloud.
+
+### Nœud Monero  
+Curieux du monde crypto, j’ai hébergé un nœud **Monero** (~230 Go) pour apprendre et miner en autonomie.
+
+### Pterodactyl  
+Panneau de gestion de serveurs de jeu. Fonctionne dans une **VM dédiée** pour plus de liberté et d’isolation.
+
+---
+
+## L'infra logicielle
+
+Hormis Pterodactyl, tous mes services tournent dans des **LXC dédiés** (containers légers), avec à l’intérieur de chacun une couche **Docker** pour orchestrer les apps via **Docker Compose**. Ce modèle me permet :
+
+- Une isolation propre par service
+- Une empreinte mémoire plus légère que les VM
+- Une souplesse de gestion accrue
+
+---
+
+## Une évolution constante
+
+Mon instance Proxmox est un **projet vivant**. Les services évoluent avec le temps, les besoins, les envies. C’est ce qui fait la beauté de l’auto-hébergement : tout est modulable, personnalisable, améliorable.
+
+> Ce projet m’a appris énormément sur l’infra, la sécurité, la gestion de services… et ce n’est que le début.

@@ -72,7 +72,7 @@ const components = {
 	a: ({ className, ...props }: ComponentWithClassName) => (
 		<Link
 			className={clsx(
-				"font-medium text-zinc-900 underline underline-offset-4 hover:text-zinc-600 transition-colors",
+				"font-medium text-cyan-400 underline underline-offset-4 hover:text-cyan-200 transition-colors",
 				className,
 			)}
 			href={props.href || "#"}

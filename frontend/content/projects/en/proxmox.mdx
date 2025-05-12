@@ -1,6 +1,6 @@
 ---
-title: proxmox clustering
-description: An open door to the selfhost world
+title: "my adventure with proxmox"
+description: "An open door to the world of self-hosting"
 date: "2023-11-24"
 url: https://proxserv.eylexander.xyz/
 published: true
@@ -8,18 +8,77 @@ published: true
 
 [![](https://eylexander.xyz/content/proxmox-overview.png)](https://status.eylexander.xyz/status/default)
 
-Proxmox is a powerful platform for managing virtualized environments, and this instance showcases its versatility by hosting a variety of services:
+## How It All Started
 
-- **Jellyfin**: A media server that allows you to stream your personal media library across devices.
-- **Nextcloud**: A self-hosted cloud storage solution for file sharing, collaboration, and data synchronization.
-- **Ollama**: A platform for hosting and running AI models locally, ensuring privacy and control over your data.
-- **Monero Node**: A cryptocurrency node that supports the Monero blockchain, enabling private and secure transactions.
-- **Pterodactyl**: A game server management panel that simplifies hosting and managing game servers.
+I started experimenting with **Proxmox** around June 2023 on an old laptop. A bit limited in terms of performance, I set myself a budget in November to build a more serious machine that could handle long-term use.
 
-This Proxmox instance is a dynamic project, with the number and variety of services constantly evolving over time. As new needs arise or technologies emerge, additional services are integrated, making it a living example of the flexibility and scalability of self-hosted environments.
+Rather than building a machine specifically tailored for “server” use, I opted for a **mainstream**, yet balanced setup, based on what I could afford.
 
-It also contains multiple artifacts such as :
+---
 
-- **SSD ZFS Pool** : There is about 7 TiB of storage made up from 5 different SSD assuring a huge volume of storage.
-- **RAID1 HDDs** : To provide a cheap and efficient solution to local backups, I installed 2x 2 TiB HDD with RAID1 assuring 2 TiB of secure storage.
-- **External Backup Storage** : As a fire can erupt at any moment, there is an off-site storage pool to keep the Nextcloud user data (using Borg and rClone).
+## My Current Setup (2025)
+
+Here’s the hardware configuration of my self-hosted server:
+
+- **Case**: Fractal Design Node 804  
+- **Motherboard**: Gigabyte B550M Aorus Elite  
+- **CPU**: AMD Ryzen 7 5800X  
+- **CPU Cooler**: be quiet! Pure Rock 2 Black  
+- **RAM**: 64 GB DDR4 (4×16 GB 3200 MHz Kingston Fury Beast)  
+- **Power Supply**: be quiet! Straight Power 12 – 750W  
+- **Storage**:
+  - Crucial P3 2 TB (NVMe)
+  - Crucial BX500
+  - 2× Seagate BarraCuda 2 TB
+
+---
+
+## Storage Organization
+
+To get the most out of the available storage, I set up multiple systems using **ZFS** and software RAID:
+
+- **ZFS SSD Pool**: A pool of 3 SSDs (BX500) combined into a **7 TB ZFS pool**. This ensures great speed for critical services and allows for better separation and organization of my containers.
+- **ZFS HDD**: My two spinning hard drives run in **software RAID1**, ideal for long-term backup storage.  
+- **Homeland**: A **remotely hosted Raspberry Pi** with a 500 GB SSD, used as a **backup point** (via Borg and rClone).
+
+---
+
+## My Self-Hosted Services
+
+With this infrastructure, I’ve dived into the fascinating (and sometimes chaotic) world of **self-hosting**. Here are some of the services I’ve deployed:
+
+### Jellyfin  
+Media server that lets me stream various content across all my devices.  
+-> Storage: **ZFS SSD**
+
+### Nextcloud  
+Open-source alternative to GAFAM for cloud storage, file sharing, and synchronization.  
+-> Storage: **ZFS HDD** for backups (via Borg)
+
+### Ollama + Open WebUI  
+Local platform for running **LLM AI models**, with a user-friendly web interface.  
+Very useful for testing LLMs without relying on the cloud.
+
+### Monero Node  
+Curious about crypto, I hosted a **Monero node** (~230 GB) to learn and mine independently.
+
+### Pterodactyl  
+Game server management panel. Runs inside a **dedicated VM** for more freedom and isolation.
+
+---
+
+## The Software Infrastructure
+
+Except for Pterodactyl, all my services run in **dedicated LXC containers**, each with a **Docker** layer inside to orchestrate apps via **Docker Compose**. This model gives me:
+
+- Clean isolation per service  
+- Lower memory footprint than VMs  
+- Greater flexibility in management
+
+---
+
+## A Constant Evolution
+
+My Proxmox instance is a **living project**. Services evolve over time, depending on needs and interests. That’s the beauty of self-hosting: everything is modular, customizable, and improvable.
+
+> This project has taught me a lot about infrastructure, security, service management… and it’s only the beginning.
