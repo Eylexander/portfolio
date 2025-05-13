@@ -96,22 +96,97 @@ export default function AboutPage() {
 
     if (!sliderContainer || !sliderContent) return;
 
-    const originalItems = Array.from(sliderContent.children);
-    const originalWidth = sliderContent.getBoundingClientRect().width;
-
-    originalItems.forEach((item) => {
-      const clone = item.cloneNode(true);
+    const items = Array.from(sliderContent.children) as HTMLElement[];
+    const itemSpacing = 64; 
+    let totalWidth = 0;
+    
+    items.forEach(item => {
+      totalWidth += item.offsetWidth + itemSpacing;
+    });
+    
+    items.forEach(item => {
+      const clone = item.cloneNode(true) as HTMLElement;
       sliderContent.appendChild(clone);
     });
-
-    const ctx = gsap.context(() => {
-      Draggable.create(sliderContent, {
-        type: "x",
-        edgeResistance: 0.8,
-        inertia: true,
-      });
+    
+    gsap.set(sliderContent, {
+      width: totalWidth * 2.1,
+      x: 0
     });
-    return () => ctx.revert();
+
+    const originalContentWidth = totalWidth;
+    const snapTl = gsap.timeline({ paused: true });
+    
+    const autoScrollTl = gsap.timeline({ repeat: -1, paused: true });
+    autoScrollTl.to(sliderContent, {
+      x: `-=${originalContentWidth * 0.5}`,
+      duration: 30,
+      ease: "none"
+    });
+    
+    const draggable = Draggable.create(sliderContent, {
+      type: "x",
+      inertia: true,
+      cursor: "none",
+      edgeResistance: 0.8,
+      bounds: { minX: -originalContentWidth, maxX: 0 },
+      onDrag: function() {
+        checkWrapPosition();
+        autoScrollTl.pause();
+      },
+      onThrowUpdate: checkWrapPosition,
+      onThrowComplete: function() {
+        checkWrapPosition.call(this);
+        if (!draggable.isDragging) {
+          autoScrollTl.play();
+        }
+      },
+      allowContextMenu: true,
+    })[0];
+    
+    function checkWrapPosition() {
+      const x = draggable.x;
+      
+      if (x < -originalContentWidth * 0.95) {
+        const offset = -originalContentWidth - x;
+        gsap.set(sliderContent, { x: -offset });
+        draggable.update(true);
+      } 
+      else if (x > 0) {
+        const offset = x;
+        gsap.set(sliderContent, { x: -originalContentWidth + offset });
+        draggable.update(true);
+      }
+    }
+    
+    gsap.set(sliderContent, { x: -originalContentWidth * 0.25 });
+    
+    autoScrollTl.play();
+    
+    sliderContainer.addEventListener("mouseenter", () => autoScrollTl.pause());
+    sliderContainer.addEventListener("mouseleave", () => {
+      if (!draggable.isDragging) autoScrollTl.play();
+    });
+    
+    const safetyInterval = setInterval(() => {
+      if (!draggable.isDragging && (draggable.x < -originalContentWidth || draggable.x > 0)) {
+        gsap.to(sliderContent, {
+          x: -originalContentWidth * 0.25,
+          duration: 0.5,
+          onComplete: () => {
+            draggable.update(true);
+            return;
+          }
+        });
+      }
+    }, 2000);
+    
+    return () => {
+      draggable.kill();
+      gsap.killTweensOf(sliderContent);
+      clearInterval(safetyInterval);
+      autoScrollTl.kill();
+    };
   }, []);
 
   return (
@@ -223,34 +298,37 @@ export default function AboutPage() {
 
         <div
           ref={sliderContainerRef}
-          className="relative overflow-hidden w-full my-8 cursor-grab active:cursor-grabbing"
+          className="relative overflow-hidden w-full my-8"
         >
-          <div className="flex items-center" style={{
-              maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
-              WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)"
-            }}>
-
-          
           <div
-            ref={sliderContentRef}
-            className="flex space-x-16 whitespace-nowrap will-change-transform py-4"
+            className="flex items-center"
+            style={{
+              maskImage:
+                "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+              WebkitMaskImage:
+                "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+            }}
           >
-            {stack.map((tech, index) => (
-              <Link
-                key={index}
-                href={tech.url}
-                target="_blank"
-                className="flex items-center py-6 transition-all text-zinc-500 hover:text-zinc-300 hover:scale-110"
-              >
-                <tech.Icon className="w-12 h-12" />
-                <span className="ml-2 text-zinc-400">
-                  {tech.name}
-                </span>
-              </Link>
-            ))}
+            <div
+              ref={sliderContentRef}
+              className="flex space-x-16 whitespace-nowrap will-change-transform py-4 cursor-grab active:cursor-grabbing"
+            >
+              {stack.map((tech, index) => (
+                <Link
+                  key={index}
+                  href={tech.url}
+                  target="_blank"
+                  className="flex items-center py-6 transition-all text-zinc-500 hover:text-zinc-300 hover:scale-110"
+                >
+                  <tech.Icon className="w-12 h-12" />
+                  <span className="ml-2 text-zinc-400">
+                    {tech.name}
+                  </span>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
       </div>
     </div>
   );
