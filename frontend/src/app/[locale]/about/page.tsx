@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import {
   BiLogoGoLang,
   BiLogoReact,
@@ -17,9 +18,13 @@ import { VscVscodeInsiders } from "react-icons/vsc";
 import { Navigation } from "@/src/components/nav";
 import { Link } from "@/src/i18n/navigation";
 import { Card } from "@/src/components/card";
-import { useGSAP } from "@gsap/react";
-import { useTranslations } from "next-intl";
+
 import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { Draggable } from "gsap/Draggable";
+import { InertiaPlugin } from "gsap/InertiaPlugin";
+
+gsap.registerPlugin(Draggable, InertiaPlugin);
 
 const stack = [
   {
@@ -80,55 +85,34 @@ const stack = [
 ];
 
 export default function AboutPage() {
-  const marqueeRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(
-    () => {
-      if (!marqueeRef.current || !contentRef.current) return;
-
-      // Clear any existing animations first
-      gsap.killTweensOf(contentRef.current);
-
-      // Safely cast the content element to HTMLDivElement
-      const marqueeContent = contentRef.current as HTMLDivElement;
-      const originalItems = Array.from(
-        marqueeContent.children
-      ) as HTMLElement[];
-
-      // Calculate the total width of all items
-      let totalWidth = 0;
-      originalItems.forEach((item) => {
-        totalWidth += item.offsetWidth;
-      });
-
-      // Clone the items for a perfect loop
-      originalItems.forEach((item) => {
-        const clone = item.cloneNode(true) as HTMLElement;
-        marqueeContent.appendChild(clone);
-      });
-
-      // Set initial position
-      gsap.set(marqueeContent, { x: 0 });
-
-      const pixelsPerSecond = 50; // Adjust speed as needed
-      const duration = totalWidth / pixelsPerSecond;
-
-      // Create the infinite seamless loop animation
-      gsap.to(marqueeContent, {
-        x: -totalWidth,
-        duration: duration,
-        ease: "none", // Linear movement
-        repeat: -1,
-        onRepeat: function () {
-          gsap.set(marqueeContent, { x: 0 });
-        },
-      });
-    },
-    { scope: marqueeRef, dependencies: [] }
-  );
-
   const t = useTranslations("about");
+
+  const sliderContainerRef = useRef<HTMLDivElement>(null);
+  const sliderContentRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    const sliderContainer = sliderContainerRef.current;
+    const sliderContent = sliderContentRef.current;
+
+    if (!sliderContainer || !sliderContent) return;
+
+    const originalItems = Array.from(sliderContent.children);
+    const originalWidth = sliderContent.getBoundingClientRect().width;
+
+    originalItems.forEach((item) => {
+      const clone = item.cloneNode(true);
+      sliderContent.appendChild(clone);
+    });
+
+    const ctx = gsap.context(() => {
+      Draggable.create(sliderContent, {
+        type: "x",
+        edgeResistance: 0.8,
+        inertia: true,
+      });
+    });
+    return () => ctx.revert();
+  }, []);
 
   return (
     <div className="relative pb-16">
@@ -144,7 +128,9 @@ export default function AboutPage() {
           <h2 className="text-3xl font-bold tracking-tight text-zinc-100 sm:text-4xl max-md:mt-8">
             {t("title.name")}
           </h2>
-          <p className="mt-4 text-zinc-400">{t("title.description")}</p>
+          <p className="mt-4 text-zinc-400">
+            {t("title.description")}
+          </p>
         </div>
 
         <div className="w-full h-px" />
@@ -170,9 +156,10 @@ export default function AboutPage() {
                       <React.Fragment key={index}>
                         {line}
                         {index <
-                          t("presentation.content").split("\n").length - 1 && (
-                          <br />
-                        )}
+                          t(
+                            "presentation.content"
+                          ).split("\n").length -
+                          1 && <br />}
                       </React.Fragment>
                     ))}
                 </p>
@@ -192,7 +179,10 @@ export default function AboutPage() {
         <div className="space-y-8 mx-auto">
           <div className="flex flex-col space-y-1">
             <h3 className="text-2xl font-bold text-zinc-100 font-display flex items-center">
-              <Link href="/projects/alternance" className="hover:underline">
+              <Link
+                href="/projects/alternance"
+                className="hover:underline"
+              >
                 {t("experience.job1.title")}
               </Link>
               <Link
@@ -231,23 +221,36 @@ export default function AboutPage() {
           </h2>
         </div>
 
-        <div className="overflow-hidden w-full relative my-8" ref={marqueeRef}>
-          <div className="marquee-container">
-            <div className="marquee-content" ref={contentRef}>
-              {stack.map((item, index) => (
-                <Link
-                  href={item.url}
-                  key={index}
-                  className="marquee-item transition-all text-zinc-500 hover:text-zinc-300"
-                  target="_blank"
-                >
-                  <item.Icon className="w-12 h-12" />
-                  <span className="ml-2 text-zinc-400">{item.name}</span>
-                </Link>
-              ))}
-            </div>
+        <div
+          ref={sliderContainerRef}
+          className="relative overflow-hidden w-full my-8 cursor-grab active:cursor-grabbing"
+        >
+          <div className="flex items-center" style={{
+              maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+              WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)"
+            }}>
+
+          
+          <div
+            ref={sliderContentRef}
+            className="flex space-x-16 whitespace-nowrap will-change-transform py-4"
+          >
+            {stack.map((tech, index) => (
+              <Link
+                key={index}
+                href={tech.url}
+                target="_blank"
+                className="flex items-center py-6 transition-all text-zinc-500 hover:text-zinc-300 hover:scale-110"
+              >
+                <tech.Icon className="w-12 h-12" />
+                <span className="ml-2 text-zinc-400">
+                  {tech.name}
+                </span>
+              </Link>
+            ))}
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
