@@ -1,7 +1,4 @@
-// 'use client';
-
 import "./styles.css";
-import AnimatedCursor from "react-animated-cursor";
 import { Inter } from "next/font/google";
 import LocalFont from "next/font/local";
 import { Metadata } from "next";

@@ -1,7 +1,6 @@
 import { Link } from "@/src/i18n/navigation";
 import React from "react";
 import { use } from "react";
-import Particles from "@/src/components/particles";
 import { Locale, useTranslations } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import Galaxy from "@/src/components/galaxy";
@@ -37,7 +36,6 @@ export default function Home({ params }: Props) {
           ))}
         </ul>
       </nav>
-      <div className="hidden w-screen h-px animate-glow md:block animate-fade-left bg-gradient-to-r from-zinc-300/0 via-zinc-300/50 to-zinc-300/0" />
 
       <Galaxy
         className="absolute inset-0 -z-10 animate-fade-in"
@@ -53,11 +51,22 @@ export default function Home({ params }: Props) {
         ]}
       />
 
-      <h1 className="py-3.5 px-0.5 z-10 text-4xl text-transparent duration-1000 bg-white animate-title-alt font-display sm:text-6xl md:text-9xl whitespace-nowrap bg-clip-text ">
-        eylexander
+      <div className="hidden w-screen h-px animate-glow md:block animate-fade-left bg-gradient-to-r from-zinc-300/0 via-zinc-300/50 to-zinc-300/0" />
+
+      <h1 className="py-3.5 px-0.5 z-10 text-4xl duration-1000 font-display sm:text-6xl md:text-9xl whitespace-nowrap text-zinc-300">
+        {"eylexander".split("").map((char, index) => (
+          <span
+            key={index}
+            className="inline-block opacity-0 animate-title-reveal"
+            style={{ "--delay": `${index * 0.1}s` } as React.CSSProperties}
+          >
+            {char}
+          </span>
+        ))}
       </h1>
 
       <div className="hidden w-screen h-px animate-glow md:block animate-fade-right bg-gradient-to-r from-zinc-300/0 via-zinc-300/50 to-zinc-300/0" />
+
       <div className="my-16 text-center animate-fade-in">
         <h2 className="text-base text-zinc-500 ">{t("home.description")}</h2>
       </div>
