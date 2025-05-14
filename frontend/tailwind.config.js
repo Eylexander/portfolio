@@ -42,6 +42,9 @@ module.exports = {
 				"fade-left": "fade-left 3s ease-in-out forwards",
 				"fade-right": "fade-right 3s ease-in-out forwards",
 				"title-reveal": "title-reveal 1.5s ease-out forwards var(--delay, 0s)",
+				"typing": "typing 3s steps(10, end) forwards, blink 1s step-end infinite",
+				"typing-complete": "cursor-disappear 0.5s ease-in-out forwards 3s",
+				"blink": "blink 1s step-end infinite",
 			},
 			keyframes: {
 				"fade-in": {
@@ -127,6 +130,32 @@ module.exports = {
 						transform: "scale(1)",
 						filter: "blur(0)",
 						opacity: "1",
+					},
+				},
+				"typing": {
+					"0%": {
+						width: "0",
+					},
+					"100%": {
+						width: "100%",
+					},
+				},
+				"blink": {
+					"0%, 100%": {
+						opacity: 1,
+						textShadow: "0 0 5px rgba(255,255,255,0.8)",
+					},
+					"50%": {
+						opacity: 0.2,
+						textShadow: "0 0 2px rgba(255,255,255,0.4)",
+					},
+				},
+				"cursor-disappear": {
+					"0%": {
+						"border-right": "2px solid white",
+					},
+					"100%": {
+						"border-right": "2px solid transparent",
 					},
 				},
 			},
