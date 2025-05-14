@@ -97,45 +97,45 @@ export default function AboutPage() {
     if (!sliderContainer || !sliderContent) return;
 
     const items = Array.from(sliderContent.children) as HTMLElement[];
-    const itemSpacing = 64; 
+    const itemSpacing = 64;
     let totalWidth = 0;
-    
-    items.forEach(item => {
+
+    items.forEach((item) => {
       totalWidth += item.offsetWidth + itemSpacing;
     });
-    
-    items.forEach(item => {
+
+    items.forEach((item) => {
       const clone = item.cloneNode(true) as HTMLElement;
       sliderContent.appendChild(clone);
     });
-    
+
     gsap.set(sliderContent, {
       width: totalWidth * 2.1,
-      x: 0
+      x: 0,
     });
 
     const originalContentWidth = totalWidth;
     const snapTl = gsap.timeline({ paused: true });
-    
+
     const autoScrollTl = gsap.timeline({ repeat: -1, paused: true });
     autoScrollTl.to(sliderContent, {
       x: `-=${originalContentWidth * 0.5}`,
       duration: 30,
-      ease: "none"
+      ease: "none",
     });
-    
+
     const draggable = Draggable.create(sliderContent, {
       type: "x",
       inertia: true,
       cursor: "none",
       edgeResistance: 0.8,
       bounds: { minX: -originalContentWidth, maxX: 0 },
-      onDrag: function() {
+      onDrag: function () {
         checkWrapPosition();
         autoScrollTl.pause();
       },
       onThrowUpdate: checkWrapPosition,
-      onThrowComplete: function() {
+      onThrowComplete: function () {
         checkWrapPosition.call(this);
         if (!draggable.isDragging) {
           autoScrollTl.play();
@@ -143,44 +143,48 @@ export default function AboutPage() {
       },
       allowContextMenu: true,
     })[0];
-    
+
     function checkWrapPosition() {
       const x = draggable.x;
-      
+
       if (x < -originalContentWidth * 0.95) {
         const offset = -originalContentWidth - x;
         gsap.set(sliderContent, { x: -offset });
         draggable.update(true);
-      } 
-      else if (x > 0) {
+      } else if (x > 0) {
         const offset = x;
         gsap.set(sliderContent, { x: -originalContentWidth + offset });
         draggable.update(true);
       }
     }
-    
+
     gsap.set(sliderContent, { x: -originalContentWidth * 0.25 });
-    
+
     autoScrollTl.play();
-    
-    sliderContainer.addEventListener("mouseenter", () => autoScrollTl.pause());
+
+    sliderContainer.addEventListener("mouseenter", () =>
+      autoScrollTl.pause()
+    );
     sliderContainer.addEventListener("mouseleave", () => {
       if (!draggable.isDragging) autoScrollTl.play();
     });
-    
+
     const safetyInterval = setInterval(() => {
-      if (!draggable.isDragging && (draggable.x < -originalContentWidth || draggable.x > 0)) {
+      if (
+        !draggable.isDragging &&
+        (draggable.x < -originalContentWidth || draggable.x > 0)
+      ) {
         gsap.to(sliderContent, {
           x: -originalContentWidth * 0.25,
           duration: 0.5,
           onComplete: () => {
             draggable.update(true);
             return;
-          }
+          },
         });
       }
     }, 2000);
-    
+
     return () => {
       draggable.kill();
       gsap.killTweensOf(sliderContent);
@@ -256,16 +260,10 @@ export default function AboutPage() {
             <h3 className="text-2xl font-bold text-zinc-100 font-display flex items-center">
               <Link
                 href="/projects/alternance"
-                className="hover:underline"
+                className="group"
               >
                 {t("experience.job1.title")}
-              </Link>
-              <Link
-                href="/projects/alternance"
-                target="_blank"
-                className="ml-2 text-zinc-500 hover:text-zinc-300"
-              >
-                <BiLinkExternal />
+                <BiLinkExternal className="ml-2 text-zinc-500 group-hover:text-zinc-300 inline" />
               </Link>
             </h3>
             <p className="text-zinc-500 text-s">

@@ -1,8 +1,39 @@
 ---
-title: flutter
-description: Mes expérimentations avec Flutter
+title: "flutter"
+description: "Mes expérimentations avec Flutter"
 date: "2025-03-03"
 repository: "eylexander/flutter_paddy_disease"
 published: true
 ---
 
+# Mes expérimentations avec Flutter
+
+Je connais Flutter depuis très longtemps. Je me souviens encore du tout premier projet que j'avais lancé avec ce framework : le classique template par défaut. Mais à l'époque, je n'étais pas allé plus loin que ce simple écran de démarrage. Peut-être à cause de quelques soucis techniques pour le faire tourner correctement, ou tout simplement par manque d'occasion.
+
+## Une première immersion concrète
+
+Ce n’est que plus récemment, dans le cadre de mes études, que j’ai vraiment plongé dans Flutter. Deux occasions distinctes m’ont permis d'apprendre à l’utiliser de manière sérieuse : une première fois en mai 2024, puis à nouveau en mars 2025.
+
+Mon initiation concrète s’est faite via une application de [todo list](https://github.com/Eylexander/flutter_todo_list), connectée à une base de données Supabase. Ce projet m’a permis d’explorer de nombreuses fonctionnalités : personnalisation du thème, nom de l'application, et surtout gestion de tâches (tri par nom, date de création ou d'exécution).  
+C’était également ma première vraie rencontre avec le système de **Provider**, un concept essentiel dans Flutter pour la gestion d’état.
+
+## Un projet autour de l'IA embarquée
+
+Quelques mois plus tard, dans un second cours, on nous a proposé un exercice particulièrement stimulant : s’inspirer d’un projet Flutter existant en ligne, le reproduire par nous-mêmes, et l’améliorer.
+
+Le projet en question utilisait **TensorFlow Lite (TFLite)** pour effectuer une classification d’images localement. Une app Flutter qui embarque une IA pour reconnaître des plantes, rien que ça !
+
+J’ai pris soin de bien documenter ce projet, que vous pouvez retrouver ici :
+-> [flutter_plant_recogniser](https://github.com/Eylexander/flutter_plant_recogniser?tab=readme-ov-file#plant-guessr---a-tensorflow-recognition-app)
+
+## Une version augmentée avec Gradio
+
+Mais l’aventure ne s’arrêtait pas là. On nous a ensuite demandé d’intégrer une **API Hugging Face via Gradio**, pour enrichir l’application. Plutôt que de faire deux projets séparés, j’ai décidé de combiner les deux systèmes : reconnaissance locale avec TFLite **et** reconnaissance à distance via Gradio.
+
+Cela m’a amené à concevoir un **provider spécifique** pour permettre le changement de contexte dynamiquement. Une vraie montée en compétence !
+
+-> Découvrez le projet final ici : [flutter_paddy_disease](https://github.com/Eylexander/flutter_paddy_disease#flower-api---a-plant-recognition-app-on-huggingface)
+
+## Mon ressenti
+
+J’ai vraiment pris plaisir à travailler sur ces projets. Flutter est pour moi une vraie pépite : rapide à prendre en main, puissant, et gratifiant. Il fait partie de mes **coups de cœur informatiques**, et je compte bien continuer à l’explorer.
