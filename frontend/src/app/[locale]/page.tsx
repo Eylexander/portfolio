@@ -54,10 +54,15 @@ export default function Home({ params }: Props) {
 
       <div className="hidden w-screen h-px animate-glow md:block animate-fade-left bg-gradient-to-r from-zinc-300/0 via-zinc-300/50 to-zinc-300/0" />
 
-      <TypingTitle 
-        text="eylexander" 
-        typingSpeed={180} 
-      />
+      {/* <TypingTitle 
+        text="eylexander"
+        speed={180}
+        className="py-3.5 px-0.5 z-10 text-4xl text-transparent bg-white font-display sm:text-6xl md:text-9xl whitespace-nowrap bg-clip-text"
+      /> */}
+
+      <div className="py-3.5 px-0.5 z-10 text-4xl text-transparent bg-white font-display sm:text-6xl md:text-9xl whitespace-nowrap bg-clip-text duration-1000 animate-title">
+        eylexander
+      </div>
 
       <div className="hidden w-screen h-px animate-glow md:block animate-fade-right bg-gradient-to-r from-zinc-300/0 via-zinc-300/50 to-zinc-300/0" />
 
