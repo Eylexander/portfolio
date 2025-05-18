@@ -135,17 +135,6 @@ module.exports = {
 						width: "22ch"
 					}
 				},
-				"blink": {
-					"0%": {
-						
-					},
-					"100%": {
-						"border-color": "transparent",
-					},
-					"100%": {
-						"border-color": "#000",
-					},
-				},
 			},
 		},
 	},
