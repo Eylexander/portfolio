@@ -38,10 +38,9 @@ module.exports = {
 			},
 			animation: {
 				"fade-in": "fade-in 2s ease-in-out forwards",
-				"title-alt": "text-outline 4s ease-out forwards, title-alt 2s ease-out forwards",
+				title: "title-alt 2s ease-out forwards",
 				"fade-left": "fade-left 3s ease-in-out forwards",
 				"fade-right": "fade-right 3s ease-in-out forwards",
-				"title-reveal": "title-reveal 1.5s ease-out forwards var(--delay, 0s)",
 			},
 			keyframes: {
 				"fade-in": {
@@ -83,7 +82,7 @@ module.exports = {
 						opacity: "0%",
 					},
 				},
-				"title-alt": {
+				title: {
 					"0%": {
 						"line-height": "0%",
 						"letter-spacing": "0.4em",
@@ -100,33 +99,6 @@ module.exports = {
 					"100%": {
 						"line-height": "100%",
 						opacity: "100%",
-					},
-				},
-				"text-outline": {
-					"0%": {
-						"-webkit-text-stroke": "1px rgba(253,251,212,0.3)",
-					},
-					"100%": {
-						"-webkit-text-stroke": "0px rgba(253,251,212,0.3)",
-						},
-				},
-				"title-reveal": {
-					"0%": {
-						transform: "scale(0.5)",
-						filter: "blur(4px)",
-						opacity: "0",
-					},
-					"1%": {
-						opacity: "0",
-					},
-					"50%": {
-						opacity: "0.5",
-						filter: "blur(2px)",
-					},
-					"100%": {
-						transform: "scale(1)",
-						filter: "blur(0)",
-						opacity: "1",
 					},
 				},
 			},

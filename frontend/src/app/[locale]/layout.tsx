@@ -7,7 +7,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/src/i18n/routing";
 import { getMessages, setRequestLocale } from "next-intl/server";
-import DeviceProvider from "@/src/components/deviceProvider";
+import DeviceProvider from "@/src/hooks/deviceProvider";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://eylexander.xyz"),

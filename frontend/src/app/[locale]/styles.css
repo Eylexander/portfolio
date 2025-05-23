@@ -6,6 +6,13 @@
   .text-edge-outline {
     -webkit-text-stroke: 1px rgba(253,251,212,0.3);
   }
+  
+  .text-glow {
+    text-shadow: 0 0 2px rgba(255, 255, 255, 0.3),
+                 0 0 8px rgba(255, 255, 255, 0.2),
+                 0 0 12px rgba(255, 255, 255, 0.1);
+    background-image: linear-gradient(to bottom, #ffffff, #f0f0f0);
+  }
 }
 
 @layer components {
