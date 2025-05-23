@@ -17,26 +17,22 @@ type Direction =
 
 interface TrailProps {
     children: React.ReactNode;
-    delay?: number;
     fromDirection?: Direction;
     distance?: number;
     mass?: number;
     tension?: number;
     friction?: number;
-    staggerChildren?: boolean;
-    staggerDelay?: number;
+    duration?: number;
 }
 
 const Trail: React.FC<TrailProps> = ({
     children,
-    delay = 0,
     fromDirection = 'bottom-left',
     distance = 20,
     mass = 5,
     tension = 2000,
     friction = 200,
-    staggerChildren = true,
-    staggerDelay = 35,
+    duration,
 }) => {
     const items = React.Children.toArray(children);
 
@@ -70,7 +66,7 @@ const Trail: React.FC<TrailProps> = ({
     const { x: fromX, y: fromY } = getDirectionVectors(fromDirection);
 
     const trail = useTrail(items.length, {
-        config: { mass, tension, friction },
+        config: { mass, tension, friction, duration },
         opacity: 1,
         x: 0,
         y: 0,

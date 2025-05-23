@@ -28,9 +28,9 @@ export default function Home({ params }: Props) {
         <ul className="flex items-center justify-center gap-4">
           <Trail
             fromDirection="top"
-            distance={30}
+            distance={20}
             friction={300}
-            delay={3000}
+            duration={250}
           >
             {navigation.map((item) => (
               <Link
@@ -59,8 +59,6 @@ export default function Home({ params }: Props) {
         ]}
       />
 
-      {/* <div className="hidden w-screen h-px md:block animate-fade-left bg-gradient-to-r from-zinc-300/0 via-zinc-300/50 to-zinc-300/0" /> */}
-
       {/* <Trail 
           fromDirection="center-expand" 
           delay={150}       
@@ -73,18 +71,16 @@ export default function Home({ params }: Props) {
           </div>
         </Trail> */}
 
-      <div className="flex flex-row items-center">
+      <div className="flex flex-row items-center py-3.5 px-0.5">
         <Trail
           fromDirection="bottom"
-          delay={150}
           distance={40}
           tension={1000}
-          staggerDelay={100}
         >
           {Array.from("eylexander").map((letter, i) => (
             <div
               key={i}
-              className="inline-block py-3.5 px-0.5 z-10 text-4xl text-transparent bg-white font-display sm:text-6xl md:text-9xl whitespace-nowrap bg-clip-text text-glow"
+              className="inline-block z-10 text-4xl text-transparent bg-white font-display sm:text-6xl md:text-9xl whitespace-nowrap bg-clip-text text-glow"
             >
               {letter}
             </div>
@@ -92,13 +88,10 @@ export default function Home({ params }: Props) {
         </Trail>
       </div>
 
-
-      {/* <div className="hidden w-screen h-px md:block animate-fade-right bg-gradient-to-r from-zinc-300/0 via-zinc-300/50 to-zinc-300/0" /> */}
-
       <Trail
         fromDirection="bottom"
-        delay={300}
-        distance={30}
+        duration={800}
+        distance={40}
         tension={1000}
       >
         <div className="my-16 text-center">
