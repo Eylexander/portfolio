@@ -223,7 +223,7 @@ export function Mdx({ code, content }: MdxProps) {
 	
 	try {
 		return (
-			<div className="mdx prose prose-zinc dark:prose-invert">
+			<div className="mdx prose prose-zinc prose-invert">
 				<MDXRemote {...mdxContent} components={components} />
 			</div>
 		);
