@@ -1,41 +1,39 @@
 package api
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 )
 
-func (s *Handler) StartDebugger(w http.ResponseWriter, r *http.Request) error {
-	if r.Method == "GET" {
-		s.dataStore.DoDebug()
-		return s.GetDebugger(w, r)
+func (h *Handler) StartDebugger(w http.ResponseWriter, r *http.Request) error {
+	switch r.Method {
+	case http.MethodGet:
+		return h.GetDebugger(w, r)
+	case http.MethodPost:
+		return h.PostDebugger(w, r)
+	default:
+		return h.WriteError(w, http.StatusMethodNotAllowed, "METHOD_NOT_ALLOWED",
+			"Method not allowed", "Only GET and POST are supported")
 	}
-	if r.Method == "POST" {
-		return s.PostDebugger(w, r)
-	}
-	return nil
 }
 
-func (s *Handler) GetDebugger(w http.ResponseWriter, _ *http.Request) error {
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"message": "Get Debugger"})
-	return nil
+func (h *Handler) GetDebugger(w http.ResponseWriter, _ *http.Request) error {
+	h.dataStore.DoDebug()
+	return h.WriteSuccess(w, map[string]string{"message": "Debugger started"})
 }
 
-func (s *Handler) PostDebugger(w http.ResponseWriter, _ *http.Request) error {
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"message": "Post Debugger"})
-	return nil
+func (h *Handler) PostDebugger(w http.ResponseWriter, r *http.Request) error {
+	// TODO: Parse request body for debug configuration
+	return h.WriteSuccess(w, map[string]string{"message": "Debug configuration updated"})
 }
 
-func (s *Handler) GetDebugs(w http.ResponseWriter, _ *http.Request) error {
-	response, err := s.dataStore.GetDebugs()
+func (h *Handler) GetDebugs(w http.ResponseWriter, _ *http.Request) error {
+	response, err := h.dataStore.GetDebugs()
 	if err != nil {
-		log.Printf("Error: %v", err)
+		log.Printf("Error getting debugs: %v", err)
+		return h.WriteError(w, http.StatusInternalServerError, "DATABASE_ERROR",
+			"Failed to retrieve debug data", err.Error())
 	}
 
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(response)
-	return nil
+	return h.WriteSuccess(w, response)
 }

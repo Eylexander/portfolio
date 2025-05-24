@@ -18,7 +18,7 @@ type MongoDBStore struct {
 
 func NewMongoDBStore(dbName string) *MongoDBStore {
 	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found")
+		log.Println("No local .env file found")
 	}
 
 	uri := os.Getenv("MONGODB_URI")
