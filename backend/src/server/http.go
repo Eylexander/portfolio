@@ -22,6 +22,10 @@ func Start(address string, handler *api.Handler, controller *ctrl.Controller) {
 	// Create an API subrouter for all /api/v1 routes
 	apiRouter := router.PathPrefix("/api/v1").Subrouter()
 
+	//
+	// Routes
+	//
+
 	// Define specific API routes with proper HTTP methods
 	apiRouter.HandleFunc("", wrapHandler(handler.DefaultLocation)).Methods("GET")
 	apiRouter.HandleFunc("/health", wrapHandler(handler.HealthCheck)).Methods("GET")
@@ -30,11 +34,14 @@ func Start(address string, handler *api.Handler, controller *ctrl.Controller) {
 	apiRouter.HandleFunc("/debugger", wrapHandler(handler.StartDebugger)).Methods("GET", "POST")
 	apiRouter.HandleFunc("/debugs", wrapHandler(handler.GetDebugs)).Methods("GET")
 
+	//
+	//
+	//
+
 	// Set a NotFoundHandler for the API subrouter to handle undefined API routes
 	apiRouter.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("API route not found: %s instruction on %s path.", r.Method, r.URL)
-		handler.WriteError(w, http.StatusNotFound, "ROUTE_NOT_FOUND",
-			"API endpoint not found", "The requested API endpoint does not exist")
+		handler.DefaultLocation(w, r)
 	})
 
 	webRouter := router.PathPrefix("/").Subrouter()
