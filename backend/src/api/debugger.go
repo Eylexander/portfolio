@@ -23,7 +23,6 @@ func (h *Handler) GetDebugger(w http.ResponseWriter, _ *http.Request) error {
 }
 
 func (h *Handler) PostDebugger(w http.ResponseWriter, r *http.Request) error {
-	// TODO: Parse request body for debug configuration
 	return h.WriteSuccess(w, map[string]string{"message": "Debug configuration updated"})
 }
 

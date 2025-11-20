@@ -4,7 +4,9 @@
 # build-env #
 #############
 
-FROM cosmtrek/air:v1.61.7
+FROM cosmtrek/air:v1.63.1
+
+ENV MONGODB_URI=mongodb://database:27017/portfolio
 
 RUN apt-get update \
   && apt-get install openssh-client -y
@@ -12,8 +14,6 @@ RUN apt-get update \
 WORKDIR /go/src/
 
 COPY . .
-
-ENV MONGODB_URI=mongodb://mongo:27017/
 
 EXPOSE 8000/tcp
 

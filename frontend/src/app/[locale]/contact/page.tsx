@@ -15,9 +15,9 @@ const socials = [
 	},
 	{
 		icon: <LuMail size={20} />,
-		href: "mailto:eylexander88@gmail.com",
+		href: "mailto:me@eylexander.fr",
 		label: "Email",
-		handle: "eylexander88@gmail.com",
+		handle: "me@eylexander.fr",
 	},
 	{
 		icon: <LuGithub size={20} />,

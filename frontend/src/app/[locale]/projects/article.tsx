@@ -2,17 +2,8 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/navigation";
-
-// Custom Project type to replace Contentlayer's
-type Project = {
-  slug: string;
-  title: string;
-  description: string;
-  date?: string;
-  published: boolean;
-  url?: string;
-  repository?: string;
-};
+import type { Project } from "@/util/projects";
+import { getProjectForLocale } from "@/util/projects";
 
 type Props = {
 	project: Project;
@@ -22,6 +13,7 @@ export const Article: React.FC<Props> = ({ project }) => {
 
 	const t = useTranslations("projects");
 	const locale = useLocale();
+	const projectData = getProjectForLocale(project, locale);
 
 	return (
 		<Link href={`/projects/${project.slug}`}>
@@ -43,10 +35,10 @@ export const Article: React.FC<Props> = ({ project }) => {
 					</span>
 				</div>
 				<h2 className="mt-2 z-20 text-xl font-medium duration-1000 lg:text-3xl text-zinc-200 group-hover:text-white font-display">
-					{project.title}
+					{projectData?.title}
 				</h2>
 				<p className="z-20 mt-4 text-sm  duration-1000 text-zinc-400 group-hover:text-zinc-200">
-					{project.description}
+					{projectData?.description}
 				</p>
 			</article>
 		</Link>

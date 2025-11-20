@@ -13,14 +13,12 @@ type Handler struct {
 	ctrl      *ctrl.Controller
 }
 
-// Response represents a standard API response
 type Response struct {
 	Success bool        `json:"success"`
 	Data    interface{} `json:"data,omitempty"`
 	Error   *APIError   `json:"error,omitempty"`
 }
 
-// APIError represents an API error response
 type APIError struct {
 	Code    string `json:"code"`
 	Message string `json:"message"`

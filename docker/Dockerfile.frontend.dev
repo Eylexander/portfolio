@@ -4,15 +4,11 @@
 # build-env #
 #############
 
-FROM node:23-11
+FROM node:25
 
 WORKDIR /app
 
 COPY . .
-
-RUN apt-get update \
-  && apt-get install openssh-client -y \
-  && apt-get clean
 
 RUN npm install
 

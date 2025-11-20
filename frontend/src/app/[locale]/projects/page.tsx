@@ -3,142 +3,19 @@ import { Navigation } from "@/src/components/nav";
 import { Card } from "@/src/components/card";
 import { Article } from "./article";
 import { getTranslations, getLocale } from "next-intl/server";
-import fs from "fs/promises";
-import * as fsSync from "fs";
-import path from "path";
-import matter from "gray-matter";
+import { getProjects } from "@/util/projects";
+import type { Project } from "@/util/projects";
 import { Featured } from "./featured";
 import { BsArrowDownCircle } from "react-icons/bs";
 
-// Type for project data
-type Project = {
-    slug: string;
-    title: string;
-    description: string;
-    date?: string;
-    published: boolean;
-    url?: string;
-    repository?: string;
-};
-
-// Function to get all projects with locale support
+// Function to get all projects from API with locale
 async function getAllProjects(locale: string): Promise<Project[]> {
-    // Try to find projects in the locale-specific directory
-    const localeContentDir = path.join(
-        process.cwd(),
-        "content",
-        "projects",
-        locale
-    );
-    let files = [];
-
     try {
-        // First try to get files from locale directory
-        files = await fs.readdir(localeContentDir);
-
-        const projects = await Promise.all(
-            files
-                .filter((file) => file.endsWith(".mdx"))
-                .map(async (file) => {
-                    const filePath = path.join(localeContentDir, file);
-                    const content = await fs.readFile(filePath, "utf8");
-                    const { data } = matter(content);
-
-                    return {
-                        slug: file.replace(/\.mdx$/, ""),
-                        title: data.title,
-                        description: data.description,
-                        date: data.date,
-                        published: data.published !== false, // Default to true if not specified
-                        url: data.url,
-                        repository: data.repository,
-                    };
-                })
-        );
-
+        const projects = await getProjects(locale);
         return projects.filter((p) => p.published);
     } catch (error) {
-        // If locale directory doesn't exist or has an error, try falling back
-        // For non-English locales, try English first
-        if (locale !== "en") {
-            try {
-                const enContentDir = path.join(
-                    process.cwd(),
-                    "content",
-                    "projects",
-                    "en"
-                );
-                files = await fs.readdir(enContentDir);
-
-                const projects = await Promise.all(
-                    files
-                        .filter((file) => file.endsWith(".mdx"))
-                        .map(async (file) => {
-                            const filePath = path.join(enContentDir, file);
-                            const content = await fs.readFile(filePath, "utf8");
-                            const { data } = matter(content);
-
-                            return {
-                                slug: file.replace(/\.mdx$/, ""),
-                                title: data.title,
-                                description: data.description,
-                                date: data.date,
-                                published: data.published !== false,
-                                url: data.url,
-                                repository: data.repository,
-                            };
-                        })
-                );
-
-                return projects.filter((p) => p.published);
-            } catch (enError) {
-                console.error(
-                    "Error reading English project directory:",
-                    enError
-                );
-            }
-        }
-
-        // Last resort, try the root content directory
-        try {
-            const rootContentDir = path.join(
-                process.cwd(),
-                "content",
-                "projects"
-            );
-            files = await fs.readdir(rootContentDir);
-
-            const projects = await Promise.all(
-                files
-                    .filter(
-                        (file) =>
-                            file.endsWith(".mdx") &&
-                            !fsSync
-                                .statSync(path.join(rootContentDir, file))
-                                .isDirectory()
-                    )
-                    .map(async (file) => {
-                        const filePath = path.join(rootContentDir, file);
-                        const content = await fs.readFile(filePath, "utf8");
-                        const { data } = matter(content);
-
-                        return {
-                            slug: file.replace(/\.mdx$/, ""),
-                            title: data.title,
-                            description: data.description,
-                            date: data.date,
-                            published: data.published !== false,
-                            url: data.url,
-                            repository: data.repository,
-                        };
-                    })
-            );
-
-            return projects.filter((p) => p.published);
-        } catch (rootError) {
-            console.error("Error reading root project directory:", rootError);
-            return [];
-        }
+        console.error("Error fetching projects from API:", error);
+        return [];
     }
 }
 
@@ -148,20 +25,17 @@ export default async function ProjectsPage() {
 
     const t = await getTranslations("projects");
 
-    // Get featured project slugs from environment variables with fallbacks
-    const featuredSlug = process.env.NEXT_PUBLIC_FEATURED_PROJECT || "proxmox";
-    const top2Slug = process.env.NEXT_PUBLIC_TOP2_PROJECT || "eylexander";
-    const top3Slug = process.env.NEXT_PUBLIC_TOP3_PROJECT || "alternance";
-
-    const featured = projects.find((project) => project.slug === featuredSlug);
-    const top2 = projects.find((project) => project.slug === top2Slug);
-    const top3 = projects.find((project) => project.slug === top3Slug);
+    // Get top 3 projects by position attribute
+    const featured = projects.find((project) => project.position === 1);
+    const top2 = projects.find((project) => project.position === 2);
+    const top3 = projects.find((project) => project.position === 3);
+    
+    // Get remaining projects sorted by date (newest first)
     const sorted = projects
         .filter(
             (project) =>
-                project.slug !== featured?.slug &&
-                project.slug !== top2?.slug &&
-                project.slug !== top3?.slug
+                !project.position || 
+                (project.position !== 1 && project.position !== 2 && project.position !== 3)
         )
         .sort(
             (a, b) =>

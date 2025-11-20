@@ -4,14 +4,11 @@
 # build-env-back #
 ##################
 
-FROM golang:1.24.3 AS back-build-env
+FROM golang:trixie AS back-build-env
 
-LABEL maintainer="Eylexander <eylexander88@gmail.com>"
+LABEL maintainer="Eylexander <me@eylexander.fr>"
 
-ENV MONGODB_URI=mongodb://database:27017/
-
-RUN apt-get update \
-	&& apt-get install openssh-client -y
+ENV MONGODB_URI=mongodb://database:27017/portfolio
 
 WORKDIR /go/src/
 
@@ -24,13 +21,11 @@ RUN unset GOPATH && go build -o bin/backend src/cmd/*.go
 # target image #
 ################
 
-FROM debian:sid-slim
+FROM debian:bookworm-slim
 
 WORKDIR /opt/backend
 
 COPY --from=back-build-env /go/src/bin/backend .
-COPY --from=back-build-env /go/src/scripts/startup.sh ./scripts/startup.sh
-# COPY --from=back-build-env /go/src/.env .env
 
 EXPOSE 8000/tcp
 

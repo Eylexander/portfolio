@@ -12,4 +12,8 @@ type DataStore interface {
 	// Debugger
 	DoDebug() (*consts.StoreResponse, error)
 	GetDebugs() ([]consts.Debug, error)
+
+	// Projects
+	GetProjects(locale string) ([]consts.Project, error)
+	GetProjectBySlug(slug string, locale string) (*consts.Project, error)
 }

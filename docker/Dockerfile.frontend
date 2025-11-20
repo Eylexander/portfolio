@@ -4,19 +4,15 @@
 # frontend-builder#
 ###################
 
-FROM node:lts-bullseye-slim AS front-builder
+FROM node:lts-bookworm-slim AS front-builder
 
-ARG NEXT_PUBLIC_FEATURED_PROJECT="proxmox"
-ARG NEXT_PUBLIC_TOP2_PROJECT="eylexander"
-ARG NEXT_PUBLIC_TOP3_PROJECT="alternance"
+LABEL maintainer="Eylexander <me@eylexander.fr>"
 
 ###################
 # deps-env-front  #
 ###################
 
 FROM front-builder AS front-deps-env
-
-RUN apt update
 
 WORKDIR /app
 
@@ -30,9 +26,6 @@ RUN \
 
 FROM front-builder AS front-build-env
 
-RUN apt update \
-	&& apt install -y openssh-client
-
 WORKDIR /app
 
 COPY --from=front-deps-env /app/node_modules ./node_modules
@@ -45,7 +38,7 @@ RUN yarn build
 # target image #
 ################
 
-FROM alpine:3.21
+FROM alpine:3.22.2
 
 WORKDIR /opt/frontend
 
