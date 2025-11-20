@@ -5,13 +5,13 @@ const path = require('path');
 const matter = require('gray-matter');
 const { MongoClient } = require('mongodb');
 
-const MONGODB_URI = 'mongodb://192.168.0.131:27017';
+const MONGODB_URI = 'mongodb://' + process.argv[2] || process.env.MONGODB_URI || 'mongodb://192.168.0.131:27017';
 const DB_NAME = 'Portfolio';
 const COLLECTION_NAME = 'projects';
 
 // Get the locales to export (or all if none specified)
-const specifiedLocale = process.argv[2];
-const contentDir = path.join(__dirname, '../frontend/content/projects');
+const specifiedLocale = process.argv[3];
+const contentDir = path.join(__dirname, './articles');
 
 async function main() {
   let client;
