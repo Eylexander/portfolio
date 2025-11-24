@@ -36,6 +36,11 @@ type ProjectLocale struct {
 	Content     string `json:"content" bson:"content"`
 }
 
+type ProjectReducedLocale struct {
+	Title       string `json:"title" bson:"title"`
+	Description string `json:"description" bson:"description"`
+}
+
 type Project struct {
 	ID         primitive.ObjectID       `json:"id" bson:"_id,omitempty"`
 	Slug       string                   `json:"slug" bson:"slug"`
@@ -45,4 +50,12 @@ type Project struct {
 	URL        string                   `json:"url,omitempty" bson:"url,omitempty"`
 	Repository string                   `json:"repository,omitempty" bson:"repository,omitempty"`
 	Position   int                      `json:"position,omitempty" bson:"position,omitempty"`
+}
+
+type ProjectReduced struct {
+	ID        primitive.ObjectID              `json:"id" bson:"_id,omitempty"`
+	Slug      string                          `json:"slug" bson:"slug"`
+	Locales   map[string]ProjectReducedLocale `json:"locales" bson:"locales"`
+	Date      *time.Time                      `json:"date,omitempty" bson:"date,omitempty"`
+	Position  int                             `json:"position,omitempty" bson:"position,omitempty"`
 }

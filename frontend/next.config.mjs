@@ -27,6 +27,14 @@ const withMDX = createMDX({
 const nextConfig = {
   output: 'standalone',
   pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
+  async rewrites() {
+    return [
+      {
+        source: '/api/v1/:path*',
+        destination: 'http://localhost:8000/api/v1/:path*',
+      },
+    ];
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.plugins.push(

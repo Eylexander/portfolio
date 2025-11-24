@@ -3,16 +3,16 @@ import { Navigation } from "@/src/components/nav";
 import { Card } from "@/src/components/card";
 import { Article } from "./article";
 import { getTranslations, getLocale } from "next-intl/server";
-import { getProjects } from "@/util/projects";
-import type { Project } from "@/util/projects";
+import { getProjectsReduced } from "@/util/projects";
+import type { ProjectReduced } from "@/util/projects";
 import { Featured } from "./featured";
 import { BsArrowDownCircle } from "react-icons/bs";
 
 // Function to get all projects from API with locale
-async function getAllProjects(locale: string): Promise<Project[]> {
+async function getAllProjects(locale: string): Promise<ProjectReduced[]> {
     try {
-        const projects = await getProjects(locale);
-        return projects.filter((p) => p.published);
+        const projects = await getProjectsReduced(locale);
+        return projects;
     } catch (error) {
         console.error("Error fetching projects from API:", error);
         return [];
@@ -72,7 +72,7 @@ export default async function ProjectsPage() {
 
                     <div className="flex flex-col w-full gap-8 mx-auto border-t border-gray-900/10 lg:mx-0 lg:border-t-0">
                         {[top2, top3]
-                            .filter((project): project is Project =>
+                            .filter((project): project is ProjectReduced =>
                                 Boolean(project)
                             )
                             .map((project) => (

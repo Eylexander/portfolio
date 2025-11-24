@@ -1,27 +1,17 @@
-// API client for projects with caching
-function getApiBaseUrl(): string {
-  if (typeof window !== 'undefined') {
-    return 'http://' + window.location.hostname + '/api/v1';
-  }
-  return 'http://localhost:8000/api/v1';
-}
+'use server';
 
-// Cache structure
-const cache: {
-  projects: Record<string, { data: Project[] | null; timestamp: number }>;
-  projectBySlug: Record<string, Record<string, { data: Project | null; timestamp: number }>>;
-} = {
-  projects: {},
-  projectBySlug: {},
-};
-
-// Cache duration: 10 minutes (in milliseconds)
-const CACHE_DURATION = 10 * 60 * 1000;
+const CACHE_DURATION = 10 * 60; // 10 minutes in seconds
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL + "/api/v1" || "http://proxy/api/v1";
 
 export type ProjectLocale = {
   title: string;
   description: string;
   content: string;
+};
+
+export type ProjectReducedLocale = {
+  title: string;
+  description: string;
 };
 
 export type Project = {
@@ -35,6 +25,14 @@ export type Project = {
   position?: number;
 };
 
+export type ProjectReduced = {
+  id: string;
+  slug: string;
+  locales: Record<string, ProjectReducedLocale>;
+  date?: string;
+  position?: number;
+};
+
 export type ApiResponse<T> = {
   success: boolean;
   data?: T;
@@ -45,18 +43,7 @@ export type ApiResponse<T> = {
   };
 };
 
-/**
- * Check if cached data is still valid
- */
-function isCacheValid(timestamp: number): boolean {
-  return Date.now() - timestamp < CACHE_DURATION;
-}
-
-/**
- * Extract locale-specific content from a Project
- * Returns a flat object with title, description, and content for the given locale
- */
-export function getProjectForLocale(project: Project, locale: string) {
+export async function getProjectForLocale(project: Project, locale: string) {
   const localeData = project.locales[locale];
   if (!localeData) {
     return null;
@@ -69,28 +56,31 @@ export function getProjectForLocale(project: Project, locale: string) {
   };
 }
 
-/**
- * Fetch all published projects from the API with caching
- * @param locale Optional locale to filter projects by
- */
-export async function getProjects(locale?: string): Promise<Project[]> {
-  const cacheKey = locale || 'default';
-  
-  // Return cached data if valid
-  if (
-    cache.projects[cacheKey]?.data !== null &&
-    isCacheValid(cache.projects[cacheKey]?.timestamp || 0)
-  ) {
-    return cache.projects[cacheKey]?.data || [];
+export async function getProjectForLocaleReduced(project: ProjectReduced, locale: string) {
+  const localeData = project.locales[locale];
+  if (!localeData) {
+    return null;
   }
+  return {
+    ...project,
+    title: localeData.title,
+    description: localeData.description,
+  };
+}
 
+export async function getProjects(locale?: string): Promise<Project[]> {
   try {
-    const url = new URL(`${getApiBaseUrl()}/projects`);
+    const url = new URL(`${apiBaseUrl}/projects`);
     if (locale) {
-      url.searchParams.append('locale', locale);
+      url.searchParams.append("locale", locale);
     }
-    
-    const response = await fetch(url.toString());
+
+    const response = await fetch(url.toString(), {
+      next: { revalidate: CACHE_DURATION },
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`API error: ${response.status} ${response.statusText}`);
@@ -99,57 +89,32 @@ export async function getProjects(locale?: string): Promise<Project[]> {
     const json: ApiResponse<Project[]> = await response.json();
 
     if (!json.success || !json.data) {
-      throw new Error(json.error?.message || 'Failed to fetch projects');
+      throw new Error(json.error?.message || "Failed to fetch projects");
     }
-
-    // Update cache
-    if (!cache.projects[cacheKey]) {
-      cache.projects[cacheKey] = { data: null, timestamp: 0 };
-    }
-    cache.projects[cacheKey] = {
-      data: json.data,
-      timestamp: Date.now(),
-    };
 
     return json.data;
   } catch (error) {
-    console.error('Error fetching projects:', error);
-    // Return cached data even if expired, as fallback
-    if (cache.projects[cacheKey]?.data) {
-      return cache.projects[cacheKey].data;
-    }
+    console.error("Error fetching projects:", error);
     throw error;
   }
 }
 
-/**
- * Fetch a single project by slug with caching
- * @param slug Project slug
- * @param locale Optional locale to filter by
- */
-export async function getProjectBySlug(slug: string, locale?: string): Promise<Project> {
-  const localeKey = locale || 'default';
-  
-  // Initialize locale cache if it doesn't exist
-  if (!cache.projectBySlug[slug]) {
-    cache.projectBySlug[slug] = {};
-  }
-
-  // Return cached data if valid
-  if (
-    cache.projectBySlug[slug][localeKey]?.data !== null &&
-    isCacheValid(cache.projectBySlug[slug][localeKey]?.timestamp || 0)
-  ) {
-    return cache.projectBySlug[slug][localeKey]?.data as Project;
-  }
-
+export async function getProjectBySlug(
+  slug: string,
+  locale?: string
+): Promise<Project> {
   try {
-    const url = new URL(`${getApiBaseUrl()}/projects/${slug}`);
+    const url = new URL(`${apiBaseUrl}/projects/${slug}`);
     if (locale) {
-      url.searchParams.append('locale', locale);
+      url.searchParams.append("locale", locale);
     }
-    
-    const response = await fetch(url.toString());
+
+    const response = await fetch(url.toString(), {
+      next: { revalidate: CACHE_DURATION },
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`API error: ${response.status} ${response.statusText}`);
@@ -158,51 +123,77 @@ export async function getProjectBySlug(slug: string, locale?: string): Promise<P
     const json: ApiResponse<Project> = await response.json();
 
     if (!json.success || !json.data) {
-      throw new Error(json.error?.message || 'Project not found');
+      throw new Error(json.error?.message || "Project not found");
     }
-
-    // Update cache
-    cache.projectBySlug[slug][localeKey] = {
-      data: json.data,
-      timestamp: Date.now(),
-    };
 
     return json.data;
   } catch (error) {
     console.error(`Error fetching project ${slug}:`, error);
-    // Return cached data even if expired, as fallback
-    if (cache.projectBySlug[slug]?.[localeKey]?.data) {
-      return cache.projectBySlug[slug][localeKey].data as Project;
-    }
     throw error;
   }
 }
 
-/**
- * Clear all caches
- */
-export function clearProjectCache(): void {
-  cache.projects = {};
-  cache.projectBySlug = {};
-}
+export async function getProjectsReduced(locale?: string): Promise<ProjectReduced[]> {
+  try {
+    const url = new URL(`${apiBaseUrl}/projects/lite`);
+    if (locale) {
+      url.searchParams.append("locale", locale);
+    }
 
-/**
- * Clear cache for a specific project
- */
-export function clearProjectCacheBySlug(slug: string): void {
-  delete cache.projectBySlug[slug];
-}
-
-/**
- * Invalidate all caches to force fresh fetch on next request
- */
-export function invalidateProjectCache(): void {
-  Object.keys(cache.projects).forEach((locale) => {
-    cache.projects[locale].timestamp = 0;
-  });
-  Object.keys(cache.projectBySlug).forEach((slug) => {
-    Object.keys(cache.projectBySlug[slug]).forEach((locale) => {
-      cache.projectBySlug[slug][locale].timestamp = 0;
+    const response = await fetch(url.toString(), {
+      next: { revalidate: CACHE_DURATION },
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
-  });
+
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+
+    const json: ApiResponse<ProjectReduced[]> = await response.json();
+
+    if (!json.success || !json.data) {
+      throw new Error(json.error?.message || "Failed to fetch projects");
+    }
+
+    return json.data;
+  } catch (error) {
+    console.error("Error fetching reduced projects:", error);
+    throw error;
+  }
+}
+
+export async function getProjectBySlugReduced(
+  slug: string,
+  locale?: string
+): Promise<ProjectReduced> {
+  try {
+    const url = new URL(`${apiBaseUrl}/projects/${slug}/lite`);
+    if (locale) {
+      url.searchParams.append("locale", locale);
+    }
+
+    const response = await fetch(url.toString(), {
+      next: { revalidate: CACHE_DURATION },
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+
+    const json: ApiResponse<ProjectReduced> = await response.json();
+
+    if (!json.success || !json.data) {
+      throw new Error(json.error?.message || "Project not found");
+    }
+
+    return json.data;
+  } catch (error) {
+    console.error(`Error fetching reduced project ${slug}:`, error);
+    throw error;
+  }
 }

@@ -2,25 +2,37 @@ services:
   proxy:
     image: nginx:latest
     container_name: portfolio_nginx
+    restart: always
     ports:
-      - "8080:80"
+      - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - portfolio_frontend
       - portfolio_backend
+    networks:
+      - portfolio_network
 
   portfolio_frontend:
     image: portfolio-frontend:latest
     container_name: portfolio_frontend
+    restart: always
     depends_on:
       - portfolio_backend
+    networks:
+      - portfolio_network
 
   portfolio_backend:
     image: portfolio-backend:latest
     container_name: portfolio_backend
+    restart: always
     environment:
       - MONGODB_URI=mongodb://database:27017/
+      - APP_VERSION=0.2.0
+    depends_on:
+      - database
+    networks:
+      - portfolio_network
 
   database:
     image: mongo:latest
@@ -29,3 +41,9 @@ services:
       - "27017:27017"
     volumes:
       - ../data:/data/db
+    networks:
+      - portfolio_network
+
+networks:
+  portfolio_network:
+    driver: bridge

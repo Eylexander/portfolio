@@ -37,7 +37,9 @@ func Start(address string, handler *api.Handler, controller *ctrl.Controller) {
 
 	// Project endpoints
 	apiRouter.HandleFunc("/projects", wrapHandler(handler.GetProjects)).Methods("GET")
+	apiRouter.HandleFunc("/projects/lite", wrapHandler(handler.GetProjectsReduced)).Methods("GET")
 	apiRouter.HandleFunc("/projects/{slug}", wrapHandler(handler.GetProjectBySlug)).Methods("GET")
+	apiRouter.HandleFunc("/projects/{slug}/lite", wrapHandler(handler.GetProjectBySlugReduced)).Methods("GET")
 
 	// Set a NotFoundHandler for the API subrouter to handle undefined API routes
 	apiRouter.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

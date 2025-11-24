@@ -4,49 +4,56 @@
 # frontend-builder#
 ###################
 
-FROM node:lts-bookworm-slim AS front-builder
+FROM node:lts-bookworm-slim AS base
 
 LABEL maintainer="Eylexander <me@eylexander.fr>"
+
+ENV NEXT_TELEMETRY_DISABLED=1
+
+WORKDIR /app
 
 ###################
 # deps-env-front  #
 ###################
 
-FROM front-builder AS front-deps-env
-
-WORKDIR /app
+FROM base AS dependencies
 
 COPY ./frontend/package.json ./frontend/package-lock.json ./
-RUN \
-	npm ci
+RUN npm ci
 
 ###################
 # build-env-front #
 ###################
 
-FROM front-builder AS front-build-env
+FROM base AS build
 
 WORKDIR /app
 
-COPY --from=front-deps-env /app/node_modules ./node_modules
-
+COPY --from=dependencies /app/node_modules ./node_modules
 COPY ./frontend .
 
-RUN yarn build
+RUN npm run build
 
 ################
 # target image #
 ################
 
-FROM alpine:3.22.2
+FROM base AS runtime
 
-WORKDIR /opt/frontend
+ENV NODE_ENV=production
+ENV NEXT_PUBLIC_API_URL=http://proxy
+ENV PORT=3000
 
-COPY --from=front-build-env /app/public ./public
-COPY --from=front-build-env /app/.next/standalone .
-COPY --from=front-build-env /app/.next/static ./.next/static
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+RUN mkdir .next
+RUN chown -R nextjs:nodejs .next
 
-RUN apk add nodejs npm
+COPY --from=build /app/public ./public
+COPY --from=build --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=build --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
 
 EXPOSE 3000/tcp
 

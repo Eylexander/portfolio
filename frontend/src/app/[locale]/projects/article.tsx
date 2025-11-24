@@ -1,19 +1,24 @@
 'use client';
 
 import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 import { Link } from "@/src/i18n/navigation";
-import type { Project } from "@/util/projects";
-import { getProjectForLocale } from "@/util/projects";
+import type { ProjectReduced } from "@/util/projects";
+import { getProjectForLocaleReduced } from "@/util/projects";
 
 type Props = {
-	project: Project;
+	project: ProjectReduced;
 };
 
 export const Article: React.FC<Props> = ({ project }) => {
 
 	const t = useTranslations("projects");
 	const locale = useLocale();
-	const projectData = getProjectForLocale(project, locale);
+	const [projectData, setProjectData] = useState<Awaited<ReturnType<typeof getProjectForLocaleReduced>> | null>(null);
+
+	useEffect(() => {
+		getProjectForLocaleReduced(project, locale).then(setProjectData);
+	}, [project, locale]);
 
 	return (
 		<Link href={`/projects/${project.slug}`}>

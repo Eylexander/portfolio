@@ -16,4 +16,6 @@ type DataStore interface {
 	// Projects
 	GetProjects(locale string) ([]consts.Project, error)
 	GetProjectBySlug(slug string, locale string) (*consts.Project, error)
+	GetProjectsReduced(locale string) ([]consts.ProjectReduced, error)
+	GetProjectBySlugReduced(slug string, locale string) (*consts.ProjectReduced, error)
 }
