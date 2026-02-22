@@ -1,0 +1,54 @@
+services:
+  frontend:
+    container_name: portfolio_frontend_dev
+    build:
+      context: ../frontend
+      dockerfile: ../docker/frontend.dev.Dockerfile
+    volumes:
+      - ../frontend:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  backend:
+    container_name: portfolio_backend_dev
+    build:
+      context: ../backend
+      dockerfile: ../docker/backend.dev.Dockerfile
+    volumes:
+      - ../backend:/go/src
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGODB_URI=${MONGODB_URI:-mongodb://portfolio_mongo:27017/portfolio}
+      - JWT_SECRET=${JWT_SECRET:-your_jwt_secret}
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+      - GOTIFY_URL=${GOTIFY_URL:-http://localhost:8080}
+      - GOTIFY_TOKEN=${GOTIFY_TOKEN:-your_gotify_token_here}
+    depends_on:
+      database:
+        condition: service_healthy
+
+  database:
+    image: mongo:latest
+    container_name: portfolio_mongo_dev
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data_dev:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  mongo_data_dev:

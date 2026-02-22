@@ -1,21 +1,35 @@
 package datastore
 
 import (
-	"eylexander/portfolio/backend/src/consts"
+	"context"
+	"eylexander/portfolio/backend/src/models"
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// DataStore defines the interface for database operations
 type DataStore interface {
+	Close(ctx context.Context) error
+	Ping(ctx context.Context) error
 
-	// Health check
-	HealthCheck() error
+	// Articles
+	CreateArticle(ctx context.Context, article *models.Article) error
+	GetArticles(ctx context.Context, onlyVisible bool) ([]*models.Article, error)
+	GetArticleBySlug(ctx context.Context, slug string) (*models.Article, error)
+	UpdateArticle(ctx context.Context, article *models.Article) error
+	DeleteArticle(ctx context.Context, id primitive.ObjectID) error
 
-	// Debugger
-	DoDebug() (*consts.StoreResponse, error)
-	GetDebugs() ([]consts.Debug, error)
+	// Contact
+	CreateContactMessage(ctx context.Context, msg *models.ContactMessage) error
+	GetLastContactMessageTime(ctx context.Context, ip string) (time.Time, error)
+	GetContactMessages(ctx context.Context) ([]*models.ContactMessage, error)
+	DeleteContactMessage(ctx context.Context, id primitive.ObjectID) error
 
-	// Projects
-	GetProjects(locale string) ([]consts.Project, error)
-	GetProjectBySlug(slug string, locale string) (*consts.Project, error)
-	GetProjectsReduced(locale string) ([]consts.ProjectReduced, error)
-	GetProjectBySlugReduced(slug string, locale string) (*consts.ProjectReduced, error)
+	// Auth
+	GetUserByUsername(ctx context.Context, username string) (*models.User, error)
+	CreateUser(ctx context.Context, user *models.User) error
+	CreateAdminUser(ctx context.Context, username, password string) error
+	UpdateUser(ctx context.Context, user *models.User) error
+	CountUsers(ctx context.Context) (int64, error)
 }

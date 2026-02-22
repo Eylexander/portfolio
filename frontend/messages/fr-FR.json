@@ -1,0 +1,63 @@
+{
+  "HomePage": {
+    "role": "je suis ingénieur logiciel, étudiant et administrateur système."
+  },
+  "Navigation": {
+    "home": "accueil",
+    "about": "a propos",
+    "projects": "projets",
+    "contact": "contact",
+    "login": "connexion"
+  },
+  "Projects": {
+    "title": "projets",
+    "subtitle": "Une vitrine de mes réalisations en développement logiciel et autres loisirs.",
+    "readMore": "Voir le Projet",
+    "noProjects": "Aucun projet à afficher pour le moment.",
+    "addProject": "Ajouter un projet",
+    "featured": "En vedette"
+  },
+  "About": {
+    "title": "à propos de moi",
+    "description": "Je suis ingénieur logiciel, étudiant et administrateur système. Passionné par la technologie, j'aime apprendre de nouvelles choses et repousser les limites. Actuellement étudiant à l'UTT, je travaille sur divers projets innovants pendant mon temps libre, alliant créativité et expertise technique.",
+    "experience_title": "Expériences professionnelles",
+    "experiences": {
+      "job1": {
+        "role": "Alternant Ingénieur Logiciel",
+        "company": "Netlor",
+        "period": "Septembre 2024 - Août 2025",
+        "description": "J'ai travaillé sur la mise en production d'une application de microservices utilisant Golang et VueJS avec Kubernetes, Docker et Ansible."
+      },
+      "job2": {
+        "role": "Stagiaire Développeur Microservices",
+        "company": "Netlor",
+        "period": "Février 2024 - Mai 2024",
+        "description": "J'ai contribué au développement d'une application de microservices utilisant Golang et VueJS."
+      }
+    }
+  },
+  "Contact": {
+    "header": "contact",
+    "title": "me contacter",
+    "subtitle": "Vous avez un projet en tête ou juste envie de dire bonjour ?",
+    "name": "Nom",
+    "email": "Email",
+    "subject": "Sujet",
+    "message": "Message",
+    "submit": "Envoyer",
+    "sending": "Envoi…",
+    "success": "Message envoyé !",
+    "placeholder_name": "Jean Dupont",
+    "placeholder_email": "jean@example.com",
+    "placeholder_subject": "Demande de projet",
+    "placeholder_message": "Parlez-moi de votre projet..."
+  },
+  "Admin": {
+    "new_project": "Nouveau Projet",
+    "create_project": "Créer un Projet",
+    "edit_project": "Modifier le Projet",
+    "back": "Retour",
+    "view_site": "Voir le site",
+    "logout": "Déconnexion"
+  }
+}

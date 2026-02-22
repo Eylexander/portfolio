@@ -1,0 +1,80 @@
+services:
+  portfolio_proxy:
+    image: nginx:latest
+    container_name: portfolio_nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      portfolio_frontend:
+        condition: service_healthy
+    networks:
+      - portfolio_network
+
+  portfolio_frontend:
+    image: eylexander/portfolio-frontend:latest
+    container_name: portfolio_frontend
+    restart: always
+    depends_on:
+      portfolio_backend:
+        condition: service_healthy
+    networks:
+      - portfolio_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  portfolio_backend:
+    image: eylexander/portfolio-backend:latest
+    container_name: portfolio_backend
+    restart: always
+    environment:
+      - MONGODB_URI=${MONGODB_URI:-mongodb://portfolio_mongo:27017/portfolio}
+      - JWT_SECRET=${JWT_SECRET:-your_jwt_secret}
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+      - GOTIFY_URL=${GOTIFY_URL}
+      - GOTIFY_TOKEN=${GOTIFY_TOKEN}
+    depends_on:
+      portfolio_database:
+        condition: service_healthy
+    networks:
+      - portfolio_network
+    volumes:
+      - portfolio_uploads:/opt/app/uploads
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  portfolio_database:
+    image: mongo:7.0
+    container_name: portfolio_mongo
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - portfolio_network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  mongo_data:
+  portfolio_uploads:
+
+networks:
+  portfolio_network:
+    driver: bridge

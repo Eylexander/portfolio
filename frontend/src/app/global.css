@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+@layer base {
+  :root {
+    /* Core — modern paper style */
+    --background: 40 40% 96%; /* Warmer, paper-like white */
+    --foreground: 220 15% 15%; /* Softer dark gray for text */
+
+    /* Primary — clean purple */
+    --primary: 262 52% 54%;
+    --primary-foreground: 0 0% 99%;
+
+    /* Secondary — subtle paper texture/shade */
+    --secondary: 40 30% 92%;
+    --secondary-foreground: 220 15% 25%;
+
+    /* Muted */
+    --muted: 40 25% 90%;
+    --muted-foreground: 220 10% 45%;
+
+    /* Card — pure white for contrast against paper bg */
+    --card: 40 33% 98%;
+    --card-foreground: 220 15% 15%;
+
+    /* Accent */
+    --accent: 40 30% 92%;
+    --accent-foreground: 220 15% 25%;
+
+    /* Border / Input / Ring */
+    --border: 40 20% 86%;
+    --input: 40 20% 86%;
+    --ring: 262 52% 54%;
+
+    /* Destructive */
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+
+    /* Radius */
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 248 18% 7%;
+    --foreground: 210 20% 94%;
+
+    /* Primary — lighter purple for dark bg readability */
+    --primary: 262 65% 68%;
+    --primary-foreground: 262 20% 8%;
+
+    --secondary: 248 14% 14%;
+    --secondary-foreground: 210 20% 78%;
+
+    --muted: 248 14% 12%;
+    --muted-foreground: 248 10% 52%;
+
+    --card: 248 16% 9%;
+    --card-foreground: 210 20% 94%;
+
+    --accent: 248 14% 14%;
+    --accent-foreground: 210 20% 94%;
+
+    --border: 248 14% 16%;
+    --input: 248 14% 16%;
+    --ring: 262 65% 68%;
+
+    --destructive: 0 68% 55%;
+    --destructive-foreground: 0 0% 98%;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/40;
+  }
+
+  /* Selection */
+  ::selection {
+    @apply bg-primary/25 text-foreground;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Noise texture overlay (subtle, for cards) */
+  .noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  }
+
+  /* Gradient text helper */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(290 55% 65%) 100%);
+  }
+
+  /* Glow effect */
+  .glow-primary {
+    box-shadow: 0 0 20px -4px hsl(var(--primary) / 0.4);
+  }
+}

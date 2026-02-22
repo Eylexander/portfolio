@@ -1,31 +1,63 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
+	"os"
+	"time"
 
-	"eylexander/portfolio/backend/src/api"
-	"eylexander/portfolio/backend/src/ctrl"
 	"eylexander/portfolio/backend/src/datastore"
 	"eylexander/portfolio/backend/src/server"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	addr := "0.0.0.0"
-	port := 8000
-	dbName := "Portfolio"
-
-	address := fmt.Sprintf("%s:%d", addr, port)
-
-	store := datastore.NewMongoDBStore(dbName)
-
-	if err := store.Init(); err != nil {
-		log.Fatal(err)
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found, using system environment variables")
 	}
 
-	controller := ctrl.NewController(store)
+	mongoURI := os.Getenv("MONGODB_URI")
+	if mongoURI == "" {
+		mongoURI = "mongodb://localhost:27017"
+	}
+	dbName := os.Getenv("DATABASE_NAME")
+	if dbName == "" {
+		dbName = "portfolio"
+	}
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8000"
+	}
 
-	handler := api.NewHandler(store, controller)
+	// Initialize MongoDB datastore
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
-	server.Start(address, handler, controller)
+	ds, err := datastore.NewMongoDatastore(ctx, mongoURI, dbName)
+	if err != nil {
+		log.Fatalf("Failed to connect to MongoDB: %v", err)
+	}
+	defer ds.Close(context.Background())
+
+	log.Println("Successfully connected to MongoDB")
+
+	// Initialize and start server
+	srv := server.NewServer(ds)
+
+	// Initialize Admin User if provided
+	adminUser := os.Getenv("ADMIN_USERNAME")
+	adminPass := os.Getenv("ADMIN_PASSWORD")
+	err = ds.CreateAdminUser(ctx, adminUser, adminPass)
+	if err != nil {
+		log.Printf("Admin user creation skipped: %v", err)
+	} else {
+		log.Printf("Admin user '%s' created successfully", adminUser)
+	}
+
+	fmt.Printf("Portfolio Server starting on port %s...\n", port)
+	if err := srv.Run(":" + port); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
 }

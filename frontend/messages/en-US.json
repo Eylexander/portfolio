@@ -1,0 +1,63 @@
+{
+  "HomePage": {
+    "role": "I am a software engineer, student, and sysadmin."
+  },
+  "Navigation": {
+    "home": "home",
+    "about": "about",
+    "projects": "projects",
+    "contact": "contact",
+    "login": "login"
+  },
+  "Projects": {
+    "title": "projects",
+    "subtitle": "A showcase of my work in software development and other hobbies.",
+    "readMore": "View Project",
+    "noProjects": "No projects yet.",
+    "addProject": "Add Project",
+    "featured": "Featured"
+  },
+  "About": {
+    "title": "about me",
+    "description": "I'm a software engineer, student, and sysadmin. Passionate about technology, I love learning new things and pushing boundaries. Currently a student at UTT, I work on various innovative projects in my spare time, blending creativity with technical expertise.",
+    "experience_title": "Professional Experience",
+    "experiences": {
+      "job1": {
+        "role": "Software Engineer Apprentice",
+        "company": "Netlor",
+        "period": "September 2024 - August 2025",
+        "description": "Worked on the production deployment of a microservices application using Golang and VueJS with Kubernetes, Docker, and Ansible."
+      },
+      "job2": {
+        "role": "Microservices Developer Intern",
+        "company": "Netlor",
+        "period": "February 2024 - May 2024",
+        "description": "Contributed to the development of a microservices application using Golang and VueJS."
+      }
+    }
+  },
+  "Contact": {
+    "header": "contact",
+    "title": "get in touch",
+    "subtitle": "have a project in mind or just want to say hi?",
+    "name": "Name",
+    "email": "Email",
+    "subject": "Subject",
+    "message": "Message",
+    "submit": "Send Message",
+    "sending": "Sending…",
+    "success": "Message sent!",
+    "placeholder_name": "John Doe",
+    "placeholder_email": "john@example.com",
+    "placeholder_subject": "Project Inquiry",
+    "placeholder_message": "Tell me about your project..."
+  },
+  "Admin": {
+    "new_project": "New Project",
+    "create_project": "Create Project",
+    "edit_project": "Edit Project",
+    "back": "Back",
+    "view_site": "View Site",
+    "logout": "Logout"
+  }
+}
