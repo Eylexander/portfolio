@@ -41,7 +41,7 @@ export default function ArticleCard({ article, featured = false }: ArticleCardPr
             <img
               src={article.cover_image}
               alt={title}
-              className="w-full h-full object-cover transition-transform duration-500 will-change-transform group-hover:scale-105"
+              className="w-full h-full object-contain transition-transform duration-500 will-change-transform group-hover:scale-105"
             />
             {/* Subtle gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-t dark:from-card/60 dark:to-transparent" />

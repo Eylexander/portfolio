@@ -6,24 +6,35 @@ import { apiClient } from '@/lib/api-client';
 interface AuthState {
   token: string | null;
   isAuthenticated: boolean;
-  login: (token: string) => void;
+  login: (identifier: string, password: string) => Promise<void>;
   logout: () => void;
-  checkAuth: () => void;
+  checkAuth: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       token: null,
       isAuthenticated: false,
-      login: (token: string) => {
-        Cookies.set('token', token, { expires: 1 });
-        set({ token, isAuthenticated: true });
+      login: async (identifier: string, password: string) => {
+        const response = await apiClient.login(identifier, password);
+
+        Cookies.set('token', response.token, { expires: 1 });
+
+        set({ token: response.token, isAuthenticated: true });
       },
-      checkAuth: () => {
+      checkAuth: async () => {
         const token = Cookies.get('token');
         if (token) {
-          set({ token, isAuthenticated: true });
+          const isValid = await apiClient.verifyToken();
+          if (isValid) {
+            set({ token, isAuthenticated: true });
+          } else {
+            Cookies.remove('token');
+            set({ token: null, isAuthenticated: false });
+          }
+        } else {
+          set({ token: null, isAuthenticated: false });
         }
       },
       logout: () => {

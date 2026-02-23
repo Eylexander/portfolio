@@ -77,6 +77,7 @@ func (s *Server) registerRoutes() {
 
 			// Credentials update
 			protected.PUT("/auth/credentials", s.api.UpdateCredentials)
+			protected.GET("/auth/verify", s.api.VerifyToken)
 		}
 	}
 

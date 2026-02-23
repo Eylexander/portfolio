@@ -6,13 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type LoginRequest struct {
-	Username string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required"`
-}
-
 func (a *API) Login(c *gin.Context) {
-	var req LoginRequest
+	var req struct {
+		Username string `json:"username" binding:"required"`
+		Password string `json:"password" binding:"required"`
+	}
+
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
 		return
@@ -57,4 +56,9 @@ func (a *API) UpdateCredentials(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Credentials updated successfully"})
+}
+
+func (a *API) VerifyToken(c *gin.Context) {
+	// If the middleware passes, the token is valid
+	c.JSON(http.StatusOK, gin.H{"valid": true})
 }

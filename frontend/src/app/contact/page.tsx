@@ -75,7 +75,8 @@ export default function ContactPage() {
       await apiClient.sendContactMessage(formData);
       toast.success(t("success"));
       setFormData({ name: "", email: "", subject: "", message: "", website: "" });
-    } catch (error: any) {
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: string } } };
       toast.error(
         error.response?.data?.error || "Failed to send message. Please try again."
       );

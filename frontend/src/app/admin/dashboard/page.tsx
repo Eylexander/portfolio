@@ -12,6 +12,7 @@ import Loader from "@/components/Loader";
 import apiClient from "@/lib/api-client";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
+import Image from "next/image";
 
 const stagger = {
   hidden: {},
@@ -23,11 +24,12 @@ const fadeUp = {
 };
 
 export default function AdminDashboard() {
-  const { isAuthenticated, logout } = useAuthStore();
+  const { logout } = useAuthStore();
   const router = useRouter();
   const { resolvedTheme, setTheme } = useTheme();
   const [articles, setArticles] = useState<Article[]>([]);
   const [uploads, setUploads] = useState<string[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"projects" | "uploads" | "messages" | "settings">("projects");
@@ -39,12 +41,8 @@ export default function AdminDashboard() {
   const t = useTranslations("Admin");
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      router.push("/login");
-      return;
-    }
     fetchData();
-  }, [isAuthenticated, router]);
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -93,6 +91,7 @@ export default function AdminDashboard() {
       setTimeout(() => setCopiedText(null), 2000);
     } catch (err) {
       toast.error("Failed to copy URL");
+      console.error(err);
     }
   };
 
@@ -102,6 +101,7 @@ export default function AdminDashboard() {
       toast.success("Email copied to clipboard");
     } catch (err) {
       toast.error("Failed to copy email");
+      console.error(err);
     }
   };
 
@@ -117,8 +117,9 @@ export default function AdminDashboard() {
       toast.success("Credentials updated successfully. Please log in again.");
       logout();
       router.push("/login");
-    } catch (err: any) {
-      toast.error(err.response?.data?.error || "Failed to update credentials");
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: string } } };
+      toast.error(error.response?.data?.error || "Failed to update credentials");
     } finally {
       setUpdatingCredentials(false);
     }
@@ -152,7 +153,7 @@ export default function AdminDashboard() {
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
       toast.success("Backup exported successfully");
-    } catch (err) {
+    } catch {
       toast.error("Failed to export backup");
     }
   };
@@ -181,10 +182,14 @@ export default function AdminDashboard() {
         for (const article of importedArticles) {
           try {
             // Remove id and _id so the backend creates a new one
-            const { id, _id, ...articleData } = article as any;
+            const { id: _id1, _id: _id2, ...articleData } = article as Article & { _id?: string };
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            void _id1; 
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            void _id2;
             await apiClient.createArticle(articleData);
             successCount++;
-          } catch (err) {
+          } catch {
             errorCount++;
           }
         }
@@ -196,7 +201,7 @@ export default function AdminDashboard() {
         }
         
         fetchData();
-      } catch (err) {
+      } catch {
         toast.error("Failed to parse backup file");
       }
       
@@ -205,8 +210,6 @@ export default function AdminDashboard() {
     };
     reader.readAsText(file);
   };
-
-  if (!isAuthenticated) return null;
 
   return (
     <div className="min-h-screen bg-background">
@@ -354,7 +357,7 @@ export default function AdminDashboard() {
                     >
                       <td className="py-3.5 px-4 sm:px-5 font-medium text-foreground">
                         <Link href={`/projects/${article.slug}`} className="hover:text-primary hover:underline transition-colors line-clamp-1">
-                          {article.title?.en || article.title?.fr || "Untitled"}
+                          {article.title?.["en-US"] || article.title?.["fr-FR"] || "Untitled"}
                         </Link>
                         {/* Mobile-only status and date */}
                         <div className="flex sm:hidden items-center gap-2 mt-1 text-xs text-muted-foreground">
@@ -448,7 +451,7 @@ export default function AdminDashboard() {
                       variants={fadeUp}
                       className="group relative aspect-square rounded-lg overflow-hidden border border-border bg-secondary/20"
                     >
-                      <img 
+                      <Image 
                         src={url} 
                         alt={`Upload ${index}`} 
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"

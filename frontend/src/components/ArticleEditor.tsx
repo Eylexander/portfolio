@@ -26,17 +26,17 @@ export default function ArticleEditor({
 
   const [formData, setFormData] = useState({
     title: {
-      en: initialData?.title?.en || "",
-      fr: initialData?.title?.fr || "",
+      "en-US": initialData?.title?.["en-US"] || "",
+      "fr-FR": initialData?.title?.["fr-FR"] || "",
     },
     slug: initialData?.slug || "",
     snippet: {
-      en: initialData?.snippet?.en || "",
-      fr: initialData?.snippet?.fr || "",
+      "en-US": initialData?.snippet?.["en-US"] || "",
+      "fr-FR": initialData?.snippet?.["fr-FR"] || "",
     },
     content: {
-      en: initialData?.content?.en || "",
-      fr: initialData?.content?.fr || "",
+      "en-US": initialData?.content?.["en-US"] || "",
+      "fr-FR": initialData?.content?.["fr-FR"] || "",
     },
     cover_image: initialData?.cover_image || "",
     tags: initialData?.tags?.join(", ") || "",
@@ -44,7 +44,7 @@ export default function ArticleEditor({
     project_date: initialData?.project_date ? initialData.project_date.substring(0, 7) : new Date().toISOString().substring(0, 7),
   });
   const [isSaving, setIsSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState<"en" | "fr">("en");
+  const [activeTab, setActiveTab] = useState<"en-US" | "fr-FR">("en-US");
   const [isPreview, setIsPreview] = useState(false);
   const [isSlugModified, setIsSlugModified] = useState(!!initialData?.slug);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
@@ -63,7 +63,7 @@ export default function ArticleEditor({
   const handleLocalizedChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     field: "title" | "snippet" | "content",
-    lang: "en" | "fr"
+    lang: "en-US" | "fr-FR"
   ) => {
     const { value } = e.target;
     setFormData((prev) => {
@@ -75,7 +75,7 @@ export default function ArticleEditor({
         },
       };
 
-      if (field === "title" && !isSlugModified && lang === "en") {
+      if (field === "title" && !isSlugModified && lang === "en-US") {
         newData.slug = value
           .toLowerCase()
           .normalize("NFD")
@@ -112,7 +112,8 @@ export default function ArticleEditor({
       }
       router.push("/admin/dashboard");
       router.refresh();
-    } catch (error: any) {
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: string } } };
       toast.error(error.response?.data?.error || "Failed to save project");
     } finally {
       setIsSaving(false);
@@ -160,7 +161,7 @@ export default function ArticleEditor({
         }));
       }
       toast.success("Image uploaded!");
-    } catch (error) {
+    } catch {
       toast.error("Failed to upload image");
     } finally {
       setIsUploadingImage(false);
@@ -175,9 +176,9 @@ export default function ArticleEditor({
       <div className="flex items-center gap-2 border-b border-border pb-2">
         <button
           type="button"
-          onClick={() => setActiveTab("en")}
+          onClick={() => setActiveTab("en-US")}
           className={`px-4 py-1.5 text-sm font-medium rounded-t-lg transition-colors ${
-            activeTab === "en"
+            activeTab === "en-US"
               ? "bg-primary/10 text-primary border-b-2 border-primary"
               : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
           }`}
@@ -186,9 +187,9 @@ export default function ArticleEditor({
         </button>
         <button
           type="button"
-          onClick={() => setActiveTab("fr")}
+          onClick={() => setActiveTab("fr-FR")}
           className={`px-4 py-1.5 text-sm font-medium rounded-t-lg transition-colors ${
-            activeTab === "fr"
+            activeTab === "fr-FR"
               ? "bg-primary/10 text-primary border-b-2 border-primary"
               : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
           }`}
@@ -206,7 +207,7 @@ export default function ArticleEditor({
             value={formData.title[activeTab]}
             onChange={(e) => handleLocalizedChange(e, "title", activeTab)}
             className={inputCls}
-            placeholder={activeTab === "en" ? "My Awesome Project" : "Mon Super Projet"}
+            placeholder={activeTab === "en-US" ? "My Awesome Project" : "Mon Super Projet"}
             required
           />
         </div>
@@ -230,7 +231,7 @@ export default function ArticleEditor({
           value={formData.snippet[activeTab]}
           onChange={(e) => handleLocalizedChange(e, "snippet", activeTab)}
           className={`${inputCls} h-20 resize-none`}
-          placeholder={activeTab === "en" ? "A short description shown in the project card…" : "Une courte description affichée sur la carte du projet…"}
+          placeholder={activeTab === "en-US" ? "A short description shown in the project card…" : "Une courte description affichée sur la carte du projet…"}
           required
         />
       </div>
@@ -297,7 +298,7 @@ export default function ArticleEditor({
             value={formData.content[activeTab]}
             onChange={(e) => handleLocalizedChange(e, "content", activeTab)}
             className={`${inputCls} h-80 font-mono text-xs resize-y`}
-            placeholder={activeTab === "en" ? "# My project\n\nWrite your content in Markdown…" : "# Mon projet\n\nÉcrivez votre contenu en Markdown…"}
+            placeholder={activeTab === "en-US" ? "# My project\n\nWrite your content in Markdown…" : "# Mon projet\n\nÉcrivez votre contenu en Markdown…"}
             required
           />
         )}

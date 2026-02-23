@@ -15,7 +15,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
     <ReactMarkdown
       rehypePlugins={[rehypeRaw, rehypeSlug]}
       components={{
-        pre({ node, children, ...props }) {
+        pre({ children, ...props }) {
           return (
             <div className="relative group not-prose my-6">
               <pre {...props} className="bg-secondary border border-border rounded-lg p-4 overflow-x-auto text-sm font-mono text-foreground">
@@ -25,8 +25,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
             </div>
           );
         },
-        code({ node, inline, className, children, ...props }: any) {
-          const match = /language-(\w+)/.exec(className || "");
+        code({ inline, className, children, ...props }: React.HTMLAttributes<HTMLElement> & { inline?: boolean }) {
           if (inline) {
             return (
               <code className="text-primary bg-secondary px-1.5 py-0.5 rounded text-sm font-normal" {...props}>

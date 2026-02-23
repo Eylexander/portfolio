@@ -3,25 +3,16 @@
 import ArticleEditor from "@/components/ArticleEditor";
 import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, Globe, LogOut, Sun, Moon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 
 export default function NewArticlePage() {
-    const { isAuthenticated, logout } = useAuthStore();
+    const { logout } = useAuthStore();
     const router = useRouter();
     const { resolvedTheme, setTheme } = useTheme();
     const t = useTranslations("Admin");
-
-    useEffect(() => {
-        if (!isAuthenticated) {
-            router.push("/login");
-        }
-    }, [isAuthenticated, router]);
-
-    if (!isAuthenticated) return null;
 
     return (
         <div className="min-h-screen bg-background">

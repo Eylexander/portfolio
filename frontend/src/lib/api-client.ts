@@ -43,6 +43,16 @@ class ApiClient {
 		return response.data;
 	}
 
+	async verifyToken(): Promise<boolean> {
+		try {
+			await this.client.get('/auth/verify');
+			return true;
+		} catch (error) {
+			console.error('Token verification failed:', error);
+			return false;
+		}
+	}
+
 	async updateCredentials(newUsername?: string, newPassword?: string): Promise<void> {
 		await this.client.put('/auth/credentials', { newUsername, newPassword });
 	}
@@ -94,7 +104,9 @@ class ApiClient {
 		await this.client.post('/contact', data);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	async getContactMessages(): Promise<any[]> {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const response = await this.client.get<any[]>('/messages');
 		return response.data;
 	}

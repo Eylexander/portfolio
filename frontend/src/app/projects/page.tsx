@@ -10,7 +10,6 @@ import { Plus, LayoutDashboard } from "lucide-react";
 import { useTranslations } from "next-intl";
 import apiClient from "@/lib/api-client";
 import PageNav from "@/components/PageNav";
-import Loader from "@/components/Loader";
 
 const stagger = {
   hidden: {},

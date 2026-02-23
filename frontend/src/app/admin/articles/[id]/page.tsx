@@ -15,7 +15,7 @@ import { useTheme } from "next-themes";
 
 export default function EditArticlePage() {
     const { id } = useParams();
-    const { isAuthenticated, logout } = useAuthStore();
+    const { logout } = useAuthStore();
     const router = useRouter();
     const { resolvedTheme, setTheme } = useTheme();
     const [article, setArticle] = useState<Article | null>(null);
@@ -23,11 +23,6 @@ export default function EditArticlePage() {
     const t = useTranslations("Admin");
 
     useEffect(() => {
-        if (!isAuthenticated) {
-            router.push("/login");
-            return;
-        }
-
         const fetchArticle = async () => {
             try {
                 const articles = await apiClient.getArticles(true);
@@ -45,9 +40,7 @@ export default function EditArticlePage() {
         };
 
         if (id) fetchArticle();
-    }, [id, isAuthenticated, router]);
-
-    if (!isAuthenticated) return null;
+    }, [id]);
 
     return (
         <div className="min-h-screen bg-background">
@@ -89,7 +82,7 @@ export default function EditArticlePage() {
                     {!loading && article && (
                         <>
                             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-primary mb-1">{t("edit_project")}</p>
-                            <h1 className="text-xl sm:text-2xl font-black tracking-tight text-foreground">{article.title?.en || article.title?.fr || "Untitled"}</h1>
+                            <h1 className="text-xl sm:text-2xl font-black tracking-tight text-foreground">{article.title?.["en-US"] || article.title?.["fr-FR"] || "Untitled"}</h1>
                         </>
                     )}
                     {!loading && !article && (

@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
 import { motion } from "framer-motion";
-import apiClient from "@/lib/api-client";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -17,28 +16,29 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { login, isAuthenticated, checkAuth } = useAuthStore();
+  const { login, checkAuth } = useAuthStore();
 
   // Redirect if already logged in
   useEffect(() => {
-    checkAuth();
-    const { isAuthenticated: authenticated } = useAuthStore.getState();
-    if (authenticated) {
-      router.push("/admin/dashboard");
-    }
+    const verify = async () => {
+      await checkAuth();
+      const { isAuthenticated: authenticated } = useAuthStore.getState();
+      if (authenticated) {
+        router.push("/admin/dashboard");
+      }
+    };
+    verify();
   }, [checkAuth, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const data = await apiClient.login(username, password);
-      if (data.token) {
-        login(data.token);
-        toast.success("Logged in successfully!");
-        router.push("/admin/dashboard");
-      }
-    } catch (error: any) {
+      await login(username, password);
+      toast.success("Logged in successfully!");
+      router.push("/admin/dashboard");
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: string } } };
       toast.error(error.response?.data?.error || "Login failed");
     } finally {
       setIsLoading(false);

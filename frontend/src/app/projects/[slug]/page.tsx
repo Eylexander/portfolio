@@ -38,7 +38,7 @@ export default function ArticlePage() {
       try {
         const data = await apiClient.getArticle(slug as string);
         setArticle(data);
-      } catch (err) {
+      } catch {
         setError("Project not found");
       } finally {
         setIsLoading(false);
@@ -74,16 +74,20 @@ export default function ArticlePage() {
         <div className="max-w-2xl mx-auto">
           {/* Cover */}
           {article.cover_image && (
-            <a 
-              href={article.cover_image} 
-              target="_blank" 
+            <a
+              href={article.cover_image}
+              target="_blank"
               rel="noopener noreferrer"
-              className="block w-full h-56 md:h-80 overflow-hidden rounded-xl mb-10 shadow-md hover:opacity-90 transition-opacity cursor-pointer"
+              className="group block w-full h-56 md:h-80 overflow-hidden rounded-xl mb-10 
+               border border-border/50 bg-secondary/30 
+               shadow-sm hover:shadow-md hover:border-primary/20 
+               transition-all duration-300 cursor-pointer relative"
             >
               <img
                 src={article.cover_image}
-                alt={article.title?.[locale] || article.title?.en || "Untitled"}
-                className="w-full h-full object-cover"
+                alt={article.title?.[locale] || article.title?.["en-US"] || "Untitled"}
+                className="w-full h-full object-contain"
+                loading="lazy"
               />
             </a>
           )}
@@ -105,7 +109,7 @@ export default function ArticlePage() {
                   </div>
                 )}
                 <h1 className="text-3xl md:text-4xl font-black text-foreground leading-tight tracking-tight break-words">
-                  {article.title?.[locale] || article.title?.en || "Untitled"}
+                  {article.title?.[locale] || article.title?.["en-US"] || "Untitled"}
                 </h1>
               </div>
               {isAuthenticated && (
@@ -133,7 +137,7 @@ export default function ArticlePage() {
             prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground
             prose-img:rounded-lg prose-img:shadow-sm
           ">
-            <MarkdownRenderer content={article.content?.[locale] || article.content?.en || ""} />
+            <MarkdownRenderer content={article.content?.[locale] || article.content?.["en-US"] || ""} />
           </div>
 
           {/* Legal Footer */}
