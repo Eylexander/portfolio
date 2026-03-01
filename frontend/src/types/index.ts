@@ -30,3 +30,30 @@ export interface ContactMessage {
   message: string;
   created_at: string;
 }
+
+export interface Experience {
+  id: string;
+  role: LocalizedString;
+  company: string;
+  period: LocalizedString;
+  description: LocalizedString;
+}
+
+export interface StackItem {
+  id: string;
+  name: string;
+  category: string;
+  url: string;
+}
+
+export interface AboutData {
+  id?: string;
+  title: LocalizedString;
+  description: LocalizedString;
+  experience_title: LocalizedString;
+  experiences: Experience[];
+  associative_title: LocalizedString;
+  associative_experiences: Experience[];
+  stack_tools: StackItem[];
+}
+

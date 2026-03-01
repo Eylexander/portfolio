@@ -32,4 +32,11 @@ type DataStore interface {
 	CreateAdminUser(ctx context.Context, username, password string) error
 	UpdateUser(ctx context.Context, user *models.User) error
 	CountUsers(ctx context.Context) (int64, error)
+
+	// About
+	GetAboutData(ctx context.Context) (*models.AboutData, error)
+	UpdateAboutData(ctx context.Context, data *models.AboutData) error
+
+	// Backup
+	RestoreBackup(ctx context.Context, data *models.BackupData) error
 }

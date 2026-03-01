@@ -128,10 +128,10 @@ export default function AdminDashboard() {
   const handleToggleFeatured = async (article: Article) => {
     try {
       const isFeatured = article.tags.includes("featured");
-      const newTags = isFeatured 
+      const newTags = isFeatured
         ? article.tags.filter(t => t !== "featured")
         : [...article.tags, "featured"];
-      
+
       await apiClient.updateArticle(article.id, { ...article, tags: newTags });
       toast.success(isFeatured ? "Removed from featured" : "Added to featured");
       fetchData();
@@ -140,9 +140,10 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleExportBackup = () => {
+  const handleExportBackup = async () => {
     try {
-      const dataStr = JSON.stringify(articles, null, 2);
+      const data = await apiClient.exportBackup();
+      const dataStr = JSON.stringify(data, null, 2);
       const blob = new Blob([dataStr], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -166,45 +167,20 @@ export default function AdminDashboard() {
     reader.onload = async (e) => {
       try {
         const content = e.target?.result as string;
-        const importedArticles = JSON.parse(content) as Article[];
-        
-        if (!Array.isArray(importedArticles)) {
-          throw new Error("Invalid backup format");
-        }
+        const backupData = JSON.parse(content);
 
-        if (!confirm(`Are you sure you want to import ${importedArticles.length} projects? This will not delete existing projects, but might create duplicates if they already exist.`)) {
+        if (!confirm(`Are you sure you want to restore this backup? This will overwrite current database collections (Articles, About, and Messages)!`)) {
+          event.target.value = '';
           return;
         }
 
-        let successCount = 0;
-        let errorCount = 0;
-
-        for (const article of importedArticles) {
-          try {
-            // Remove id and _id so the backend creates a new one
-            const { id: _id1, _id: _id2, ...articleData } = article as Article & { _id?: string };
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            void _id1; 
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            void _id2;
-            await apiClient.createArticle(articleData);
-            successCount++;
-          } catch {
-            errorCount++;
-          }
-        }
-
-        if (errorCount > 0) {
-          toast.error(`Imported ${successCount} projects, but ${errorCount} failed.`);
-        } else {
-          toast.success(`Successfully imported ${successCount} projects.`);
-        }
-        
+        await apiClient.importBackup(backupData);
+        toast.success(`Backup restored successfully.`);
         fetchData();
       } catch {
-        toast.error("Failed to parse backup file");
+        toast.error("Failed to import backup");
       }
-      
+
       // Reset the input
       event.target.value = '';
     };
@@ -215,7 +191,12 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-background">
       {/* Top bar */}
       <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md px-4 sm:px-6 py-3 flex items-center justify-between">
+        <Link
+          href="/"
+          className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary transition-colors"
+        >
         <span className="text-sm font-bold tracking-wider text-foreground">Admin</span>
+        </Link>
         <div className="flex items-center gap-1 sm:gap-2">
           <button
             onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
@@ -258,41 +239,37 @@ export default function AdminDashboard() {
         <div className="flex items-center gap-2 border-b border-border mb-6 overflow-x-auto whitespace-nowrap pb-1 scrollbar-hide [&::-webkit-scrollbar]:hidden justify-center sm:justify-start">
           <button
             onClick={() => setActiveTab("projects")}
-            className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${
-              activeTab === "projects"
+            className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${activeTab === "projects"
                 ? "border-primary text-primary"
                 : "border-transparent text-muted-foreground hover:text-foreground"
-            }`}
+              }`}
           >
             Projects
           </button>
           <button
             onClick={() => setActiveTab("uploads")}
-            className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${
-              activeTab === "uploads"
+            className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${activeTab === "uploads"
                 ? "border-primary text-primary"
                 : "border-transparent text-muted-foreground hover:text-foreground"
-            }`}
+              }`}
           >
             Uploads
           </button>
           <button
             onClick={() => setActiveTab("messages")}
-            className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${
-              activeTab === "messages"
+            className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${activeTab === "messages"
                 ? "border-primary text-primary"
                 : "border-transparent text-muted-foreground hover:text-foreground"
-            }`}
+              }`}
           >
             Messages
           </button>
           <button
             onClick={() => setActiveTab("settings")}
-            className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${
-              activeTab === "settings"
+            className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${activeTab === "settings"
                 ? "border-primary text-primary"
                 : "border-transparent text-muted-foreground hover:text-foreground"
-            }`}
+              }`}
           >
             Settings
           </button>
@@ -340,96 +317,95 @@ export default function AdminDashboard() {
                   animate="visible"
                   className="w-full text-sm min-w-full"
                 >
-                <thead>
-                  <tr className="border-b border-border bg-secondary/40">
-                    <th className="py-3 px-4 sm:px-5 text-left text-xs font-semibold tracking-wide text-muted-foreground uppercase">Title</th>
-                    <th className="hidden sm:table-cell py-3 px-4 sm:px-5 text-left text-xs font-semibold tracking-wide text-muted-foreground uppercase">Status</th>
-                    <th className="hidden md:table-cell py-3 px-4 sm:px-5 text-left text-xs font-semibold tracking-wide text-muted-foreground uppercase">Date</th>
-                    <th className="py-3 px-4 sm:px-5 text-right text-xs font-semibold tracking-wide text-muted-foreground uppercase">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {articles.map((article) => (
-                    <motion.tr
-                      key={article.id}
-                      variants={fadeUp}
-                      className="border-b border-border/60 hover:bg-secondary/20 transition-colors"
-                    >
-                      <td className="py-3.5 px-4 sm:px-5 font-medium text-foreground">
-                        <Link href={`/projects/${article.slug}`} className="hover:text-primary hover:underline transition-colors line-clamp-1">
-                          {article.title?.["en-US"] || article.title?.["fr-FR"] || "Untitled"}
-                        </Link>
-                        {/* Mobile-only status and date */}
-                        <div className="flex sm:hidden items-center gap-2 mt-1 text-xs text-muted-foreground">
+                  <thead>
+                    <tr className="border-b border-border bg-secondary/40">
+                      <th className="py-3 px-4 sm:px-5 text-left text-xs font-semibold tracking-wide text-muted-foreground uppercase">Title</th>
+                      <th className="hidden sm:table-cell py-3 px-4 sm:px-5 text-left text-xs font-semibold tracking-wide text-muted-foreground uppercase">Status</th>
+                      <th className="hidden md:table-cell py-3 px-4 sm:px-5 text-left text-xs font-semibold tracking-wide text-muted-foreground uppercase">Date</th>
+                      <th className="py-3 px-4 sm:px-5 text-right text-xs font-semibold tracking-wide text-muted-foreground uppercase">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {articles.map((article) => (
+                      <motion.tr
+                        key={article.id}
+                        variants={fadeUp}
+                        className="border-b border-border/60 hover:bg-secondary/20 transition-colors"
+                      >
+                        <td className="py-3.5 px-4 sm:px-5 font-medium text-foreground">
+                          <Link href={`/projects/${article.slug}`} className="hover:text-primary hover:underline transition-colors line-clamp-1">
+                            {article.title?.["en-US"] || article.title?.["fr-FR"] || "Untitled"}
+                          </Link>
+                          {/* Mobile-only status and date */}
+                          <div className="flex sm:hidden items-center gap-2 mt-1 text-xs text-muted-foreground">
+                            {article.is_visible ? (
+                              <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
+                                <Eye size={10} /> Visible
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1">
+                                <EyeOff size={10} /> Hidden
+                              </span>
+                            )}
+                            <span>•</span>
+                            <span>{new Date(article.project_date || article.created_at).toLocaleDateString()}</span>
+                          </div>
+                        </td>
+                        <td className="hidden sm:table-cell py-3.5 px-4 sm:px-5">
                           {article.is_visible ? (
-                            <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
-                              <Eye size={10} /> Visible
+                            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
+                              <Eye size={12} /> Visible
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1">
-                              <EyeOff size={10} /> Hidden
+                            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                              <EyeOff size={12} /> Hidden
                             </span>
                           )}
-                          <span>•</span>
-                          <span>{new Date(article.project_date || article.created_at).toLocaleDateString()}</span>
-                        </div>
-                      </td>
-                      <td className="hidden sm:table-cell py-3.5 px-4 sm:px-5">
-                        {article.is_visible ? (
-                          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
-                            <Eye size={12} /> Visible
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                            <EyeOff size={12} /> Hidden
-                          </span>
-                        )}
-                      </td>
-                      <td className="hidden md:table-cell py-3.5 px-4 sm:px-5 text-muted-foreground text-xs">
-                        {new Date(article.project_date || article.created_at).toLocaleDateString()}
-                      </td>
-                      <td className="py-3.5 px-4 sm:px-5">
-                        <div className="flex justify-end gap-1">
-                          <button
-                            onClick={() => handleToggleFeatured(article)}
-                            className={`p-1.5 rounded-md transition-colors ${
-                              article.tags.includes("featured") 
-                                ? "text-yellow-500 hover:bg-yellow-500/10" 
-                                : "text-muted-foreground hover:text-yellow-500 hover:bg-yellow-500/10"
-                            }`}
-                            title={article.tags.includes("featured") ? "Remove from featured" : "Add to featured"}
-                          >
-                            <Star size={15} fill={article.tags.includes("featured") ? "currentColor" : "none"} />
-                          </button>
-                          <Link href={`/admin/articles/${article.id}`}>
-                            <button className="p-1.5 hover:bg-accent rounded-md text-muted-foreground hover:text-foreground transition-colors" title="Edit">
-                              <Edit size={15} />
+                        </td>
+                        <td className="hidden md:table-cell py-3.5 px-4 sm:px-5 text-muted-foreground text-xs">
+                          {new Date(article.project_date || article.created_at).toLocaleDateString()}
+                        </td>
+                        <td className="py-3.5 px-4 sm:px-5">
+                          <div className="flex justify-end gap-1">
+                            <button
+                              onClick={() => handleToggleFeatured(article)}
+                              className={`p-1.5 rounded-md transition-colors ${article.tags.includes("featured")
+                                  ? "text-yellow-500 hover:bg-yellow-500/10"
+                                  : "text-muted-foreground hover:text-yellow-500 hover:bg-yellow-500/10"
+                                }`}
+                              title={article.tags.includes("featured") ? "Remove from featured" : "Add to featured"}
+                            >
+                              <Star size={15} fill={article.tags.includes("featured") ? "currentColor" : "none"} />
                             </button>
+                            <Link href={`/admin/articles/${article.id}`}>
+                              <button className="p-1.5 hover:bg-accent rounded-md text-muted-foreground hover:text-foreground transition-colors" title="Edit">
+                                <Edit size={15} />
+                              </button>
+                            </Link>
+                            <button
+                              onClick={() => handleDelete(article.id)}
+                              className="p-1.5 hover:bg-destructive/10 text-muted-foreground hover:text-destructive rounded-md transition-colors"
+                              title="Delete"
+                            >
+                              <Trash2 size={15} />
+                            </button>
+                          </div>
+                        </td>
+                      </motion.tr>
+                    ))}
+                    {articles.length === 0 && (
+                      <tr>
+                        <td colSpan={4} className="py-16 text-center text-sm text-muted-foreground">
+                          No projects yet.{" "}
+                          <Link href="/admin/articles/new" className="text-primary hover:underline">
+                            Create your first one.
                           </Link>
-                          <button
-                            onClick={() => handleDelete(article.id)}
-                            className="p-1.5 hover:bg-destructive/10 text-muted-foreground hover:text-destructive rounded-md transition-colors"
-                            title="Delete"
-                          >
-                            <Trash2 size={15} />
-                          </button>
-                        </div>
-                      </td>
-                    </motion.tr>
-                  ))}
-                  {articles.length === 0 && (
-                    <tr>
-                      <td colSpan={4} className="py-16 text-center text-sm text-muted-foreground">
-                        No projects yet.{" "}
-                        <Link href="/admin/articles/new" className="text-primary hover:underline">
-                          Create your first one.
-                        </Link>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </motion.table>
-            </div>
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </motion.table>
+              </div>
             </div>
           ) : activeTab === "uploads" ? (
             <div className="p-4 sm:p-6">
@@ -439,21 +415,21 @@ export default function AdminDashboard() {
                   <p>No images uploaded yet.</p>
                 </div>
               ) : (
-                <motion.div 
+                <motion.div
                   variants={stagger}
                   initial="hidden"
                   animate="visible"
                   className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4"
                 >
                   {uploads.map((url, index) => (
-                    <motion.div 
-                      key={index} 
+                    <motion.div
+                      key={index}
                       variants={fadeUp}
                       className="group relative aspect-square rounded-lg overflow-hidden border border-border bg-secondary/20"
                     >
-                      <Image 
-                        src={url} 
-                        alt={`Upload ${index}`} 
+                      <Image
+                        src={url}
+                        alt={`Upload ${index}`}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
@@ -492,7 +468,7 @@ export default function AdminDashboard() {
                           <h3 className="font-semibold text-foreground">{msg.subject}</h3>
                           <p className="text-xs text-muted-foreground">
                             From: {msg.name} (
-                            <button 
+                            <button
                               onClick={() => handleCopyEmail(msg.email)}
                               className="hover:text-primary hover:underline transition-colors inline-flex items-center gap-1"
                               title="Copy email"

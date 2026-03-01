@@ -38,6 +38,7 @@ export default function ArticleCard({ article, featured = false }: ArticleCardPr
         {/* Cover image */}
         {article.cover_image && (
           <div className={`relative w-full overflow-hidden bg-secondary shrink-0 ${featured ? "h-56 md:h-64" : "h-44"}`}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={article.cover_image}
               alt={title}

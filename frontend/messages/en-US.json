@@ -1,6 +1,6 @@
 {
   "HomePage": {
-    "role": "I am a software engineer, student, and sysadmin."
+    "role": "i'm a software engineer, student, and sysadmin."
   },
   "Navigation": {
     "home": "home",
@@ -11,35 +11,16 @@
   },
   "Projects": {
     "title": "projects",
-    "subtitle": "A showcase of my work in software development and other hobbies.",
+    "subtitle": "A showcase of my software development journey and other hobbies.",
     "readMore": "View Project",
-    "noProjects": "No projects yet.",
-    "addProject": "Add Project",
+    "noProjects": "No projects to display at the moment.",
+    "addProject": "Add a project",
     "featured": "Featured"
-  },
-  "About": {
-    "title": "about me",
-    "description": "I'm a software engineer, student, and sysadmin. Passionate about technology, I love learning new things and pushing boundaries. Currently a student at UTT, I work on various innovative projects in my spare time, blending creativity with technical expertise.",
-    "experience_title": "Professional Experience",
-    "experiences": {
-      "job1": {
-        "role": "Software Engineer Apprentice",
-        "company": "Netlor",
-        "period": "September 2024 - August 2025",
-        "description": "Worked on the production deployment of a microservices application using Golang and VueJS with Kubernetes, Docker, and Ansible."
-      },
-      "job2": {
-        "role": "Microservices Developer Intern",
-        "company": "Netlor",
-        "period": "February 2024 - May 2024",
-        "description": "Contributed to the development of a microservices application using Golang and VueJS."
-      }
-    }
   },
   "Contact": {
     "header": "contact",
     "title": "get in touch",
-    "subtitle": "have a project in mind or just want to say hi?",
+    "subtitle": "Have a project in mind or just want to say hi?",
     "name": "Name",
     "email": "Email",
     "subject": "Subject",
@@ -57,7 +38,7 @@
     "create_project": "Create Project",
     "edit_project": "Edit Project",
     "back": "Back",
-    "view_site": "View Site",
+    "view_site": "View site",
     "logout": "Logout"
   }
 }

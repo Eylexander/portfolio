@@ -83,6 +83,7 @@ export default function ArticlePage() {
                shadow-sm hover:shadow-md hover:border-primary/20 
                transition-all duration-300 cursor-pointer relative"
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={article.cover_image}
                 alt={article.title?.[locale] || article.title?.["en-US"] || "Untitled"}

@@ -51,6 +51,9 @@ func (s *Server) registerRoutes() {
 		v1.GET("/articles", s.api.GetArticles)
 		v1.GET("/articles/:slug", OptionalAuthMiddleware(), s.api.GetArticle)
 
+		// About
+		v1.GET("/about", s.api.GetAboutData)
+
 		// Contact
 		v1.POST("/contact", s.api.SubmitContact)
 
@@ -71,7 +74,14 @@ func (s *Server) registerRoutes() {
 			protected.POST("/upload", s.api.UploadImage)
 			protected.GET("/uploads", s.api.ListUploads)
 
-			// Contact message management
+			// About
+			protected.PUT("/about", s.api.UpdateAboutData)
+
+			// Backup
+                        protected.GET("/backup/export", s.api.ExportBackup)
+                        protected.POST("/backup/import", s.api.ImportBackup)
+
+                        // Contact message management
 			protected.GET("/messages", s.api.GetContactMessages)
 			protected.DELETE("/messages/:id", s.api.DeleteContactMessage)
 

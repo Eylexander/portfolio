@@ -114,6 +114,29 @@ class ApiClient {
 	async deleteContactMessage(id: string): Promise<void> {
 		await this.client.delete(`/messages/${id}`);
 	}
+
+	// About
+	async getAboutData(): Promise<import('@/types').AboutData> {
+		const response = await this.client.get<import('@/types').AboutData>('/about');
+		return response.data;
+	}
+
+	async updateAboutData(data: import('@/types').AboutData): Promise<import('@/types').AboutData> {
+		const response = await this.client.put<import('@/types').AboutData>('/about', data);
+		return response.data;
+	}
+
+	// Backup
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	async exportBackup(): Promise<any> {
+		const response = await this.client.get('/backup/export');
+		return response.data;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	async importBackup(data: any): Promise<void> {
+		await this.client.post('/backup/import', data);
+	}
 }
 
 export const apiClient = new ApiClient();

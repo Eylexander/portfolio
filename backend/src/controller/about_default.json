@@ -1,0 +1,83 @@
+{
+  "title": {
+    "en-US": "about me",
+    "fr-FR": "à propos de moi"
+  },
+  "description": {
+    "en-US": "I'm a software engineer, student, and sysadmin. Passionate about technology, I love learning new things and pushing boundaries. Currently a student at UTT, I work on various innovative projects in my spare time, blending creativity with technical expertise.",
+    "fr-FR": "Je suis ingénieur logiciel, étudiant et administrateur système. Passionné par la technologie, j'aime apprendre de nouvelles choses et repousser les limites. Actuellement étudiant à l'UTT, je travaille sur divers projets innovants pendant mon temps libre, alliant créativité et expertise technique."
+  },
+  "experience_title": {
+    "en-US": "Professional Experience",
+    "fr-FR": "Expériences professionnelles"
+  },
+  "experiences": [
+    {
+      "id": "job1",
+      "role": {
+        "en-US": "Software Engineer Apprentice",
+        "fr-FR": "Alternant Ingénieur Logiciel"
+      },
+      "company": "Netlor",
+      "period": {
+        "en-US": "September 2024 - August 2025",
+        "fr-FR": "Septembre 2024 - Août 2025"
+      },
+      "description": {
+        "en-US": "Worked on the production deployment of a microservices application using Golang and VueJS with Kubernetes, Docker, and Ansible.",
+        "fr-FR": "J'ai travaillé sur la mise en production d'une application de microservices utilisant Golang et VueJS avec Kubernetes, Docker et Ansible."
+      }
+    },
+    {
+      "id": "job2",
+      "role": {
+        "en-US": "Microservices Developer Intern",
+        "fr-FR": "Stagiaire Développeur Microservices"
+      },
+      "company": "Netlor",
+      "period": {
+        "en-US": "February 2024 - May 2024",
+        "fr-FR": "Février 2024 - Mai 2024"
+      },
+      "description": {
+        "en-US": "Contributed to the development of a microservices application using Golang and VueJS.",
+        "fr-FR": "J'ai contribué au développement d'une application de microservices utilisant Golang et VueJS."
+      }
+    }
+  ],
+  "associative_title": {
+    "en-US": "Associative Experience",
+    "fr-FR": "Expériences associatives"
+  },
+  "associative_experiences": [
+    {
+      "id": "utt_arena",
+      "role": {
+        "en-US": "Network Infrastructure Team",
+        "fr-FR": "Membre de l'équipe Réseau"
+      },
+      "company": "UTT Arena",
+      "period": {
+        "en-US": "September 2025 - November 2025",
+        "fr-FR": "Septembre 2025 - Novembre 2025"
+      },
+      "description": {
+        "en-US": "Participated in the design, deployment, and administration of the network infrastructure for the UTT Arena student LAN party.",
+        "fr-FR": "Participation à la conception, au déploiement et à l'administration de l'infrastructure réseau pour la LAN étudiante UTT Arena."
+      }
+    }
+  ],
+  "stack_tools": [
+    { "id": "s1", "name": "React", "category": "Frontend", "url": "https://reactjs.org/" },
+    { "id": "s2", "name": "Next.js", "category": "Frontend", "url": "https://nextjs.org/" },
+    { "id": "s3", "name": "TypeScript", "category": "Frontend", "url": "https://www.typescriptlang.org/" },
+    { "id": "s4", "name": "Tailwind CSS", "category": "Frontend", "url": "https://tailwindcss.com/" },
+    { "id": "s5", "name": "Golang", "category": "Backend", "url": "https://golang.org/" },
+    { "id": "s6", "name": "Node.js", "category": "Backend", "url": "https://nodejs.org/" },
+    { "id": "s7", "name": "Java", "category": "Backend", "url": "https://www.java.com/" },
+    { "id": "s8", "name": "MongoDB", "category": "Database", "url": "https://www.mongodb.com/" },
+    { "id": "s9", "name": "Docker", "category": "DevOps", "url": "https://www.docker.com/" },
+    { "id": "s10", "name": "Kubernetes", "category": "DevOps", "url": "https://kubernetes.io/" },
+    { "id": "s11", "name": "VsCode", "category": "Tools", "url": "https://code.visualstudio.com/" }
+  ]
+}
