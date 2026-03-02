@@ -41,6 +41,25 @@ export default function PageNav({ backLabel, backHref = "/", onBack }: PageNavPr
     };
   }, [isMobileMenuOpen]);
 
+  // Show navbar only on specific pages
+  if (
+    !pathname.startsWith("/about") &&
+    !pathname.startsWith("/projects") &&
+    !pathname.startsWith("/contact")
+  ) {
+    return null;
+  }
+
+  // Handle specific paths that need custom back behavior
+  let resolvedBackLabel = backLabel;
+  let resolvedBackHref = backHref;
+
+  // For project detail pages
+  if (pathname.startsWith("/projects/") && pathname !== "/projects") {
+    resolvedBackLabel = navT("projects");
+    resolvedBackHref = "/projects";
+  }
+
   const navLinks = [
     { href: "/about", label: navT("about") },
     { href: "/projects", label: navT("projects") },
@@ -67,12 +86,12 @@ export default function PageNav({ backLabel, backHref = "/", onBack }: PageNavPr
               className="flex items-center gap-2"
             >
               <ArrowLeft size={16} strokeWidth={2.5} className="shrink-0" />
-              <span className="hidden sm:inline">{backLabel ?? navT("home")}</span>
+              <span className="hidden sm:inline">{resolvedBackLabel ?? navT("home")}</span>
             </motion.span>
           </button>
         ) : (
           <Link
-            href={backHref}
+            href={resolvedBackHref}
             className="group flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200 z-50"
           >
             <motion.span
@@ -81,7 +100,7 @@ export default function PageNav({ backLabel, backHref = "/", onBack }: PageNavPr
               className="flex items-center gap-2"
             >
               <ArrowLeft size={16} strokeWidth={2.5} className="shrink-0" />
-              <span className="hidden sm:inline">{backLabel ?? navT("home")}</span>
+              <span className="hidden sm:inline">{resolvedBackLabel ?? navT("home")}</span>
             </motion.span>
           </Link>
         )}

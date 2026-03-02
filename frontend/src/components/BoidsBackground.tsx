@@ -24,9 +24,9 @@ export default function BoidsBackground() {
     let height = (canvas.height = window.innerHeight);
 
     const boids: Boid[] = [];
-    const numBoids = 120;
-    const visualRange = 90;
-    const minDistance = 28;
+    const numBoids = Math.min(250, Math.max(75, Math.floor((width * height) / 12500)));
+    const visualRange = 70;
+    const minDistance = 30;
     const speedLimit = 3.2;
     const minSpeed = 1.2;
 
@@ -116,8 +116,17 @@ export default function BoidsBackground() {
       ctx.restore();
     }
 
-    function update() {
+    let lastTime = performance.now();
+
+    function update(time: number) {
       if (!ctx) return;
+
+      const deltaTime = time - lastTime;
+      lastTime = time;
+
+      // Base simulation on ~60 FPS (16.66ms per frame) to normalize speed across screens
+      const dtFactor = Math.min(deltaTime, 50) / 16.666;
+
       ctx.clearRect(0, 0, width, height);
 
       for (const boid of boids) {
@@ -162,10 +171,10 @@ export default function BoidsBackground() {
           boid.vy += (avgVY - boid.vy) * 0.04;
         }
 
-        boid.vx += avoidX * 0.06;
-        boid.vy += avoidY * 0.06;
-        boid.vx += (Math.random() - 0.5) * 0.12;
-        boid.vy += (Math.random() - 0.5) * 0.12;
+        boid.vx += avoidX * 0.08;
+        boid.vy += avoidY * 0.08;
+        boid.vx += (Math.random() - 0.5) * 0.15;
+        boid.vy += (Math.random() - 0.5) * 0.15;
 
         const mdx = boid.x - mouse.x;
         const mdy = boid.y - mouse.y;
@@ -185,8 +194,8 @@ export default function BoidsBackground() {
           boid.vy = (boid.vy / currentSpeed) * minSpeed;
         }
 
-        boid.x += boid.vx;
-        boid.y += boid.vy;
+        boid.x += boid.vx * dtFactor;
+        boid.y += boid.vy * dtFactor;
 
         if (boid.x < 0) boid.x += width;
         if (boid.x > width) boid.x -= width;
@@ -199,7 +208,7 @@ export default function BoidsBackground() {
       animationFrameId = requestAnimationFrame(update);
     }
 
-    update();
+    update(performance.now());
 
     return () => {
       window.removeEventListener("resize", handleResize);

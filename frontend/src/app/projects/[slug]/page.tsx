@@ -6,7 +6,6 @@ import { useParams, useRouter } from "next/navigation";
 import { format } from "date-fns";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import apiClient from "@/lib/api-client";
-import PageNav from "@/components/PageNav";
 import { PageLoader } from "@/components/Loader";
 import { motion } from "framer-motion";
 import { useTranslations, useLocale } from "next-intl";
