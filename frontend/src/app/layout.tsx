@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getLocale } from "next-intl/server";
 import AdminLoginButton from "@/components/AdminLoginButton";
 import CustomCursor from "@/components/CustomCursor";
+import GlobalPageNav from "@/components/GlobalPageNav";
 import "./global.css";
 
 const inter = Inter({
@@ -37,6 +38,7 @@ export default async function RootLayout({
 					<ThemeProvider>
 						<CustomCursor />
 						<ToasterProvider />
+						<GlobalPageNav />
 						{children}
 						<AdminLoginButton />
 					</ThemeProvider>

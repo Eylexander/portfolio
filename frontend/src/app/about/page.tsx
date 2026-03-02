@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { useLocale } from "next-intl";
 import { useEffect, useState } from "react";
-import PageNav from "@/components/PageNav";
 import apiClient from "@/lib/api-client";
 import { AboutData } from "@/types";
 import Loader from "@/components/Loader";
@@ -38,7 +37,6 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageNav />
 
       <main className="pt-28 pb-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center overflow-hidden">
         <motion.div
@@ -103,9 +101,20 @@ export default function AboutPage() {
                         {exp.period?.[locale]}
                       </span>
                     </div>
-                    <p className="text-primary font-medium mb-3">
-                      {exp.company}
-                    </p>
+                    {exp.url ? (
+                      <a 
+                        href={exp.url.startsWith('http') ? exp.url : `https://${exp.url}`}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-primary font-medium mb-3 hover:underline inline-block"
+                      >
+                        {exp.company}
+                      </a>
+                    ) : (
+                      <p className="text-primary font-medium mb-3">
+                        {exp.company}
+                      </p>
+                    )}
                     <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
                       {exp.description?.[locale]}
                     </p>
@@ -138,9 +147,20 @@ export default function AboutPage() {
                         {exp.period?.[locale]}
                       </span>
                     </div>
-                    <p className="text-primary font-medium mb-3">
-                      {exp.company}
-                    </p>
+                    {exp.url ? (
+                      <a 
+                        href={exp.url.startsWith('http') ? exp.url : `https://${exp.url}`}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-primary font-medium mb-3 hover:underline inline-block"
+                      >
+                        {exp.company}
+                      </a>
+                    ) : (
+                      <p className="text-primary font-medium mb-3">
+                        {exp.company}
+                      </p>
+                    )}
                     <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
                       {exp.description?.[locale]}
                     </p>
@@ -161,39 +181,22 @@ export default function AboutPage() {
               <h2 className="text-sm font-semibold tracking-[0.2em] uppercase text-muted-foreground">
                 Stack &amp; Tools
               </h2>
-              
-              <style>{`
-                @keyframes custom-marquee {
-                  0% { transform: translateX(0%); }
-                  100% { transform: translateX(-50%); }
-                }
-                .animate-custom-marquee {
-                  animation: custom-marquee 90s linear infinite;
-                }
-              `}</style>
 
-              {/* Marquee Container */}
-              <div className="relative flex overflow-hidden w-full group [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">
-                <div className="flex w-max animate-custom-marquee group-hover:[animation-play-state:paused] will-change-transform">
-                  {[...data.stack_tools, ...data.stack_tools, ...data.stack_tools, ...data.stack_tools, ...data.stack_tools, ...data.stack_tools, ...data.stack_tools, ...data.stack_tools].map((item, idx) => (
-                    <div
-                      key={`${item.id}-${idx}`}
-                      className="flex-shrink-0 mx-2 py-2"
-                    >
-                      <a
-                        href={item.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium bg-secondary text-secondary-foreground border border-border/60 transition-all hover:scale-105 hover:-translate-y-0.5 hover:border-primary/50"
-                      >
-                        {item.name}
-                        <span className="text-[10px] text-muted-foreground/70 font-normal">
-                          {item.category}
-                        </span>
-                      </a>
-                    </div>
-                  ))}
-                </div>
+              <div className="flex flex-wrap gap-3">
+                {data.stack_tools.map((item, idx) => (
+                  <a
+                    key={`${item.id}-${idx}`}
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-secondary/40 hover:bg-secondary text-secondary-foreground border border-border/50 hover:border-primary/50 transition-all hover:scale-105 hover:-translate-y-0.5"
+                  >
+                    {item.name}
+                    <span className="text-[10px] text-muted-foreground/70 font-normal tracking-wider uppercase">
+                      {item.category}
+                    </span>
+                  </a>
+                ))}
               </div>
             </motion.div>
           )}

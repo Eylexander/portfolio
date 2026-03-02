@@ -35,6 +35,7 @@ export interface Experience {
   id: string;
   role: LocalizedString;
   company: string;
+  url?: string;
   period: LocalizedString;
   description: LocalizedString;
 }

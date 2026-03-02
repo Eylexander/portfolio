@@ -5,7 +5,6 @@ import { useState } from "react";
 import apiClient from "@/lib/api-client";
 import { Github, AtSign, Mail, Twitter } from "lucide-react";
 import toast from "react-hot-toast";
-import PageNav from "@/components/PageNav";
 import { useTranslations } from "next-intl";
 
 const stagger = {
@@ -87,7 +86,6 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageNav />
 
       <main className="pt-28 pb-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         <motion.div

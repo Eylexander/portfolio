@@ -30,8 +30,8 @@ export default function BoidsBackground() {
     const speedLimit = 3.2;
     const minSpeed = 1.2;
 
-    // Tailwind primary: 262 52% 54%
-    const primaryHSL = "262, 52%, 54%";
+    const primaryHSL_light = "262, 52%, 54%";
+    const primaryHSL_dark = "262, 55%, 65%";
 
     for (let i = 0; i < numBoids; i++) {
       const angle = Math.random() * Math.PI * 2;
@@ -93,6 +93,7 @@ export default function BoidsBackground() {
       ctx.closePath();
 
       const isDark = document.documentElement.classList.contains("dark");
+      const primaryHSL = isDark ? primaryHSL_dark : primaryHSL_light;
       const speed = Math.sqrt(boid.vx ** 2 + boid.vy ** 2);
       const opacity = Math.min(speed / speedLimit, 1) * 0.5 + 0.2;
 
@@ -105,10 +106,10 @@ export default function BoidsBackground() {
       } else {
         // Default grayscale/muted logic
         ctx.fillStyle = isDark
-          ? `rgba(255, 255, 255, ${opacity})`
+          ? `rgba(220, 225, 235, ${opacity * 0.8})` // Cool icy white/blue
           : `rgba(60, 40, 80, ${opacity * 1.4})`;
         ctx.shadowBlur = isDark ? 4 : 0;
-        ctx.shadowColor = isDark ? "rgba(200, 180, 255, 0.5)" : "transparent";
+        ctx.shadowColor = isDark ? "rgba(160, 180, 240, 0.3)" : "transparent";
       }
 
       ctx.fill();

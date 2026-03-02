@@ -77,6 +77,7 @@ export default function AdminAboutPage() {
       id: crypto.randomUUID(),
       role: { "en-US": "", "fr-FR": "" },
       company: "",
+      url: "",
       period: { "en-US": "", "fr-FR": "" },
       description: { "en-US": "", "fr-FR": "" },
     };
@@ -107,8 +108,8 @@ export default function AdminAboutPage() {
       if (!prev) return prev;
       const newList = prev[type].map((exp) => {
         if (exp.id === id) {
-          if (field === "company") {
-            return { ...exp, company: val };
+          if (field === "company" || field === "url") {
+            return { ...exp, [field]: val };
           } else {
             const locField = exp[field] as LocalizedString;
             return { ...exp, [field]: { ...locField, [activeLang]: val } };
@@ -301,6 +302,16 @@ export default function AdminAboutPage() {
                     />
                   </div>
                   <div>
+                    <label className="block text-xs text-muted-foreground mb-1">Company URL</label>
+                    <input
+                      type="text"
+                      value={exp.url || ""}
+                      onChange={(e) => handleExperienceChange("experiences", exp.id, "url", e.target.value)}
+                      className="w-full px-3 py-1.5 bg-background border border-border rounded text-sm"
+                      placeholder="https://..."
+                    />
+                  </div>
+                  <div>
                     <label className="block text-xs text-muted-foreground mb-1">Period</label>
                     <input
                       type="text"
@@ -370,6 +381,16 @@ export default function AdminAboutPage() {
                       value={exp.role?.[activeLang] || ""}
                       onChange={(e) => handleExperienceChange("associative_experiences", exp.id, "role", e.target.value)}
                       className="w-full px-3 py-1.5 bg-background border border-border rounded text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-muted-foreground mb-1">Organization URL</label>
+                    <input
+                      type="text"
+                      value={exp.url || ""}
+                      onChange={(e) => handleExperienceChange("associative_experiences", exp.id, "url", e.target.value)}
+                      className="w-full px-3 py-1.5 bg-background border border-border rounded text-sm"
+                      placeholder="https://..."
                     />
                   </div>
                   <div>

@@ -46,28 +46,34 @@ html {
   }
 
   .dark {
-    --background: 248 18% 7%;
-    --foreground: 210 20% 94%;
+    /* Core — deep, rich obsidian/charcoal (cool-toned, no yellow/brown) */
+    --background: 228 15% 9%; /* Deepest grey-blue */
+    --foreground: 210 20% 98%; /* Crisp, icy white for contrast */
 
-    /* Primary — lighter purple for dark bg readability */
-    --primary: 262 65% 68%;
-    --primary-foreground: 262 20% 8%;
+    /* Primary — vibrant, elegant purple */
+    --primary: 262 70% 68%;
+    --primary-foreground: 228 15% 9%;
 
-    --secondary: 248 14% 14%;
-    --secondary-foreground: 210 20% 78%;
+    /* Secondary — slightly elevated from background */
+    --secondary: 228 14% 13%; 
+    --secondary-foreground: 210 20% 85%;
 
-    --muted: 248 14% 12%;
-    --muted-foreground: 248 10% 52%;
+    /* Muted — for subdued text and subtle surfaces */
+    --muted: 228 12% 16%;
+    --muted-foreground: 220 15% 65%;
 
-    --card: 248 16% 9%;
-    --card-foreground: 210 20% 94%;
+    /* Card — soft, pure elevation for readability */
+    --card: 228 14% 11%;
+    --card-foreground: 210 20% 98%;
 
-    --accent: 248 14% 14%;
-    --accent-foreground: 210 20% 94%;
+    /* Accent & Interactions */
+    --accent: 228 14% 15%;
+    --accent-foreground: 210 20% 98%;
 
-    --border: 248 14% 16%;
-    --input: 248 14% 16%;
-    --ring: 262 65% 68%;
+    /* Thin, sharp borders (very subtle) */
+    --border: 228 14% 18%;
+    --input: 228 14% 18%;
+    --ring: 262 70% 68%;
 
     --destructive: 0 68% 55%;
     --destructive-foreground: 0 0% 98%;

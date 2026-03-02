@@ -6,6 +6,7 @@ type Experience struct {
 	ID          string          `bson:"id" json:"id"`
 	Role        LocalizedString `bson:"role" json:"role"`
 	Company     string          `bson:"company" json:"company"`
+	URL         string          `bson:"url" json:"url,omitempty"`
 	Period      LocalizedString `bson:"period" json:"period"`
 	Description LocalizedString `bson:"description" json:"description"`
 }

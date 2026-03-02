@@ -3,13 +3,12 @@
 import { useEffect, useState } from "react";
 import { Article } from "@/types";
 import ArticleCard from "@/components/ArticleCard";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuthStore } from "@/store/authStore";
 import Link from "next/link";
 import { Plus, LayoutDashboard } from "lucide-react";
 import { useTranslations } from "next-intl";
 import apiClient from "@/lib/api-client";
-import PageNav from "@/components/PageNav";
 
 const stagger = {
   hidden: {},
@@ -46,7 +45,6 @@ export default function ProjectsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageNav />
 
       <main className="pt-28 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
@@ -93,69 +91,83 @@ export default function ProjectsPage() {
                   className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors shadow-sm"
                 >
                   <Plus size={16} />
-                    {t("addProject")}
+                  {t("addProject")}
                 </Link>
               </motion.div>
             )}
           </motion.div>
 
           {/* Grid */}
-          {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div
-                  key={i}
-                  className="h-80 rounded-xl bg-secondary/60 border border-border overflow-hidden"
-                  style={{
-                    background: "linear-gradient(90deg, hsl(var(--secondary)) 25%, hsl(var(--muted)) 50%, hsl(var(--secondary)) 75%)",
-                    backgroundSize: "200% 100%",
-                    animation: `shimmer 1.8s infinite linear`,
-                    animationDelay: `${i * 0.12}s`,
-                  }}
-                />
-              ))}
-            </div>
-          ) : articles.length === 0 ? (
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center text-muted-foreground py-24 text-sm tracking-wide"
-            >
-              {t("noProjects")}
-            </motion.p>
-          ) : (
-            <div className="space-y-12">
-              {/* Featured Projects Section */}
-              {articles.filter(a => a.tags.includes("featured")).length > 0 && (
+          <AnimatePresence mode="wait">
+            {isLoading ? (
+              <motion.div
+                key="skeleton"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, y: -20, filter: "blur(5px)" }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              >
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.1 * i, duration: 0.4 }}
+                    className="h-80 rounded-xl bg-secondary/60 border border-border overflow-hidden"
+                    style={{
+                      background: "linear-gradient(90deg, hsl(var(--secondary)) 25%, hsl(var(--muted)) 50%, hsl(var(--secondary)) 75%)",
+                      backgroundSize: "200% 100%",
+                      animation: `shimmer 1.8s infinite linear`,
+                      animationDelay: `${i * 0.12}s`,
+                    }}
+                  />
+                ))}
+              </motion.div>
+            ) : articles.length === 0 ? (
+              <motion.p
+                key="empty"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="text-center text-muted-foreground py-24 text-sm tracking-wide"
+              >
+                {t("noProjects")}
+              </motion.p>
+            ) : (
+              <motion.div key="content" className="space-y-12">
+                {/* Featured Projects Section */}
+                {articles.filter(a => a.tags.includes("featured")).length > 0 && (
+                  <motion.div
+                    variants={stagger}
+                    initial="hidden"
+                    animate="visible"
+                    className="grid grid-cols-1 md:grid-cols-2 gap-6"
+                  >
+                    {articles.filter(a => a.tags.includes("featured")).map((article) => (
+                      <motion.div key={article.id} variants={fadeUp} className="h-full">
+                        <ArticleCard article={article} featured={true} />
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                )}
+
+                {/* All Other Projects Grid */}
                 <motion.div
                   variants={stagger}
                   initial="hidden"
                   animate="visible"
-                  className="grid grid-cols-1 md:grid-cols-2 gap-6"
+                  className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6"
                 >
-                  {articles.filter(a => a.tags.includes("featured")).map((article) => (
-                    <motion.div key={article.id} variants={fadeUp} className="h-full">
-                      <ArticleCard article={article} featured={true} />
+                  {articles.filter(a => !a.tags.includes("featured")).map((article) => (
+                    <motion.div key={article.id} variants={fadeUp}>
+                      <ArticleCard article={article} />
                     </motion.div>
                   ))}
                 </motion.div>
-              )}
-
-              {/* All Other Projects Grid */}
-              <motion.div
-                variants={stagger}
-                initial="hidden"
-                animate="visible"
-                className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6"
-              >
-                {articles.filter(a => !a.tags.includes("featured")).map((article) => (
-                  <motion.div key={article.id} variants={fadeUp}>
-                    <ArticleCard article={article} />
-                  </motion.div>
-                ))}
               </motion.div>
-            </div>
-          )}
+            )}
+          </AnimatePresence>
         </div>
       </main>
     </div>

@@ -49,21 +49,21 @@ export default function ArticlePage() {
 
   if (isLoading) return (
     <div className="min-h-screen bg-background">
-      <PageNav onBack={handleBack} backLabel={navT("projects")} />
+      
       <PageLoader />
     </div>
   );
 
   if (error || !article) return (
     <div className="min-h-screen bg-background">
-      <PageNav onBack={handleBack} backLabel={navT("projects")} />
+      
       <div className="min-h-screen flex items-center justify-center text-muted-foreground text-sm">{error || "Not found"}</div>
     </div>
   );
 
   return (
     <div className="min-h-screen bg-background">
-      <PageNav onBack={handleBack} backLabel={navT("projects")} />
+      
 
       <motion.article
         initial={{ opacity: 0, y: 20 }}

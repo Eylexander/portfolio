@@ -99,11 +99,15 @@ export default function PageNav({ backLabel, backHref = "/", onBack }: PageNavPr
                 }`}
               >
                 {link.label}
-                <span 
-                  className={`absolute -bottom-1 left-0 h-0.5 bg-primary rounded-full transition-all duration-300 ease-out ${
-                    isActive ? "w-full" : "w-0 group-hover:w-full"
-                  }`} 
-                />
+                {isActive ? (
+                  <motion.div
+                    layoutId="nav-indicator"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full"
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  />
+                ) : (
+                  <span className="absolute -bottom-1 left-0 h-0.5 bg-primary rounded-full transition-all duration-300 ease-out w-0 group-hover:w-full" />
+                )}
               </Link>
             );
           })}
