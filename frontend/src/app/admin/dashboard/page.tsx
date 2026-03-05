@@ -5,14 +5,14 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Article } from "@/types";
 import Link from "next/link";
-import { Edit, Trash2, Plus, Eye, EyeOff, LogOut, Globe, Image as ImageIcon, Copy, Check, Code, Star, FolderOpenDot, Sun, Moon, Download, Upload } from "lucide-react";
+import { Edit, Trash2, Plus, Eye, EyeOff, Image as ImageIcon, Copy, Check, Code, Star, Download, Upload } from "lucide-react";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import Loader from "@/components/Loader";
 import apiClient from "@/lib/api-client";
 import { useTranslations } from "next-intl";
-import { useTheme } from "next-themes";
 import Image from "next/image";
+import { useOllama } from "@/hooks/useOllama";
 
 const stagger = {
   hidden: {},
@@ -26,7 +26,6 @@ const fadeUp = {
 export default function AdminDashboard() {
   const { logout } = useAuthStore();
   const router = useRouter();
-  const { resolvedTheme, setTheme } = useTheme();
   const [articles, setArticles] = useState<Article[]>([]);
   const [uploads, setUploads] = useState<string[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -38,6 +37,11 @@ export default function AdminDashboard() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [updatingCredentials, setUpdatingCredentials] = useState(false);
+  
+  const [ollama_model, setOllamaModel] = useState("");
+  const [updatingSettings, setUpdatingSettings] = useState(false);
+  const { isConfigured: isOllamaConfigured, models: availableModels } = useOllama();
+
   const t = useTranslations("Admin");
 
   useEffect(() => {
@@ -46,15 +50,19 @@ export default function AdminDashboard() {
 
   const fetchData = async () => {
     try {
-      const [articlesData, uploadsData, messagesData] = await Promise.all([
+      const [articlesData, uploadsData, messagesData, settingsData] = await Promise.all([
         apiClient.getArticles(true),
         apiClient.getUploads(),
-        apiClient.getContactMessages()
+        apiClient.getContactMessages(),
+        apiClient.getSettings().catch(() => null),
       ]);
       setArticles(articlesData || []);
       setUploads(uploadsData || []);
       setMessages(messagesData || []);
-    } catch {
+      if (settingsData) {
+        setOllamaModel(settingsData.ollama_model || "");
+      }
+    } catch (err) {
       toast.error("Failed to load data");
     } finally {
       setLoading(false);
@@ -67,7 +75,7 @@ export default function AdminDashboard() {
       await apiClient.deleteArticle(id);
       toast.success("Article deleted");
       fetchData();
-    } catch {
+    } catch (err) {
       toast.error("Failed to delete article");
     }
   };
@@ -122,6 +130,19 @@ export default function AdminDashboard() {
       toast.error(error.response?.data?.error || "Failed to update credentials");
     } finally {
       setUpdatingCredentials(false);
+    }
+  };
+
+  const handleUpdateSettings = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setUpdatingSettings(true);
+    try {
+      await apiClient.updateSettings({ ollama_model });
+      toast.success("Settings updated successfully.");
+    } catch (err) {
+      toast.error("Failed to update settings");
+    } finally {
+      setUpdatingSettings(false);
     }
   };
 
@@ -189,43 +210,6 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Top bar */}
-      <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md px-4 sm:px-6 py-3 flex items-center justify-between">
-        <Link
-          href="/"
-          className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary transition-colors"
-        >
-        <span className="text-sm font-bold tracking-wider text-foreground">Admin</span>
-        </Link>
-        <div className="flex items-center gap-1 sm:gap-2">
-          <button
-            onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-            aria-label="Toggle theme"
-            className="p-1.5 sm:p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors duration-200"
-          >
-            {resolvedTheme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
-          </button>
-          <Link
-            href="/projects"
-            className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary transition-colors"
-          >
-            <FolderOpenDot size={13} /> <span className="hidden sm:inline">Projects</span>
-          </Link>
-          <Link
-            href="/"
-            className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary transition-colors"
-          >
-            <Globe size={13} /> <span className="hidden sm:inline">{t("view_site")}</span>
-          </Link>
-          <button
-            onClick={() => { logout(); router.push("/"); }}
-            className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 text-xs font-medium text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
-          >
-            <LogOut size={13} /> <span className="hidden sm:inline">{t("logout")}</span>
-          </button>
-        </div>
-      </header>
-
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
         {/* Header */}
         <div className="flex items-center justify-between mb-6 sm:mb-8">
@@ -499,9 +483,50 @@ export default function AdminDashboard() {
               )}
             </div>
           ) : (
-            <div className="p-4 sm:p-6 max-w-md mx-auto">
-              <h2 className="text-lg font-semibold mb-4">Update Credentials</h2>
-              <form onSubmit={handleUpdateCredentials} className="space-y-4">
+            <div className="p-4 sm:p-6 max-w-2xl mx-auto space-y-12">
+              {isOllamaConfigured && (
+                <div>
+                  <h2 className="text-lg font-semibold mb-1">Ollama Configuration</h2>
+                  <p className="text-xs text-muted-foreground mb-4">Ollama is connected. Select the model to use for auto-translations.</p>
+                  <form onSubmit={handleUpdateSettings} className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-muted-foreground mb-1">Ollama Model</label>
+                      {availableModels.length > 0 ? (
+                        <select
+                          value={ollama_model}
+                          onChange={(e) => setOllamaModel(e.target.value)}
+                          className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        >
+                          <option value="">Use .env default</option>
+                          {availableModels.map((m) => (
+                            <option key={m} value={m}>{m}</option>
+                          ))}
+                        </select>
+                      ) : (
+                        <input
+                          type="text"
+                          value={ollama_model}
+                          onChange={(e) => setOllamaModel(e.target.value)}
+                          placeholder="e.g. llama3 (leave blank to use .env default)"
+                          className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        />
+                      )}
+                      <p className="text-xs text-muted-foreground mt-1">This overrides the OLLAMA_MODEL environment variable for auto-translations.</p>
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={updatingSettings}
+                      className="py-2 px-4 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {updatingSettings ? "Saving..." : "Save Settings"}
+                    </button>
+                  </form>
+                </div>
+              )}
+
+              <div>
+                <h2 className="text-lg font-semibold mb-4">Update Credentials</h2>
+                <form onSubmit={handleUpdateCredentials} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-muted-foreground mb-1">New Username</label>
                   <input
@@ -541,6 +566,7 @@ export default function AdminDashboard() {
                   {updatingCredentials ? "Updating..." : "Update Credentials"}
                 </button>
               </form>
+              </div>
             </div>
           )}
         </div>

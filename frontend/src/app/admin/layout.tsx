@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
 import Loader from "@/components/Loader";
+import AdminNavbar from "@/components/AdminNavbar";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, checkAuth } = useAuthStore();
@@ -32,5 +33,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     );
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <AdminNavbar />
+      {children}
+    </>
+  );
 }

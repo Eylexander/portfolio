@@ -37,6 +37,10 @@ type DataStore interface {
 	GetAboutData(ctx context.Context) (*models.AboutData, error)
 	UpdateAboutData(ctx context.Context, data *models.AboutData) error
 
+	// Settings
+	GetSettings(ctx context.Context) (*models.Settings, error)
+	UpdateSettings(ctx context.Context, settings *models.Settings) error
+
 	// Backup
 	RestoreBackup(ctx context.Context, data *models.BackupData) error
 }

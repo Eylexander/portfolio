@@ -1,22 +1,20 @@
 "use client";
+import AutoTranslateButton from "@/components/AutoTranslateButton";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Save, Languages, ArrowLeft, Plus, Trash2, Globe, LogOut, Sun, Moon } from "lucide-react";
+import { Save, Languages, ArrowLeft, Plus, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import apiClient from "@/lib/api-client";
 import { AboutData, Experience, StackItem, LocalizedString } from "@/types";
 import Loader from "@/components/Loader";
-import { useAuthStore } from "@/store/authStore";
-import { useTheme } from "next-themes";
-import Link from "next/link";
+import { useOllama } from "@/hooks/useOllama";
 
 type Locale = "en-US" | "fr-FR";
 
 export default function AdminAboutPage() {
   const router = useRouter();
-  const { logout } = useAuthStore();
-  const { resolvedTheme, setTheme } = useTheme();
+  const { isConfigured: isTranslateConfigured } = useOllama();
   const [data, setData] = useState<AboutData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -158,32 +156,6 @@ export default function AdminAboutPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Top bar */}
-      <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md px-4 sm:px-6 py-3 flex items-center justify-between">
-        <span className="text-sm font-bold tracking-wider text-foreground">Admin</span>
-        <div className="flex items-center gap-1 sm:gap-2">
-          <button
-            onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-            aria-label="Toggle theme"
-            className="p-1.5 sm:p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors duration-200"
-          >
-            {resolvedTheme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
-          </button>
-          <Link
-            href="/"
-            className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary transition-colors"
-          >
-            <Globe size={13} /> <span className="hidden sm:inline">View Site</span>
-          </Link>
-          <button
-            onClick={() => { logout(); router.push("/"); }}
-            className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 text-xs font-medium text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
-          >
-            <LogOut size={13} /> <span className="hidden sm:inline">Logout</span>
-          </button>
-        </div>
-      </header>
-
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -243,12 +215,20 @@ export default function AdminAboutPage() {
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Description</label>
-              <textarea
-                rows={4}
-                value={data.description?.[activeLang] || ""}
-                onChange={(e) => handleStringChange("description", e.target.value)}
-                className="w-full px-3 py-2 bg-background border border-border rounded-lg resize-none"
-              />
+              <div className="relative">
+                <AutoTranslateButton 
+                  sourceText={data.description?.[activeLang === 'en-US' ? 'fr-FR' : 'en-US'] || ""}
+                  sourceLang={activeLang === 'en-US' ? 'français' : 'english'}
+                  targetLang={activeLang === 'en-US' ? 'english' : 'français'}
+                  onTranslated={(text) => handleStringChange("description", text)}
+                />
+                <textarea
+                  rows={4}
+                  value={data.description?.[activeLang] || ""}
+                  onChange={(e) => handleStringChange("description", e.target.value)}
+                  className={`w-full px-3 py-2 ${isTranslateConfigured ? 'pt-10' : ''} bg-background border border-border rounded-lg resize-none`}
+                />
+              </div>
             </div>
           </div>
         </section>

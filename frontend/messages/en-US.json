@@ -1,6 +1,6 @@
 {
   "HomePage": {
-    "role": "i'm a software engineer, student, and sysadmin."
+    "roles": "software engineer,student,sysadmin,full-stack developer"
   },
   "Navigation": {
     "home": "home",

@@ -57,6 +57,9 @@ func (s *Server) registerRoutes() {
 		// Contact
 		v1.POST("/contact", s.api.SubmitContact)
 
+		// Translate status (public)
+		v1.GET("/translate/status", s.api.IsTranslateConfigured)
+
 		// Auth
 		v1.POST("/auth/login", s.api.Login)
 
@@ -78,16 +81,24 @@ func (s *Server) registerRoutes() {
 			protected.PUT("/about", s.api.UpdateAboutData)
 
 			// Backup
-                        protected.GET("/backup/export", s.api.ExportBackup)
-                        protected.POST("/backup/import", s.api.ImportBackup)
+			protected.GET("/backup/export", s.api.ExportBackup)
+			protected.POST("/backup/import", s.api.ImportBackup)
 
-                        // Contact message management
+			// Settings
+			protected.GET("/settings", s.api.GetSettings)
+			protected.PUT("/settings", s.api.UpdateSettings)
+
+			// Contact message management
 			protected.GET("/messages", s.api.GetContactMessages)
 			protected.DELETE("/messages/:id", s.api.DeleteContactMessage)
 
 			// Credentials update
 			protected.PUT("/auth/credentials", s.api.UpdateCredentials)
 			protected.GET("/auth/verify", s.api.VerifyToken)
+
+			// Translate
+			protected.POST("/translate", s.api.Translate)
+			protected.GET("/translate/models", s.api.GetOllamaModels)
 		}
 	}
 

@@ -58,10 +58,20 @@ const config: Config = {
           '0%': { backgroundPosition: '-200% 0' },
           '100%': { backgroundPosition: '200% 0' },
         },
+        'cursor-blink': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0' },
+        },
+        'bounce-y': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(6px)' },
+        },
       },
       animation: {
         'fade-in': 'fade-in 0.5s ease forwards',
         shimmer: 'shimmer 2s infinite linear',
+        'cursor-blink': 'cursor-blink 1s step-end infinite',
+        'bounce-y': 'bounce-y 1.4s ease-in-out infinite',
       },
       typography: {
         DEFAULT: {

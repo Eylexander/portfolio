@@ -1,6 +1,6 @@
 {
   "HomePage": {
-    "role": "je suis ingénieur logiciel, étudiant et administrateur système."
+    "roles": "ingénieur logiciel,étudiant,administrateur système,développeur full-stack"
   },
   "Navigation": {
     "home": "accueil",

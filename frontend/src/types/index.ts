@@ -58,3 +58,7 @@ export interface AboutData {
   stack_tools: StackItem[];
 }
 
+
+export interface Settings {
+  ollama_model: string;
+}

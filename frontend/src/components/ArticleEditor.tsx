@@ -1,4 +1,6 @@
 "use client";
+import AutoTranslateButton from "@/components/AutoTranslateButton";
+import { useOllama } from "@/hooks/useOllama";
 
 import { useState, useRef } from "react";
 import { Article } from "@/types";
@@ -23,6 +25,7 @@ export default function ArticleEditor({
   isNew = false,
 }: ArticleEditorProps) {
   const router = useRouter();
+  const { isConfigured: isTranslateConfigured } = useOllama();
 
   const [formData, setFormData] = useState({
     title: {
@@ -292,15 +295,31 @@ export default function ArticleEditor({
             )}
           </div>
         ) : (
-          <textarea
-            ref={textareaRef}
-            name="content"
-            value={formData.content[activeTab]}
-            onChange={(e) => handleLocalizedChange(e, "content", activeTab)}
-            className={`${inputCls} h-80 font-mono text-xs resize-y`}
-            placeholder={activeTab === "en-US" ? "# My project\n\nWrite your content in Markdown…" : "# Mon projet\n\nÉcrivez votre contenu en Markdown…"}
-            required
-          />
+          <div className="relative">
+            <AutoTranslateButton 
+              sourceText={formData.content[activeTab === 'en-US' ? 'fr-FR' : 'en-US']}
+              sourceLang={activeTab === 'en-US' ? 'français' : 'english'}
+              targetLang={activeTab === 'en-US' ? 'english' : 'français'}
+              onTranslated={(text) => {
+                setFormData(prev => ({
+                  ...prev,
+                  content: {
+                    ...prev.content,
+                    [activeTab]: text
+                  }
+                }));
+              }}
+            />
+            <textarea
+              ref={textareaRef}
+              name="content"
+              value={formData.content[activeTab]}
+              onChange={(e) => handleLocalizedChange(e, "content", activeTab)}
+              className={`${inputCls} h-80 font-mono text-xs resize-y ${isTranslateConfigured ? 'pt-10' : ''}`}
+              placeholder={activeTab === "en-US" ? "# My project\n\nWrite your content in Markdown…" : "# Mon projet\n\nÉcrivez votre contenu en Markdown…"}
+              required
+            />
+          </div>
         )}
       </div>
 

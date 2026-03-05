@@ -2,35 +2,36 @@
 
 import { motion } from "framer-motion";
 import BoidsBackground from "@/components/BoidsBackground";
+import TypewriterText from "@/components/TypewriterText";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import LocaleSwitcher from "@/components/LocaleSwitcher";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, Github, Linkedin, Mail } from "lucide-react";
 import { useTheme } from "next-themes";
 
 export default function Home() {
-  const t = useTranslations('HomePage');
-  const navT = useTranslations('Navigation');
+  const t = useTranslations("HomePage");
+  const navT = useTranslations("Navigation");
   const { resolvedTheme, setTheme } = useTheme();
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { 
+    visible: {
       opacity: 1,
-      transition: { 
+      transition: {
         staggerChildren: 0.12,
-        delayChildren: 0.3
-      }
-    }
+        delayChildren: 0.3,
+      },
+    },
   };
 
   const itemVariants = {
     hidden: { y: 24, opacity: 0 },
-    visible: { 
-      y: 0, 
+    visible: {
+      y: 0,
       opacity: 1,
-      transition: { duration: 0.7, ease: "easeOut" as const }
-    }
+      transition: { duration: 0.7, ease: "easeOut" as const },
+    },
   };
 
   const titleText = "eylexander";
@@ -40,27 +41,42 @@ export default function Home() {
       opacity: 1,
       transition: {
         staggerChildren: 0.06,
-        delayChildren: 0.5
-      }
-    }
+        delayChildren: 0.5,
+      },
+    },
   };
 
   const letterVariants = {
     hidden: { opacity: 0, y: 60, rotateX: -90 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
+    visible: {
+      opacity: 1,
+      y: 0,
       rotateX: 0,
-      transition: { type: "spring" as const, damping: 14, stiffness: 120 }
-    }
+      transition: { type: "spring" as const, damping: 14, stiffness: 120 },
+    },
   };
+
+  const roles = t("roles").split(",").map((r) => r.trim());
+
+  const socialLinks = [
+    {
+      href: "https://github.com/eylexander",
+      icon: <Github size={14} />,
+      label: "GitHub"
+    },
+    {
+      href: "mailto:me@eylexander.fr",
+      icon: <Mail size={14} />,
+      label: "Email"
+    },
+  ];
 
   return (
     <main className="relative w-full h-screen overflow-hidden flex flex-col items-center justify-center bg-background selection:bg-primary/30">
       <BoidsBackground />
-      
+
       {/* Top-right controls */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
@@ -85,39 +101,33 @@ export default function Home() {
       </motion.div>
 
       {/* Main Content */}
-      <motion.div 
+      <motion.div
         className="z-10 text-center flex flex-col items-center gap-6 md:gap-8 px-4"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-
         {/* Navigation */}
         <motion.nav
           variants={itemVariants}
           className="flex flex-wrap justify-center gap-8 md:gap-14"
         >
           {[
-            { href: "/about",    label: navT('about')    },
-            { href: "/projects", label: navT('projects') },
-            { href: "/contact",  label: navT('contact')  },
+            { href: "/about", label: navT("about") },
+            { href: "/projects", label: navT("projects") },
+            { href: "/contact", label: navT("contact") },
           ].map((link) => (
-            <Link 
-              key={link.href} 
-              href={link.href} 
-              className="group relative py-1"
-            >
+            <Link key={link.href} href={link.href} className="group relative py-1">
               <span className="text-xs md:text-sm font-semibold tracking-[0.2em] text-muted-foreground group-hover:text-foreground transition-colors duration-300">
                 {link.label}
               </span>
-              {/* Underline */}
               <span className="absolute bottom-0 left-0 h-px w-0 bg-primary group-hover:w-full transition-all duration-300 ease-out" />
             </Link>
           ))}
         </motion.nav>
-        
+
         {/* Title with per-letter animation */}
-        <motion.h1 
+        <motion.h1
           className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tight text-foreground flex pb-4"
           variants={titleVariants}
         >
@@ -129,16 +139,33 @@ export default function Home() {
           ))}
         </motion.h1>
 
-        {/* Subtitle / Role */}
+        {/* Typewriter role */}
         <motion.p
           variants={itemVariants}
-          className="text-sm md:text-base text-muted-foreground font-medium tracking-[0.25em]"
+          className="text-sm md:text-base text-muted-foreground font-medium tracking-[0.25em] min-h-[1.5em]"
         >
-          {t('role')}
+          <TypewriterText words={roles} speed={70} pause={2400} />
         </motion.p>
 
+        {/* Social links */}
+        <motion.div
+          variants={itemVariants}
+          className="flex items-center gap-2"
+        >
+          {socialLinks.map((s) => (
+            <a
+              key={s.label}
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={s.label}
+              className="p-2 rounded-full text-muted-foreground hover:text-foreground bg-background/50 backdrop-blur-sm border border-border/40 hover:bg-secondary transition-all duration-200"
+            >
+              {s.icon}
+            </a>
+          ))}
+        </motion.div>
       </motion.div>
     </main>
   );
 }
-

@@ -32,6 +32,8 @@ services:
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
       - GOTIFY_URL=${GOTIFY_URL:-http://localhost:8080}
       - GOTIFY_TOKEN=${GOTIFY_TOKEN:-your_gotify_token_here}
+      - OLLAMA_URL=${OLLAMA_URL:-http://localhost:11434}
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-gpt-4}
     depends_on:
       database:
         condition: service_healthy

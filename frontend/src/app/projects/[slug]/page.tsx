@@ -15,21 +15,11 @@ import { Edit2 } from "lucide-react";
 
 export default function ArticlePage() {
   const { slug } = useParams();
-  const router = useRouter();
   const [article, setArticle] = useState<Article | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-  const navT = useTranslations("Navigation");
   const locale = useLocale() as "en-US" | "fr-FR";
   const { isAuthenticated } = useAuthStore();
-
-  const handleBack = () => {
-    if (window.history.length > 2) {
-      router.back();
-    } else {
-      router.push("/projects");
-    }
-  };
 
   useEffect(() => {
     if (!slug) return;
@@ -108,7 +98,7 @@ export default function ArticlePage() {
                     ))}
                   </div>
                 )}
-                <h1 className="text-3xl md:text-4xl font-black text-foreground leading-tight tracking-tight break-words">
+                <h1 className="text-4xl md:text-5xl font-black text-foreground leading-tight tracking-tight break-words">
                   {article.title?.[locale] || article.title?.["en-US"] || "Untitled"}
                 </h1>
               </div>

@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 	"time"
@@ -51,12 +50,12 @@ func main() {
 	adminPass := os.Getenv("ADMIN_PASSWORD")
 	err = ds.CreateAdminUser(ctx, adminUser, adminPass)
 	if err != nil {
-		log.Printf("Admin user creation skipped: %v", err)
+		log.Printf("Admin user setup skipped or failed: %v", err)
 	} else {
-		log.Printf("Admin user '%s' created successfully", adminUser)
+		log.Printf("Admin user '%s' verified/initialized successfully", adminUser)
 	}
 
-	fmt.Printf("Portfolio Server starting on port %s...\n", port)
+	log.Printf("Portfolio Server starting on port %s...\n", port)
 	if err := srv.Run(":" + port); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}

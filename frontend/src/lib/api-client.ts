@@ -3,7 +3,7 @@
 import axios, { AxiosInstance } from 'axios';
 import Cookies from 'js-cookie';
 import { useAuthStore } from '@/store/authStore';
-import { Article, LoginResponse } from '@/types';
+import { Article, LoginResponse, Settings } from '@/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
@@ -136,6 +136,36 @@ class ApiClient {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	async importBackup(data: any): Promise<void> {
 		await this.client.post('/backup/import', data);
+	}
+
+	// Settings
+	async getSettings(): Promise<Settings> {
+		const response = await this.client.get<Settings>("/settings");
+		return response.data;
+	}
+
+	async updateSettings(settings: Settings): Promise<Settings> {
+		const response = await this.client.put<Settings>("/settings", settings);
+		return response.data;
+	}
+
+	// Translate
+	async getOllamaModels(): Promise<string[] | null> {
+		try {
+			const response = await this.client.get<{ models: string[] }>('/translate/models');
+			return response.data.models || [];
+		} catch {
+			return null;
+		}
+	}
+
+	async translate(text: string, sourceLang: string, targetLang: string): Promise<string> {
+		const response = await this.client.post<{ translated_text: string }>('/translate', {
+			text,
+			source_lang: sourceLang,
+			target_lang: targetLang
+		});
+		return response.data.translated_text;
 	}
 }
 
