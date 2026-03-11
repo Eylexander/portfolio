@@ -45,13 +45,16 @@ export default function ArticleEditor({
     tags: initialData?.tags?.join(", ") || "",
     is_visible: initialData?.is_visible ?? true,
     project_date: initialData?.project_date ? initialData.project_date.substring(0, 7) : new Date().toISOString().substring(0, 7),
+    project_end_date: initialData?.project_end_date ? initialData.project_end_date.substring(0, 7) : "",
   });
   const [isSaving, setIsSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<"en-US" | "fr-FR">("en-US");
   const [isPreview, setIsPreview] = useState(false);
   const [isSlugModified, setIsSlugModified] = useState(!!initialData?.slug);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [isUploadingCover, setIsUploadingCover] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const coverImageInputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -102,8 +105,15 @@ export default function ArticleEditor({
     
     // Convert YYYY-MM to full ISO string for Go time.Time
     const projectDateIso = formData.project_date ? new Date(`${formData.project_date}-01T00:00:00Z`).toISOString() : new Date().toISOString();
+    const projectEndDateIso = formData.project_end_date ? new Date(`${formData.project_end_date}-01T00:00:00Z`).toISOString() : undefined;
     
-    const payload = { ...formData, tags: tagsArray, project_date: projectDateIso };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const payload: any = { ...formData, tags: tagsArray, project_date: projectDateIso };
+    if (projectEndDateIso !== undefined) {
+      payload.project_end_date = projectEndDateIso;
+    } else {
+      payload.project_end_date = null;
+    }
 
     try {
       if (isNew) {
@@ -120,6 +130,22 @@ export default function ArticleEditor({
       toast.error(error.response?.data?.error || "Failed to save project");
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsUploadingCover(true);
+    try {
+      const url = await apiClient.uploadImage(file);
+      setFormData((prev) => ({ ...prev, cover_image: url }));
+      toast.success("Cover image uploaded!");
+    } catch {
+      toast.error("Failed to upload cover image");
+    } finally {
+      setIsUploadingCover(false);
+      e.target.value = "";
     }
   };
 
@@ -323,17 +349,35 @@ export default function ArticleEditor({
         )}
       </div>
 
-      {/* Cover image + Tags + Date */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      {/* Cover image + Tags */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
-          <label className={labelCls}>Cover Image URL</label>
-          <input
-            name="cover_image"
-            value={formData.cover_image}
-            onChange={handleChange}
-            className={inputCls}
-            placeholder="https://…"
-          />
+          <label className={labelCls}>Cover Image</label>
+          <div className="flex gap-2">
+            <input
+              name="cover_image"
+              value={formData.cover_image}
+              onChange={handleChange}
+              className={inputCls}
+              placeholder="https://… or upload →"
+            />
+            <button
+              type="button"
+              onClick={() => coverImageInputRef.current?.click()}
+              disabled={isUploadingCover}
+              className="shrink-0 inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg border border-border bg-secondary text-foreground hover:bg-accent transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+              title="Upload cover image"
+            >
+              {isUploadingCover ? <Loader2 size={15} className="animate-spin" /> : <ImageIcon size={15} />}
+            </button>
+            <input
+              ref={coverImageInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleCoverUpload}
+            />
+          </div>
         </div>
         <div>
           <label className={labelCls}>Tags — comma separated</label>
@@ -345,12 +389,26 @@ export default function ArticleEditor({
             placeholder="react, go, design"
           />
         </div>
+      </div>
+
+      {/* Date range */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
-          <label className={labelCls}>Project Month</label>
+          <label className={labelCls}>Project Start Month</label>
           <input
             type="month"
             name="project_date"
             value={formData.project_date}
+            onChange={handleChange}
+            className={inputCls}
+          />
+        </div>
+        <div>
+          <label className={labelCls}>Project End Month <span className="normal-case font-normal text-muted-foreground">(optional)</span></label>
+          <input
+            type="month"
+            name="project_end_date"
+            value={formData.project_end_date}
             onChange={handleChange}
             className={inputCls}
           />

@@ -84,6 +84,9 @@ export default function ArticleCard({ article, featured = false }: ArticleCardPr
           <div className="flex items-center justify-between pt-3 mt-auto">
             <time className="text-xs text-muted-foreground/70">
               {format(new Date(article.project_date || article.created_at), "MMM yyyy")}
+              {article.project_end_date && (
+                <> &ndash; {format(new Date(article.project_end_date), "MMM yyyy")}</>
+              )}
             </time>
             {!article.is_visible && (
               <span className="flex items-center gap-1 text-[11px] text-muted-foreground/60 font-medium">

@@ -332,7 +332,12 @@ export default function AdminDashboard() {
                               </span>
                             )}
                             <span>•</span>
-                            <span>{new Date(article.project_date || article.created_at).toLocaleDateString()}</span>
+                            <span>
+                              {new Date(article.project_date || article.created_at).toLocaleDateString()}
+                              {article.project_end_date && (
+                                <> &ndash; {new Date(article.project_end_date).toLocaleDateString()}</>
+                              )}
+                            </span>
                           </div>
                         </td>
                         <td className="hidden sm:table-cell py-3.5 px-4 sm:px-5">
@@ -348,6 +353,9 @@ export default function AdminDashboard() {
                         </td>
                         <td className="hidden md:table-cell py-3.5 px-4 sm:px-5 text-muted-foreground text-xs">
                           {new Date(article.project_date || article.created_at).toLocaleDateString()}
+                          {article.project_end_date && (
+                            <> &ndash; {new Date(article.project_end_date).toLocaleDateString()}</>
+                          )}
                         </td>
                         <td className="py-3.5 px-4 sm:px-5">
                           <div className="flex justify-end gap-1">

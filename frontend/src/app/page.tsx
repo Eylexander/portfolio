@@ -72,7 +72,7 @@ export default function Home() {
   ];
 
   return (
-    <main className="relative w-full h-screen overflow-hidden flex flex-col items-center justify-center bg-background selection:bg-primary/30">
+    <main className="relative w-full h-screen overflow-hidden bg-background selection:bg-primary/30">
       <BoidsBackground />
 
       {/* Top-right controls */}
@@ -102,33 +102,35 @@ export default function Home() {
 
       {/* Main Content */}
       <motion.div
-        className="z-10 text-center flex flex-col items-center gap-6 md:gap-8 px-4"
+        className="z-10 absolute inset-0 flex flex-col items-center px-4"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        {/* Navigation */}
-        <motion.nav
+        {/* Top half — Nav pinned to bottom */}
+        <motion.div
           variants={itemVariants}
-          className="flex flex-wrap justify-center gap-8 md:gap-14"
+          className="flex-1 flex items-end pb-6 md:pb-10"
         >
-          {[
-            { href: "/about", label: navT("about") },
-            { href: "/projects", label: navT("projects") },
-            { href: "/contact", label: navT("contact") },
-          ].map((link) => (
-            <Link key={link.href} href={link.href} className="group relative py-1">
-              <span className="text-xs md:text-sm font-semibold tracking-[0.2em] text-muted-foreground group-hover:text-foreground transition-colors duration-300">
-                {link.label}
-              </span>
-              <span className="absolute bottom-0 left-0 h-px w-0 bg-primary group-hover:w-full transition-all duration-300 ease-out" />
-            </Link>
-          ))}
-        </motion.nav>
+          <nav className="flex flex-wrap justify-center gap-8 md:gap-14">
+            {[
+              { href: "/about", label: navT("about") },
+              { href: "/projects", label: navT("projects") },
+              { href: "/contact", label: navT("contact") },
+            ].map((link) => (
+              <Link key={link.href} href={link.href} className="group relative py-1">
+                <span className="text-xs md:text-sm font-semibold tracking-[0.2em] text-muted-foreground group-hover:text-foreground transition-colors duration-300">
+                  {link.label}
+                </span>
+                <span className="absolute bottom-0 left-0 h-px w-0 bg-primary group-hover:w-full transition-all duration-300 ease-out" />
+              </Link>
+            ))}
+          </nav>
+        </motion.div>
 
-        {/* Title with per-letter animation */}
+        {/* Title — exact vertical center */}
         <motion.h1
-          className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tight text-foreground flex pb-4"
+          className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tight text-foreground flex"
           variants={titleVariants}
         >
           {titleText.split("").map((char, index) => (
@@ -139,31 +141,28 @@ export default function Home() {
           ))}
         </motion.h1>
 
-        {/* Typewriter role */}
-        <motion.p
-          variants={itemVariants}
-          className="text-sm md:text-base text-muted-foreground font-medium tracking-[0.25em] min-h-[1.5em]"
-        >
-          <TypewriterText words={roles} speed={70} pause={2400} />
-        </motion.p>
-
-        {/* Social links */}
+        {/* Bottom half — Typewriter + Social pinned to top */}
         <motion.div
           variants={itemVariants}
-          className="flex items-center gap-2"
+          className="flex-1 flex flex-col items-center pt-6 md:pt-10 gap-6 md:gap-8"
         >
-          {socialLinks.map((s) => (
-            <a
-              key={s.label}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={s.label}
-              className="p-2 rounded-full text-muted-foreground hover:text-foreground bg-background/50 backdrop-blur-sm border border-border/40 hover:bg-secondary transition-all duration-200"
-            >
-              {s.icon}
-            </a>
-          ))}
+          <p className="text-sm md:text-base text-muted-foreground font-medium tracking-[0.25em] min-h-[1.5em]">
+            <TypewriterText words={roles} speed={70} pause={2400} />
+          </p>
+          <div className="flex items-center gap-2">
+            {socialLinks.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.label}
+                className="p-2 rounded-full text-muted-foreground hover:text-foreground bg-background/50 backdrop-blur-sm border border-border/40 hover:bg-secondary transition-all duration-200"
+              >
+                {s.icon}
+              </a>
+            ))}
+          </div>
         </motion.div>
       </motion.div>
     </main>

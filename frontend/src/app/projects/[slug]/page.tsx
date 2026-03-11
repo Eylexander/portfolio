@@ -114,6 +114,9 @@ export default function ArticlePage() {
             </div>
             <time className="text-sm text-muted-foreground">
               {format(new Date(article.project_date || article.created_at), "MMMM yyyy")}
+              {article.project_end_date && (
+                <> &ndash; {format(new Date(article.project_end_date), "MMMM yyyy")}</>
+              )}
             </time>
           </header>
 

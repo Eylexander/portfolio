@@ -19,10 +19,11 @@ type Article struct {
 	Snippet     LocalizedString    `bson:"snippet" json:"snippet"`
 	CoverImage  string             `bson:"cover_image" json:"cover_image"`
 	Tags        []string           `bson:"tags" json:"tags"`
-	IsVisible   bool               `bson:"is_visible" json:"is_visible"`
-	CreatedAt   time.Time          `bson:"created_at" json:"created_at"`
-	UpdatedAt   time.Time          `bson:"updated_at" json:"updated_at"`
-	ProjectDate time.Time          `bson:"project_date" json:"project_date"`
+	IsVisible      bool               `bson:"is_visible" json:"is_visible"`
+	CreatedAt      time.Time          `bson:"created_at" json:"created_at"`
+	UpdatedAt      time.Time          `bson:"updated_at" json:"updated_at"`
+	ProjectDate    time.Time          `bson:"project_date" json:"project_date"`
+	ProjectEndDate *time.Time         `bson:"project_end_date,omitempty" json:"project_end_date,omitempty"`
 }
 
 type ContactMessage struct {

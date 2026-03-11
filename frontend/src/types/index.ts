@@ -16,6 +16,7 @@ export interface Article {
   created_at: string;
   updated_at: string;
   project_date: string;
+  project_end_date?: string;
 }
 
 export interface LoginResponse {
