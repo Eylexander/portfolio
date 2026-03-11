@@ -12,13 +12,13 @@ type LocalizedString struct {
 }
 
 type Article struct {
-	ID          primitive.ObjectID `bson:"_id,omitempty" json:"id"`
-	Title       LocalizedString    `bson:"title" json:"title"`
-	Slug        string             `bson:"slug" json:"slug"`
-	Content     LocalizedString    `bson:"content" json:"content"` // Markdown content
-	Snippet     LocalizedString    `bson:"snippet" json:"snippet"`
-	CoverImage  string             `bson:"cover_image" json:"cover_image"`
-	Tags        []string           `bson:"tags" json:"tags"`
+	ID             primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	Title          LocalizedString    `bson:"title" json:"title"`
+	Slug           string             `bson:"slug" json:"slug"`
+	Content        LocalizedString    `bson:"content" json:"content"`
+	Snippet        LocalizedString    `bson:"snippet" json:"snippet"`
+	CoverImage     string             `bson:"cover_image" json:"cover_image"`
+	Tags           []string           `bson:"tags" json:"tags"`
 	IsVisible      bool               `bson:"is_visible" json:"is_visible"`
 	CreatedAt      time.Time          `bson:"created_at" json:"created_at"`
 	UpdatedAt      time.Time          `bson:"updated_at" json:"updated_at"`
