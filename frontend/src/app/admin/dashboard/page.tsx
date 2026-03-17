@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Article } from "@/types";
 import Link from "next/link";
-import { Edit, Trash2, Plus, Eye, EyeOff, Image as ImageIcon, Copy, Check, Code, Star, Download, Upload } from "lucide-react";
+import { Edit, Trash2, Plus, Eye, EyeOff, Image as ImageIcon, Copy, Check, Code, Star, Download, Upload, Search } from "lucide-react";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import Loader from "@/components/Loader";
@@ -27,6 +27,7 @@ export default function AdminDashboard() {
   const { logout } = useAuthStore();
   const router = useRouter();
   const [articles, setArticles] = useState<Article[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [uploads, setUploads] = useState<string[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [messages, setMessages] = useState<any[]>([]);
@@ -208,6 +209,37 @@ export default function AdminDashboard() {
     reader.readAsText(file);
   };
 
+  const getSnippet = (content: string, query: string) => {
+    if (!content || !query) return null;
+    const lowerContent = content.toLowerCase();
+    const index = lowerContent.indexOf(query.toLowerCase());
+    if (index === -1) return null;
+    
+    // Find the word occurrence context
+    const start = Math.max(0, index - 40);
+    const end = Math.min(content.length, index + query.length + 40);
+    let snippet = content.substring(start, end);
+    if (start > 0) snippet = "..." + snippet;
+    if (end < content.length) snippet = snippet + "...";
+    
+    // Highlight the matching part
+    const regex = new RegExp(`(${query})`, 'gi');
+    return snippet.split(regex).map((part, i) => 
+      regex.test(part) ? <mark key={i} className="bg-yellow-200 dark:bg-yellow-800 text-black dark:text-white px-1 rounded">{part}</mark> : part
+    );
+  };
+
+  const filteredArticles = articles.filter((article) => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    const titleEn = article.title?.["en-US"]?.toLowerCase() || "";
+    const titleFr = article.title?.["fr-FR"]?.toLowerCase() || "";
+    const contentEn = article.content?.["en-US"]?.toLowerCase() || "";
+    const contentFr = article.content?.["fr-FR"]?.toLowerCase() || "";
+    
+    return titleEn.includes(query) || titleFr.includes(query) || contentEn.includes(query) || contentFr.includes(query);
+  });
+
   return (
     <div className="min-h-screen bg-background">
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
@@ -265,7 +297,7 @@ export default function AdminDashboard() {
             <Loader size="md" className="py-16" />
           ) : activeTab === "projects" ? (
             <div className="flex flex-col">
-              <div className="flex justify-between items-center p-4 border-b border-border bg-secondary/10">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 gap-4 border-b border-border bg-secondary/10">
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleExportBackup}
@@ -287,12 +319,27 @@ export default function AdminDashboard() {
                     />
                   </label>
                 </div>
-                <Link
-                  href="/admin/articles/new"
-                  className="flex items-center gap-2 bg-primary text-primary-foreground px-3 sm:px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors shadow-sm"
-                >
-                  <Plus size={15} /> <span>{t("new_project")}</span>
-                </Link>
+                
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <div className="relative flex-1 sm:w-64">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Search size={14} className="text-muted-foreground" />
+                    </div>
+                    <input
+                      type="text"
+                      className="block w-full pl-9 pr-3 py-1.5 border border-border rounded-lg leading-5 bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition-colors"
+                      placeholder="Search across articles..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                  </div>
+                  <Link
+                    href="/admin/articles/new"
+                    className="flex shrink-0 items-center justify-center gap-2 bg-primary text-primary-foreground px-3 sm:px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors shadow-sm"
+                  >
+                    <Plus size={15} /> <span className="hidden sm:inline">{t("new_project")}</span>
+                  </Link>
+                </div>
               </div>
               <div className="overflow-x-auto">
                 <motion.table
@@ -310,16 +357,26 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {articles.map((article) => (
+                    {filteredArticles.map((article) => {
+                      const snippetEn = searchQuery ? getSnippet(article.content?.["en-US"] || "", searchQuery) : null;
+                      const snippetFr = searchQuery && !snippetEn ? getSnippet(article.content?.["fr-FR"] || "", searchQuery) : null;
+                      const snippet = snippetEn || snippetFr;
+                      
+                      return (
                       <motion.tr
                         key={article.id}
                         variants={fadeUp}
                         className="border-b border-border/60 hover:bg-secondary/20 transition-colors"
                       >
                         <td className="py-3.5 px-4 sm:px-5 font-medium text-foreground">
-                          <Link href={`/projects/${article.slug}`} className="hover:text-primary hover:underline transition-colors line-clamp-1">
+                          <Link href={`/projects/${article.slug}`} className="hover:text-primary hover:underline transition-colors line-clamp-1 block">
                             {article.title?.["en-US"] || article.title?.["fr-FR"] || "Untitled"}
                           </Link>
+                          {searchQuery && snippet && (
+                            <div className="mt-1 text-xs text-muted-foreground font-normal italic overflow-hidden text-ellipsis line-clamp-2">
+                              "...{snippet}..."
+                            </div>
+                          )}
                           {/* Mobile-only status and date */}
                           <div className="flex sm:hidden items-center gap-2 mt-1 text-xs text-muted-foreground">
                             {article.is_visible ? (
@@ -384,7 +441,8 @@ export default function AdminDashboard() {
                           </div>
                         </td>
                       </motion.tr>
-                    ))}
+                      );
+                    })}
                     {articles.length === 0 && (
                       <tr>
                         <td colSpan={4} className="py-16 text-center text-sm text-muted-foreground">
@@ -392,6 +450,13 @@ export default function AdminDashboard() {
                           <Link href="/admin/articles/new" className="text-primary hover:underline">
                             Create your first one.
                           </Link>
+                        </td>
+                      </tr>
+                    )}
+                    {articles.length > 0 && filteredArticles.length === 0 && (
+                      <tr>
+                        <td colSpan={4} className="py-16 text-center text-sm text-muted-foreground">
+                          No matches found across articles for "{searchQuery}".
                         </td>
                       </tr>
                     )}

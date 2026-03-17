@@ -10,7 +10,7 @@ interface Boid {
   isPrimary: boolean; // Added to track color
 }
 
-export default function BoidsBackground() {
+export default function BoidsBackground({ className = "" }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -223,7 +223,7 @@ export default function BoidsBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 z-0 pointer-events-none opacity-60"
+      className={`fixed inset-0 z-0 pointer-events-none opacity-60 ${className}`}
     />
   );
 }

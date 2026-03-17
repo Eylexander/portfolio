@@ -36,9 +36,9 @@ export default function AboutPage() {
   if (!data) return <Loader />;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen relative overflow-hidden">
 
-      <main className="pt-28 pb-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center overflow-hidden">
+      <main className="pt-28 pb-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center overflow-hidden relative z-10">
         <motion.div
           className="max-w-3xl w-full space-y-14"
           variants={stagger}
@@ -50,12 +50,9 @@ export default function AboutPage() {
             className="flex flex-col sm:flex-row sm:items-center justify-between gap-6"
             variants={fadeUp}
           >
-            <div className="space-y-3 pt-12 md:pt-0">
-              <p className="text-xs font-semibold tracking-[0.25em] uppercase text-primary">
-                About
-              </p>
-              <h1 className="text-4xl md:text-6xl font-black tracking-tight text-foreground leading-none">
-                {data.title?.[locale]}
+            <div className="space-y-6">
+              <h1 className="text-4xl md:text-5xl font-black tracking-tight text-foreground leading-none">
+                {data.title?.[locale]}<span className="text-primary">.</span>
               </h1>
             </div>
 

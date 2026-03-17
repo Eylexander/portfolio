@@ -19,5 +19,9 @@ portfolio-server
 .vscode
 .idea
 
+# Uploads (runtime data)
+uploads/
+tmp/
+
 # OS
 .DS_Store

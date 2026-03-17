@@ -44,9 +44,9 @@ export default function ProjectsPage() {
   }, [isAuthenticated]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen relative overflow-hidden">
 
-      <main className="pt-28 pb-20 px-4 sm:px-6 lg:px-8">
+      <main className="pt-28 pb-20 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
 
           {/* Header */}
@@ -56,18 +56,12 @@ export default function ProjectsPage() {
             initial="hidden"
             animate="visible"
           >
-            <div className="space-y-3">
-              <motion.p
-                variants={fadeUp}
-                className="text-xs font-semibold tracking-[0.25em] uppercase text-primary"
-              >
-                Work
-              </motion.p>
+            <div className="space-y-6">
               <motion.h1
                 variants={fadeUp}
                 className="text-4xl md:text-5xl font-black tracking-tight text-foreground"
               >
-                {t("title")}
+                {t("title")}<span className="text-primary">.</span>
               </motion.h1>
               <motion.p
                 variants={fadeUp}

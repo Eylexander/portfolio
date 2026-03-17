@@ -7,6 +7,7 @@ import { getMessages, getLocale } from "next-intl/server";
 import AdminLoginButton from "@/components/AdminLoginButton";
 import CustomCursor from "@/components/CustomCursor";
 import PageNav from "@/components/PageNav";
+import BoidsWrapper from "@/components/BoidsWrapper";
 import "./global.css";
 
 const inter = Inter({
@@ -37,6 +38,7 @@ export default async function RootLayout({
 				<NextIntlClientProvider locale={locale} messages={messages}>
 					<ThemeProvider>
 						<CustomCursor />
+						<BoidsWrapper />
 						<ToasterProvider />
 						<PageNav />
 						{children}

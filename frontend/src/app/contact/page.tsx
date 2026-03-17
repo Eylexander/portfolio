@@ -85,9 +85,9 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen relative overflow-hidden">
 
-      <main className="pt-28 pb-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+      <main className="pt-28 pb-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center relative z-10">
         <motion.div
           className="max-w-3xl w-full space-y-12"
           variants={stagger}
@@ -95,12 +95,9 @@ export default function ContactPage() {
           animate="visible"
         >
           {/* Heading */}
-          <motion.div variants={fadeUp} className="space-y-3">
-            <p className="text-xs font-semibold tracking-[0.25em] uppercase text-primary">
-              {t("header")}
-            </p>
+          <motion.div variants={fadeUp} className="space-y-6">
             <h1 className="text-4xl md:text-5xl font-black tracking-tight text-foreground">
-              {t("title")}
+              {t("title")}<span className="text-primary">.</span>
             </h1>
             <p className="text-muted-foreground text-base">
               {t("subtitle")}

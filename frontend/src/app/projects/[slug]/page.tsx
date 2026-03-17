@@ -39,28 +39,27 @@ export default function ArticlePage() {
   }, [slug]);
 
   if (isLoading) return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       
       <PageLoader />
     </div>
   );
 
   if (error || !article) return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       
       <div className="min-h-screen flex items-center justify-center text-muted-foreground text-sm">{error || "Not found"}</div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-background">
-      
+    <div className="min-h-screen relative overflow-hidden">
 
       <motion.article
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="pt-28 pb-24 px-4 sm:px-6 lg:px-8"
+        className="pt-28 pb-24 px-4 sm:px-6 lg:px-8 relative z-10"
       >
         <div className="max-w-2xl mx-auto">
           {/* Cover */}

@@ -4,7 +4,7 @@
 # build-env #
 #############
 
-FROM cosmtrek/air:v1.63.1
+FROM cosmtrek/air:v1.64.5
 
 ENV MONGODB_URI=mongodb://database:27017/portfolio
 

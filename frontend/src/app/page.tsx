@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import BoidsBackground from "@/components/BoidsBackground";
 import TypewriterText from "@/components/TypewriterText";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -72,8 +71,7 @@ export default function Home() {
   ];
 
   return (
-    <main className="relative w-full h-screen overflow-hidden bg-background selection:bg-primary/30">
-      <BoidsBackground />
+    <main className="relative w-full h-screen overflow-hidden selection:bg-primary/30">
 
       {/* Top-right controls */}
       <motion.div
