@@ -63,7 +63,7 @@ export default function AdminDashboard() {
       if (settingsData) {
         setOllamaModel(settingsData.ollama_model || "");
       }
-    } catch (err) {
+    } catch {
       toast.error("Failed to load data");
     } finally {
       setLoading(false);
@@ -76,7 +76,7 @@ export default function AdminDashboard() {
       await apiClient.deleteArticle(id);
       toast.success("Article deleted");
       fetchData();
-    } catch (err) {
+    } catch {
       toast.error("Failed to delete article");
     }
   };
@@ -140,7 +140,7 @@ export default function AdminDashboard() {
     try {
       await apiClient.updateSettings({ ollama_model });
       toast.success("Settings updated successfully.");
-    } catch (err) {
+    } catch {
       toast.error("Failed to update settings");
     } finally {
       setUpdatingSettings(false);
@@ -374,7 +374,7 @@ export default function AdminDashboard() {
                           </Link>
                           {searchQuery && snippet && (
                             <div className="mt-1 text-xs text-muted-foreground font-normal italic overflow-hidden text-ellipsis line-clamp-2">
-                              "...{snippet}..."
+                              &quot;...{snippet}...&quot;
                             </div>
                           )}
                           {/* Mobile-only status and date */}
@@ -456,7 +456,7 @@ export default function AdminDashboard() {
                     {articles.length > 0 && filteredArticles.length === 0 && (
                       <tr>
                         <td colSpan={4} className="py-16 text-center text-sm text-muted-foreground">
-                          No matches found across articles for "{searchQuery}".
+                          No matches found across articles for &quot;{searchQuery}&quot;.
                         </td>
                       </tr>
                     )}

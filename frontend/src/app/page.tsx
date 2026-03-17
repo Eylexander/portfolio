@@ -5,7 +5,7 @@ import TypewriterText from "@/components/TypewriterText";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import LocaleSwitcher from "@/components/LocaleSwitcher";
-import { Sun, Moon, Github, Linkedin, Mail } from "lucide-react";
+import { Sun, Moon, Github, Mail } from "lucide-react";
 import { useTheme } from "next-themes";
 
 export default function Home() {

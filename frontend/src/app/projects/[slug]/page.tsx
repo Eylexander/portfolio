@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { Article } from "@/types";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { format } from "date-fns";
 import { enUS, fr } from "date-fns/locale";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import apiClient from "@/lib/api-client";
 import { PageLoader } from "@/components/Loader";
 import { motion } from "framer-motion";
-import { useTranslations, useLocale } from "next-intl";
+import { useLocale } from "next-intl";
 import { useAuthStore } from "@/store/authStore";
 import Link from "next/link";
 import { Edit2 } from "lucide-react";
