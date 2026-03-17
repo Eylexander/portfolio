@@ -132,3 +132,9 @@ html {
     box-shadow: 0 0 20px -4px hsl(var(--primary) / 0.4);
   }
 }
+
+/* KaTeX block math centering */
+.katex-display {
+  overflow-x: auto;
+  text-align: center !important;
+}

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Article } from "@/types";
 import { useParams, useRouter } from "next/navigation";
 import { format } from "date-fns";
+import { enUS, fr } from "date-fns/locale";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import apiClient from "@/lib/api-client";
 import { PageLoader } from "@/components/Loader";
@@ -19,6 +20,7 @@ export default function ArticlePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const locale = useLocale() as "en-US" | "fr-FR";
+  const dateFnsLocale = locale === "fr-FR" ? fr : enUS;
   const { isAuthenticated } = useAuthStore();
 
   useEffect(() => {
@@ -113,9 +115,9 @@ export default function ArticlePage() {
               )}
             </div>
             <time className="text-sm text-muted-foreground">
-              {format(new Date(article.project_date || article.created_at), "MMMM yyyy")}
+              {format(new Date(article.project_date || article.created_at), "MMMM yyyy", { locale: dateFnsLocale })}
               {article.project_end_date && (
-                <> &ndash; {format(new Date(article.project_end_date), "MMMM yyyy")}</>
+                <> &ndash; {format(new Date(article.project_end_date), "MMMM yyyy", { locale: dateFnsLocale })}</>
               )}
             </time>
           </header>
@@ -128,7 +130,7 @@ export default function ArticlePage() {
             prose-headings:font-black prose-headings:tracking-tight prose-headings:scroll-mt-24
             prose-a:text-primary prose-a:no-underline hover:prose-a:underline
             prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground
-            prose-img:rounded-lg prose-img:shadow-sm
+            prose-img:rounded-lg prose-img:shadow-sm prose-img:mx-auto
           ">
             <MarkdownRenderer content={article.content?.[locale] || article.content?.["en-US"] || ""} />
           </div>

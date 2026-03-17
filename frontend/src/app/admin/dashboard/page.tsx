@@ -417,14 +417,31 @@ export default function AdminDashboard() {
                     <motion.div
                       key={index}
                       variants={fadeUp}
-                      className="group relative aspect-square rounded-lg overflow-hidden border border-border bg-secondary/20"
+                      className="group relative aspect-square rounded-lg overflow-hidden border border-border bg-secondary/20 cursor-pointer"
                     >
-                      <Image
-                        src={url}
-                        alt={`Upload ${index}`}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block w-full h-full"
+                      >
+                        <Image
+                          src={url}
+                          alt={`Upload ${index}`}
+                          width={400}
+                          height={400}
+                          unoptimized
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      </a>
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => window.open(url, '_blank')}
+                          className="p-2 bg-background/90 text-foreground rounded-md hover:bg-background transition-colors"
+                          title="Open Image"
+                        >
+                          <Eye size={16} />
+                        </button>
                         <button
                           onClick={() => handleCopyUrl(url)}
                           className="p-2 bg-background/90 text-foreground rounded-md hover:bg-background transition-colors"

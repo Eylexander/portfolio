@@ -4,6 +4,7 @@ import { Article } from "@/types";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { format } from "date-fns";
+import { enUS, fr } from "date-fns/locale";
 import { EyeOff } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -15,6 +16,7 @@ interface ArticleCardProps {
 
 export default function ArticleCard({ article, featured = false }: ArticleCardProps) {
   const locale = useLocale() as "en-US" | "fr-FR";
+  const dateFnsLocale = locale === "fr-FR" ? fr : enUS;
   const t = useTranslations("Projects");
   const title = article.title?.[locale] || article.title?.["en-US"] || "Untitled";
   const snippet = article.snippet?.[locale] || article.snippet?.["en-US"] || "";
@@ -83,9 +85,9 @@ export default function ArticleCard({ article, featured = false }: ArticleCardPr
           {/* Footer */}
           <div className="flex items-center justify-between pt-3 mt-auto">
             <time className="text-xs text-muted-foreground/70">
-              {format(new Date(article.project_date || article.created_at), "MMM yyyy")}
+              {format(new Date(article.project_date || article.created_at), "MMM yyyy", { locale: dateFnsLocale })}
               {article.project_end_date && (
-                <> &ndash; {format(new Date(article.project_end_date), "MMM yyyy")}</>
+                <> &ndash; {format(new Date(article.project_end_date), "MMM yyyy", { locale: dateFnsLocale })}</>
               )}
             </time>
             {!article.is_visible && (

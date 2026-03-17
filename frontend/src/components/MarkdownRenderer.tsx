@@ -3,6 +3,9 @@
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
+import rehypeKatex from "rehype-katex";
+import remarkMath from "remark-math";
+import "katex/dist/katex.min.css";
 import React, { useState } from "react";
 import { Check, Copy } from "lucide-react";
 
@@ -13,7 +16,8 @@ interface MarkdownRendererProps {
 export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
     <ReactMarkdown
-      rehypePlugins={[rehypeRaw, rehypeSlug]}
+      remarkPlugins={[remarkMath]}
+      rehypePlugins={[rehypeRaw, rehypeSlug, rehypeKatex]}
       components={{
         pre({ children, ...props }) {
           return (
@@ -25,18 +29,33 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
             </div>
           );
         },
-        code({ inline, className, children, ...props }: React.HTMLAttributes<HTMLElement> & { inline?: boolean }) {
-          if (inline) {
+        code({ className, children, ...props }: React.HTMLAttributes<HTMLElement> & { inline?: boolean }) {
+          // Code block
+          if (className) {
             return (
-              <code className="text-primary bg-secondary px-1.5 py-0.5 rounded text-sm font-normal" {...props}>
-                {children}
+              <code className={className} {...props}>
+                {String(children).replace(/\n$/, "")}
               </code>
             );
           }
+          // Inline code
           return (
-            <code className={className} {...props}>
-              {String(children).replace(/\n$/, "")}
+            <code className="bg-secondary border border-border rounded-lg px-3 py-1.5 text-sm font-mono font-medium text-foreground before:content-none after:content-none" {...props}>
+              {String(children)}
             </code>
+          );
+        },
+        a({ children, href, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
+          return (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+              {...props}
+            >
+              {children}
+            </a>
           );
         },
       }}
