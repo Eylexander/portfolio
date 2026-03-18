@@ -16,7 +16,7 @@ export default function BoidsWrapper() {
   if (isProjectSlug) {
     backgroundClass = "!opacity-0 blur-md";
   } else if (!isHome) {
-    backgroundClass = "blur-sm !opacity-30";
+    backgroundClass = "blur-[6px] !opacity-50 dark:!opacity-30 [mask-image:radial-gradient(ellipse_60%_80%_at_50%_30%,transparent_0%,black_100%)]";
   }
 
   return (
