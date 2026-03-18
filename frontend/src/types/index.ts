@@ -56,6 +56,8 @@ export interface AboutData {
   experiences: Experience[];
   associative_title: LocalizedString;
   associative_experiences: Experience[];
+  education_title: LocalizedString;
+  education_experiences: Experience[];
   stack_tools: StackItem[];
 }
 

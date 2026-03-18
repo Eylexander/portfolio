@@ -38,7 +38,7 @@ export default function AdminDashboard() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [updatingCredentials, setUpdatingCredentials] = useState(false);
-  
+
   const [ollama_model, setOllamaModel] = useState("");
   const [updatingSettings, setUpdatingSettings] = useState(false);
   const { isConfigured: isOllamaConfigured, models: availableModels } = useOllama();
@@ -89,6 +89,17 @@ export default function AdminDashboard() {
       fetchData();
     } catch {
       toast.error("Failed to delete message");
+    }
+  };
+
+  const handleDeleteUpload = async (filename: string) => {
+    if (!confirm("Delete this upload?")) return;
+    try {
+      await apiClient.deleteUpload(filename);
+      toast.success("Upload deleted");
+      fetchData();
+    } catch {
+      toast.error("Failed to delete upload");
     }
   };
 
@@ -214,17 +225,17 @@ export default function AdminDashboard() {
     const lowerContent = content.toLowerCase();
     const index = lowerContent.indexOf(query.toLowerCase());
     if (index === -1) return null;
-    
+
     // Find the word occurrence context
     const start = Math.max(0, index - 40);
     const end = Math.min(content.length, index + query.length + 40);
     let snippet = content.substring(start, end);
     if (start > 0) snippet = "..." + snippet;
     if (end < content.length) snippet = snippet + "...";
-    
+
     // Highlight the matching part
     const regex = new RegExp(`(${query})`, 'gi');
-    return snippet.split(regex).map((part, i) => 
+    return snippet.split(regex).map((part, i) =>
       regex.test(part) ? <mark key={i} className="bg-yellow-200 dark:bg-yellow-800 text-black dark:text-white px-1 rounded">{part}</mark> : part
     );
   };
@@ -236,12 +247,12 @@ export default function AdminDashboard() {
     const titleFr = article.title?.["fr-FR"]?.toLowerCase() || "";
     const contentEn = article.content?.["en-US"]?.toLowerCase() || "";
     const contentFr = article.content?.["fr-FR"]?.toLowerCase() || "";
-    
+
     return titleEn.includes(query) || titleFr.includes(query) || contentEn.includes(query) || contentFr.includes(query);
   });
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-full bg-background pb-12">
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
         {/* Header */}
         <div className="flex items-center justify-between mb-6 sm:mb-8">
@@ -256,8 +267,8 @@ export default function AdminDashboard() {
           <button
             onClick={() => setActiveTab("projects")}
             className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${activeTab === "projects"
-                ? "border-primary text-primary"
-                : "border-transparent text-muted-foreground hover:text-foreground"
+              ? "border-primary text-primary"
+              : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
           >
             Projects
@@ -265,8 +276,8 @@ export default function AdminDashboard() {
           <button
             onClick={() => setActiveTab("uploads")}
             className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${activeTab === "uploads"
-                ? "border-primary text-primary"
-                : "border-transparent text-muted-foreground hover:text-foreground"
+              ? "border-primary text-primary"
+              : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
           >
             Uploads
@@ -274,8 +285,8 @@ export default function AdminDashboard() {
           <button
             onClick={() => setActiveTab("messages")}
             className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${activeTab === "messages"
-                ? "border-primary text-primary"
-                : "border-transparent text-muted-foreground hover:text-foreground"
+              ? "border-primary text-primary"
+              : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
           >
             Messages
@@ -283,8 +294,8 @@ export default function AdminDashboard() {
           <button
             onClick={() => setActiveTab("settings")}
             className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${activeTab === "settings"
-                ? "border-primary text-primary"
-                : "border-transparent text-muted-foreground hover:text-foreground"
+              ? "border-primary text-primary"
+              : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
           >
             Settings
@@ -319,7 +330,7 @@ export default function AdminDashboard() {
                     />
                   </label>
                 </div>
-                
+
                 <div className="flex items-center gap-3 w-full sm:w-auto">
                   <div className="relative flex-1 sm:w-64">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -361,86 +372,86 @@ export default function AdminDashboard() {
                       const snippetEn = searchQuery ? getSnippet(article.content?.["en-US"] || "", searchQuery) : null;
                       const snippetFr = searchQuery && !snippetEn ? getSnippet(article.content?.["fr-FR"] || "", searchQuery) : null;
                       const snippet = snippetEn || snippetFr;
-                      
+
                       return (
-                      <motion.tr
-                        key={article.id}
-                        variants={fadeUp}
-                        className="border-b border-border/60 hover:bg-secondary/20 transition-colors"
-                      >
-                        <td className="py-3.5 px-4 sm:px-5 font-medium text-foreground">
-                          <Link href={`/projects/${article.slug}`} className="hover:text-primary hover:underline transition-colors line-clamp-1 block">
-                            {article.title?.["en-US"] || article.title?.["fr-FR"] || "Untitled"}
-                          </Link>
-                          {searchQuery && snippet && (
-                            <div className="mt-1 text-xs text-muted-foreground font-normal italic overflow-hidden text-ellipsis line-clamp-2">
-                              &quot;...{snippet}...&quot;
+                        <motion.tr
+                          key={article.id}
+                          variants={fadeUp}
+                          className="border-b border-border/60 hover:bg-secondary/20 transition-colors"
+                        >
+                          <td className="py-3.5 px-4 sm:px-5 font-medium text-foreground">
+                            <Link href={`/projects/${article.slug}`} className="hover:text-primary hover:underline transition-colors line-clamp-1 block">
+                              {article.title?.["en-US"] || article.title?.["fr-FR"] || "Untitled"}
+                            </Link>
+                            {searchQuery && snippet && (
+                              <div className="mt-1 text-xs text-muted-foreground font-normal italic overflow-hidden text-ellipsis line-clamp-2">
+                                &quot;...{snippet}...&quot;
+                              </div>
+                            )}
+                            {/* Mobile-only status and date */}
+                            <div className="flex sm:hidden items-center gap-2 mt-1 text-xs text-muted-foreground">
+                              {article.is_visible ? (
+                                <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
+                                  <Eye size={10} /> Visible
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1">
+                                  <EyeOff size={10} /> Hidden
+                                </span>
+                              )}
+                              <span>•</span>
+                              <span>
+                                {new Date(article.project_date || article.created_at).toLocaleDateString()}
+                                {article.project_end_date && (
+                                  <> &ndash; {new Date(article.project_end_date).toLocaleDateString()}</>
+                                )}
+                              </span>
                             </div>
-                          )}
-                          {/* Mobile-only status and date */}
-                          <div className="flex sm:hidden items-center gap-2 mt-1 text-xs text-muted-foreground">
+                          </td>
+                          <td className="hidden sm:table-cell py-3.5 px-4 sm:px-5">
                             {article.is_visible ? (
-                              <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
-                                <Eye size={10} /> Visible
+                              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
+                                <Eye size={12} /> Visible
                               </span>
                             ) : (
-                              <span className="inline-flex items-center gap-1">
-                                <EyeOff size={10} /> Hidden
+                              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                                <EyeOff size={12} /> Hidden
                               </span>
                             )}
-                            <span>•</span>
-                            <span>
-                              {new Date(article.project_date || article.created_at).toLocaleDateString()}
-                              {article.project_end_date && (
-                                <> &ndash; {new Date(article.project_end_date).toLocaleDateString()}</>
-                              )}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="hidden sm:table-cell py-3.5 px-4 sm:px-5">
-                          {article.is_visible ? (
-                            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
-                              <Eye size={12} /> Visible
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                              <EyeOff size={12} /> Hidden
-                            </span>
-                          )}
-                        </td>
-                        <td className="hidden md:table-cell py-3.5 px-4 sm:px-5 text-muted-foreground text-xs">
-                          {new Date(article.project_date || article.created_at).toLocaleDateString()}
-                          {article.project_end_date && (
-                            <> &ndash; {new Date(article.project_end_date).toLocaleDateString()}</>
-                          )}
-                        </td>
-                        <td className="py-3.5 px-4 sm:px-5">
-                          <div className="flex justify-end gap-1">
-                            <button
-                              onClick={() => handleToggleFeatured(article)}
-                              className={`p-1.5 rounded-md transition-colors ${article.tags.includes("featured")
+                          </td>
+                          <td className="hidden md:table-cell py-3.5 px-4 sm:px-5 text-muted-foreground text-xs">
+                            {new Date(article.project_date || article.created_at).toLocaleDateString()}
+                            {article.project_end_date && (
+                              <> &ndash; {new Date(article.project_end_date).toLocaleDateString()}</>
+                            )}
+                          </td>
+                          <td className="py-3.5 px-4 sm:px-5">
+                            <div className="flex justify-end gap-1">
+                              <button
+                                onClick={() => handleToggleFeatured(article)}
+                                className={`p-1.5 rounded-md transition-colors ${article.tags.includes("featured")
                                   ? "text-yellow-500 hover:bg-yellow-500/10"
                                   : "text-muted-foreground hover:text-yellow-500 hover:bg-yellow-500/10"
-                                }`}
-                              title={article.tags.includes("featured") ? "Remove from featured" : "Add to featured"}
-                            >
-                              <Star size={15} fill={article.tags.includes("featured") ? "currentColor" : "none"} />
-                            </button>
-                            <Link href={`/admin/articles/${article.id}`}>
-                              <button className="p-1.5 hover:bg-accent rounded-md text-muted-foreground hover:text-foreground transition-colors" title="Edit">
-                                <Edit size={15} />
+                                  }`}
+                                title={article.tags.includes("featured") ? "Remove from featured" : "Add to featured"}
+                              >
+                                <Star size={15} fill={article.tags.includes("featured") ? "currentColor" : "none"} />
                               </button>
-                            </Link>
-                            <button
-                              onClick={() => handleDelete(article.id)}
-                              className="p-1.5 hover:bg-destructive/10 text-muted-foreground hover:text-destructive rounded-md transition-colors"
-                              title="Delete"
-                            >
-                              <Trash2 size={15} />
-                            </button>
-                          </div>
-                        </td>
-                      </motion.tr>
+                              <Link href={`/admin/articles/${article.id}`}>
+                                <button className="p-1.5 hover:bg-accent rounded-md text-muted-foreground hover:text-foreground transition-colors" title="Edit">
+                                  <Edit size={15} />
+                                </button>
+                              </Link>
+                              <button
+                                onClick={() => handleDelete(article.id)}
+                                className="p-1.5 hover:bg-destructive/10 text-muted-foreground hover:text-destructive rounded-md transition-colors"
+                                title="Delete"
+                              >
+                                <Trash2 size={15} />
+                              </button>
+                            </div>
+                          </td>
+                        </motion.tr>
                       );
                     })}
                     {articles.length === 0 && (
@@ -499,28 +510,37 @@ export default function AdminDashboard() {
                           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
                       </a>
-                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                        <button
-                          onClick={() => window.open(url, '_blank')}
-                          className="p-2 bg-background/90 text-foreground rounded-md hover:bg-background transition-colors"
-                          title="Open Image"
-                        >
-                          <Eye size={16} />
-                        </button>
-                        <button
-                          onClick={() => handleCopyUrl(url)}
-                          className="p-2 bg-background/90 text-foreground rounded-md hover:bg-background transition-colors"
-                          title="Copy URL"
-                        >
-                          {copiedText === url ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
-                        </button>
-                        <button
-                          onClick={() => handleCopyUrl(`![Image](${url})`)}
-                          className="p-2 bg-background/90 text-foreground rounded-md hover:bg-background transition-colors"
-                          title="Copy Markdown"
-                        >
-                          {copiedText === `![Image](${url})` ? <Check size={16} className="text-green-500" /> : <Code size={16} />}
-                        </button>
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <div className="grid grid-cols-2 gap-2">
+                          <button
+                            onClick={() => window.open(url, '_blank')}
+                            className="p-2 bg-background/90 text-foreground rounded-md hover:bg-background transition-colors"
+                            title="Open Image"
+                          >
+                            <Eye size={16} />
+                          </button>
+                          <button
+                            onClick={() => handleCopyUrl(url)}
+                            className="p-2 bg-background/90 text-foreground rounded-md hover:bg-background transition-colors"
+                            title="Copy URL"
+                          >
+                            {copiedText === url ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
+                          </button>
+                          <button
+                            onClick={() => handleCopyUrl(`<img src="${url}" alt="Image" width="100%" />`)}
+                            className="p-2 bg-background/90 text-foreground rounded-md hover:bg-background transition-colors"
+                            title="Copy Markdown"
+                          >
+                            {copiedText === `<img src="${url}" alt="Image" width="100%" />` ? <Check size={16} className="text-green-500" /> : <Code size={16} />}
+                          </button>
+                          <button
+                            onClick={() => handleDeleteUpload(url.split('/').pop()!)}
+                            className="p-2 bg-background/90 text-red-500 rounded-md hover:bg-background transition-colors"
+                            title="Delete Image"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
                       </div>
                     </motion.div>
                   ))}
@@ -617,45 +637,45 @@ export default function AdminDashboard() {
               <div>
                 <h2 className="text-lg font-semibold mb-4">Update Credentials</h2>
                 <form onSubmit={handleUpdateCredentials} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-muted-foreground mb-1">New Username</label>
-                  <input
-                    type="text"
-                    value={newUsername}
-                    onChange={(e) => setNewUsername(e.target.value)}
-                    placeholder="Leave blank to keep current"
-                    className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-muted-foreground mb-1">New Password</label>
-                  <input
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="Leave blank to keep current"
-                    className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
-                  />
-                </div>
-                {/* Second password input to verify */}
-                <div>
-                  <label className="block text-sm font-medium text-muted-foreground mb-1">Confirm New Password</label>
-                  <input
-                    type="password"
-                    value={confirmNewPassword}
-                    onChange={(e) => setConfirmNewPassword(e.target.value)}
-                    placeholder="Confirm new password"
-                    className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={updatingCredentials || (!newUsername && !newPassword) || newPassword !== confirmNewPassword}
-                  className="w-full py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {updatingCredentials ? "Updating..." : "Update Credentials"}
-                </button>
-              </form>
+                  <div>
+                    <label className="block text-sm font-medium text-muted-foreground mb-1">New Username</label>
+                    <input
+                      type="text"
+                      value={newUsername}
+                      onChange={(e) => setNewUsername(e.target.value)}
+                      placeholder="Leave blank to keep current"
+                      className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-muted-foreground mb-1">New Password</label>
+                    <input
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="Leave blank to keep current"
+                      className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    />
+                  </div>
+                  {/* Second password input to verify */}
+                  <div>
+                    <label className="block text-sm font-medium text-muted-foreground mb-1">Confirm New Password</label>
+                    <input
+                      type="password"
+                      value={confirmNewPassword}
+                      onChange={(e) => setConfirmNewPassword(e.target.value)}
+                      placeholder="Confirm new password"
+                      className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={updatingCredentials || (!newUsername && !newPassword) || newPassword !== confirmNewPassword}
+                    className="w-full py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {updatingCredentials ? "Updating..." : "Update Credentials"}
+                  </button>
+                </form>
               </div>
             </div>
           )}

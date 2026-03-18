@@ -99,6 +99,10 @@ class ApiClient {
 		return response.data.map(url => `${API_URL}${url}`);
 	}
 
+	async deleteUpload(filename: string): Promise<void> {
+		await this.client.delete(`/uploads/${filename}`);
+	}
+
 	// Contact
 	async sendContactMessage(data: { name: string; email: string; subject: string; message: string; website?: string }): Promise<void> {
 		await this.client.post('/contact', data);

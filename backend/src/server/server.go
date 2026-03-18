@@ -76,6 +76,7 @@ func (s *Server) registerRoutes() {
 			// File uploads
 			protected.POST("/upload", s.api.UploadImage)
 			protected.GET("/uploads", s.api.ListUploads)
+			protected.DELETE("/uploads/:filename", s.api.DeleteUpload)
 
 			// About
 			protected.PUT("/about", s.api.UpdateAboutData)

@@ -172,6 +172,52 @@ export default function AboutPage() {
             <motion.div variants={fadeUp} className="h-px w-full bg-border" />
           )}
 
+          {/* Education Experience */}
+          {data.education_experiences && data.education_experiences.length > 0 && (
+            <motion.div variants={fadeUp} className="space-y-8">
+              <h2 className="text-sm font-semibold tracking-[0.2em] uppercase text-muted-foreground">
+                {data.education_title?.[locale] || "Education"}
+              </h2>
+              <div className="space-y-8">
+                {data.education_experiences.map((exp) => (
+                  <div key={exp.id} className="relative pl-6 border-l border-border/60">
+                    <div className="absolute w-3 h-3 bg-primary rounded-full -left-[6.5px] top-1.5 ring-4 ring-background" />
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                      <h3 className="text-lg font-bold text-foreground">
+                        {exp.role?.[locale]}
+                      </h3>
+                      <span className="text-sm font-medium text-muted-foreground bg-secondary/50 px-3 py-1 rounded-full w-fit">
+                        {exp.period?.[locale]}
+                      </span>
+                    </div>
+                    {exp.url ? (
+                      <a 
+                        href={exp.url.startsWith('http') ? exp.url : `https://${exp.url}`}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-primary font-medium mb-3 hover:underline inline-block"
+                      >
+                        {exp.company}
+                      </a>
+                    ) : (
+                      <p className="text-primary font-medium mb-3">
+                        {exp.company}
+                      </p>
+                    )}
+                    <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                      {exp.description?.[locale]}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Divider */}
+          {data.education_experiences && data.education_experiences.length > 0 && (
+            <motion.div variants={fadeUp} className="h-px w-full bg-border" />
+          )}
+
           {/* Stack */}
           {data.stack_tools && data.stack_tools.length > 0 && (
             <motion.div variants={fadeUp} className="space-y-6 w-full">

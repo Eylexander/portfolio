@@ -36,6 +36,8 @@ export default function AdminAboutPage() {
         experiences: res.experiences || [],
         associative_title: res.associative_title || { "en-US": "", "fr-FR": "" },
         associative_experiences: res.associative_experiences || [],
+        education_title: res.education_title || { "en-US": "", "fr-FR": "" },
+        education_experiences: res.education_experiences || [],
         stack_tools: res.stack_tools || [],
       });
     } catch (error) {
@@ -60,7 +62,7 @@ export default function AdminAboutPage() {
     }
   };
 
-  const handleStringChange = (key: keyof Pick<AboutData, "title" | "description" | "experience_title" | "associative_title">, val: string) => {
+  const handleStringChange = (key: keyof Pick<AboutData, "title" | "description" | "experience_title" | "associative_title" | "education_title">, val: string) => {
     setData((prev) => {
       if (!prev) return prev;
       return {
@@ -70,7 +72,7 @@ export default function AdminAboutPage() {
     });
   };
 
-  const handleAddExperience = (type: "experiences" | "associative_experiences") => {
+  const handleAddExperience = (type: "experiences" | "associative_experiences" | "education_experiences") => {
     const newExp: Experience = {
       id: crypto.randomUUID(),
       role: { "en-US": "", "fr-FR": "" },
@@ -86,7 +88,7 @@ export default function AdminAboutPage() {
     });
   };
 
-  const handleRemoveExperience = (type: "experiences" | "associative_experiences", id: string) => {
+  const handleRemoveExperience = (type: "experiences" | "associative_experiences" | "education_experiences", id: string) => {
     setData((prev) => {
       if (!prev) return prev;
       return {
@@ -97,7 +99,7 @@ export default function AdminAboutPage() {
   };
 
   const handleExperienceChange = (
-    type: "experiences" | "associative_experiences",
+    type: "experiences" | "associative_experiences" | "education_experiences",
     id: string,
     field: keyof Experience,
     val: string
@@ -155,7 +157,7 @@ export default function AdminAboutPage() {
   if (isLoading || !data) return <div className="p-8"><Loader /></div>;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-full bg-background pb-12">
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -389,6 +391,88 @@ export default function AdminAboutPage() {
                     rows={2}
                     value={exp.description?.[activeLang] || ""}
                     onChange={(e) => handleExperienceChange("associative_experiences", exp.id, "description", e.target.value)}
+                    className="w-full px-3 py-1.5 bg-background border border-border rounded text-sm resize-none"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Education Experience */}
+        <section className="space-y-4 bg-card p-6 rounded-xl border border-border">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold">Education</h2>
+            <button
+              onClick={() => handleAddExperience("education_experiences")}
+              className="flex items-center gap-2 px-3 py-1.5 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 text-sm"
+            >
+              <Plus className="w-4 h-4" /> Add Education
+            </button>
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Section Title</label>
+            <input
+              type="text"
+              value={data.education_title?.[activeLang] || ""}
+              onChange={(e) => handleStringChange("education_title", e.target.value)}
+              className="w-full px-3 py-2 bg-background border border-border rounded-lg mb-4"
+            />
+          </div>
+          <div className="space-y-4">
+            {data.education_experiences?.map((exp) => (
+              <div key={exp.id} className="p-4 border border-border/50 rounded-lg space-y-4 bg-background/50 relative">
+                <button
+                  onClick={() => handleRemoveExperience("education_experiences", exp.id)}
+                  className="absolute top-4 right-4 p-1 text-destructive hover:bg-destructive/10 rounded"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+                <div className="grid grid-cols-2 gap-4 mr-8">
+                  <div>
+                    <label className="block text-xs text-muted-foreground mb-1">School / Institution</label>
+                    <input
+                      type="text"
+                      value={exp.company}
+                      onChange={(e) => handleExperienceChange("education_experiences", exp.id, "company", e.target.value)}
+                      className="w-full px-3 py-1.5 bg-background border border-border rounded text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-muted-foreground mb-1">Degree / Role</label>
+                    <input
+                      type="text"
+                      value={exp.role?.[activeLang] || ""}
+                      onChange={(e) => handleExperienceChange("education_experiences", exp.id, "role", e.target.value)}
+                      className="w-full px-3 py-1.5 bg-background border border-border rounded text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-muted-foreground mb-1">School URL</label>
+                    <input
+                      type="text"
+                      value={exp.url || ""}
+                      onChange={(e) => handleExperienceChange("education_experiences", exp.id, "url", e.target.value)}
+                      className="w-full px-3 py-1.5 bg-background border border-border rounded text-sm"
+                      placeholder="https://..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-muted-foreground mb-1">Period</label>
+                    <input
+                      type="text"
+                      value={exp.period?.[activeLang] || ""}
+                      onChange={(e) => handleExperienceChange("education_experiences", exp.id, "period", e.target.value)}
+                      className="w-full px-3 py-1.5 bg-background border border-border rounded text-sm"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs text-muted-foreground mb-1">Description</label>
+                  <textarea
+                    rows={2}
+                    value={exp.description?.[activeLang] || ""}
+                    onChange={(e) => handleExperienceChange("education_experiences", exp.id, "description", e.target.value)}
                     className="w-full px-3 py-1.5 bg-background border border-border rounded text-sm resize-none"
                   />
                 </div>

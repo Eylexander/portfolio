@@ -26,5 +26,7 @@ type AboutData struct {
 	Experiences            []Experience       `bson:"experiences" json:"experiences"`
 	AssociativeTitle       LocalizedString    `bson:"associative_title" json:"associative_title"`
 	AssociativeExperiences []Experience       `bson:"associative_experiences" json:"associative_experiences"`
+	EducationTitle         LocalizedString    `bson:"education_title" json:"education_title"`
+	EducationExperiences   []Experience       `bson:"education_experiences" json:"education_experiences"`
 	StackTools             []StackItem        `bson:"stack_tools" json:"stack_tools"`
 }

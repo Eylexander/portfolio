@@ -66,3 +66,27 @@ func (a *API) ListUploads(c *gin.Context) {
 
 	c.JSON(http.StatusOK, urls)
 }
+
+func (a *API) DeleteUpload(c *gin.Context) {
+	filename := c.Param("filename")
+	if filename == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Filename is required"})
+		return
+	}
+
+	filepath := filepath.Join("uploads", filename)
+
+	// Check if file exists
+	if _, err := os.Stat(filepath); os.IsNotExist(err) {
+		c.JSON(http.StatusNotFound, gin.H{"error": "File not found"})
+		return
+	}
+
+	// Delete file
+	if err := os.Remove(filepath); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete file"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "File deleted successfully"})
+}

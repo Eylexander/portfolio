@@ -68,17 +68,112 @@
       }
     }
   ],
+  "education_title": {
+    "en-US": "Education",
+    "fr-FR": "Formation"
+  },
+  "education_experiences": [
+    {
+      "id": "utt",
+      "role": {
+        "en-US": "Networks & Telecommunications Engineer",
+        "fr-FR": "Ingénieur en Réseaux et Télécommunications"
+      },
+      "company": "University of Technology of Troyes (UTT)",
+      "url": "https://www.utt.fr/",
+      "period": {
+        "en-US": "September 2025 - 2028",
+        "fr-FR": "Septembre 2025 - 2028"
+      },
+      "description": {
+        "en-US": "Pursuing a degree in Networks & Telecommunications, gaining a strong foundation in network architecture, security, and communication protocols.",
+        "fr-FR": "Poursuite d'un diplôme en Réseaux et Télécommunications, acquérant une solide base en architecture réseau, sécurité et protocoles de communication."
+      }
+    },
+    {
+      "id": "iut",
+      "role": {
+        "en-US": "Bachelor of Computer Science Student",
+        "fr-FR": "BUT Informatique"
+      },
+      "company": "IUT Nancy-Charlemagne (University of Lorraine)",
+      "url": "https://iut-charlemagne.univ-lorraine.fr/",
+      "period": {
+        "en-US": "September 2022 - 2025",
+        "fr-FR": "Septembre 2022 - 2025"
+      },
+      "description": {
+        "en-US": "Pursuing a degree in Computer Science, gaining a strong foundation in programming, algorithms, and software engineering.",
+        "fr-FR": "Poursuite d'un diplôme en Informatique, acquérant une solide base en programmation, algorithmes et ingénierie logicielle."
+      }
+    }
+  ],
   "stack_tools": [
-    { "id": "s1", "name": "React", "category": "Frontend", "url": "https://reactjs.org/" },
-    { "id": "s2", "name": "Next.js", "category": "Frontend", "url": "https://nextjs.org/" },
-    { "id": "s3", "name": "TypeScript", "category": "Frontend", "url": "https://www.typescriptlang.org/" },
-    { "id": "s4", "name": "Tailwind CSS", "category": "Frontend", "url": "https://tailwindcss.com/" },
-    { "id": "s5", "name": "Golang", "category": "Backend", "url": "https://golang.org/" },
-    { "id": "s6", "name": "Node.js", "category": "Backend", "url": "https://nodejs.org/" },
-    { "id": "s7", "name": "Java", "category": "Backend", "url": "https://www.java.com/" },
-    { "id": "s8", "name": "MongoDB", "category": "Database", "url": "https://www.mongodb.com/" },
-    { "id": "s9", "name": "Docker", "category": "DevOps", "url": "https://www.docker.com/" },
-    { "id": "s10", "name": "Kubernetes", "category": "DevOps", "url": "https://kubernetes.io/" },
-    { "id": "s11", "name": "VsCode", "category": "Tools", "url": "https://code.visualstudio.com/" }
+    {
+      "id": "s1",
+      "name": "React",
+      "category": "Frontend",
+      "url": "https://reactjs.org/"
+    },
+    {
+      "id": "s2",
+      "name": "Next.js",
+      "category": "Frontend",
+      "url": "https://nextjs.org/"
+    },
+    {
+      "id": "s3",
+      "name": "TypeScript",
+      "category": "Frontend",
+      "url": "https://www.typescriptlang.org/"
+    },
+    {
+      "id": "s4",
+      "name": "Tailwind CSS",
+      "category": "Frontend",
+      "url": "https://tailwindcss.com/"
+    },
+    {
+      "id": "s5",
+      "name": "Golang",
+      "category": "Backend",
+      "url": "https://golang.org/"
+    },
+    {
+      "id": "s6",
+      "name": "Node.js",
+      "category": "Backend",
+      "url": "https://nodejs.org/"
+    },
+    {
+      "id": "s7",
+      "name": "Java",
+      "category": "Backend",
+      "url": "https://www.java.com/"
+    },
+    {
+      "id": "s8",
+      "name": "MongoDB",
+      "category": "Database",
+      "url": "https://www.mongodb.com/"
+    },
+    {
+      "id": "s9",
+      "name": "Docker",
+      "category": "DevOps",
+      "url": "https://www.docker.com/"
+    },
+    {
+      "id": "s10",
+      "name": "Kubernetes",
+      "category": "DevOps",
+      "url": "https://kubernetes.io/"
+    },
+    {
+      "id": "s11",
+      "name": "VsCode",
+      "category": "Tools",
+      "url": "https://code.visualstudio.com/"
+    }
   ]
 }
