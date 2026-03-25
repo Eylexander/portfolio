@@ -27,6 +27,8 @@ export default function AdminDashboard() {
   const { logout } = useAuthStore();
   const router = useRouter();
   const [articles, setArticles] = useState<Article[]>([]);
+  const [editingTagsId, setEditingTagsId] = useState<string | null>(null);
+  const [editingTagsValue, setEditingTagsValue] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [uploads, setUploads] = useState<string[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -78,6 +80,17 @@ export default function AdminDashboard() {
       fetchData();
     } catch {
       toast.error("Failed to delete article");
+    }
+  };
+
+  const handleUpdateTags = async (article: Article, newTagsStr: string) => {
+    try {
+      const tagsArray = newTagsStr.split(",").map(t => t.trim()).filter(Boolean);
+      await apiClient.updateArticle(article.id, { ...article, tags: tagsArray });
+      toast.success("Tags updated");
+      fetchData();
+    } catch {
+      toast.error("Failed to update tags");
     }
   };
 
@@ -388,7 +401,6 @@ export default function AdminDashboard() {
                                 &quot;...{snippet}...&quot;
                               </div>
                             )}
-                            {/* Mobile-only status and date */}
                             <div className="flex sm:hidden items-center gap-2 mt-1 text-xs text-muted-foreground">
                               {article.is_visible ? (
                                 <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
@@ -406,6 +418,77 @@ export default function AdminDashboard() {
                                   <> &ndash; {new Date(article.project_end_date).toLocaleDateString()}</>
                                 )}
                               </span>
+                            </div>
+                            {/* Tags quick edit */}
+                            <div className="mt-2 hidden sm:block relative">
+                              {editingTagsId === article.id ? (
+                                <div className="absolute top-0 left-0 z-10 p-2 bg-card border border-border rounded-md shadow-lg shadow-black/5 flex flex-col gap-2 min-w-[250px]">
+                                  <div className="flex items-center justify-between pointer-events-none">
+                                    <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Edit Tags</span>
+                                    <span className="text-[10px] text-muted-foreground">Comma separated</span>
+                                  </div>
+                                  <textarea 
+                                    autoFocus
+                                    className="text-xs bg-background border border-border rounded-md px-2 py-1.5 w-full min-h-[60px] focus:outline-none focus:ring-1 focus:ring-primary/50 resize-none font-mono"
+                                    value={editingTagsValue}
+                                    onChange={(e) => setEditingTagsValue(e.target.value)}
+                                    onKeyDown={(e) => {
+                                      if (e.key === 'Enter' && !e.shiftKey) {
+                                        e.preventDefault();
+                                        handleUpdateTags(article, editingTagsValue);
+                                        setEditingTagsId(null);
+                                      } else if (e.key === 'Escape') {
+                                        setEditingTagsId(null);
+                                      }
+                                    }}
+                                  />
+                                  <div className="flex justify-start gap-1 flex-wrap">
+                                    {editingTagsValue.split(",").map(t => t.trim()).filter(Boolean).map(tag => (
+                                      <span key={tag} className="px-1.5 py-0.5 text-[10px] rounded-sm bg-secondary opacity-70">
+                                        {tag}
+                                      </span>
+                                    ))}
+                                  </div>
+                                  <div className="flex justify-end gap-2 mt-1">
+                                    <button 
+                                      className="text-[10px] text-muted-foreground hover:text-foreground px-2 py-1"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setEditingTagsId(null);
+                                      }}
+                                    >
+                                      Cancel
+                                    </button>
+                                    <button 
+                                      className="text-[10px] bg-primary text-primary-foreground px-2 py-1 rounded-sm hover:opacity-90"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleUpdateTags(article, editingTagsValue);
+                                        setEditingTagsId(null);
+                                      }}
+                                    >
+                                      Save
+                                    </button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div 
+                                  className="flex flex-wrap gap-1 cursor-pointer hover:opacity-80"
+                                  onClick={() => {
+                                    setEditingTagsId(article.id);
+                                    setEditingTagsValue(article.tags.join(", "));
+                                  }}
+                                  title="Click to edit tags"
+                                >
+                                  {article.tags.length > 0 ? article.tags.map((tag) => (
+                                    <span key={tag} className="px-1.5 py-0.5 text-[10px] font-medium rounded-sm bg-secondary text-secondary-foreground">
+                                      {tag}
+                                    </span>
+                                  )) : (
+                                    <span className="text-[10px] text-muted-foreground border border-dashed border-border px-1.5 py-0.5 rounded-sm hover:bg-secondary cursor-pointer transition-colors">+ Add tags</span>
+                                  )}
+                                </div>
+                              )}
                             </div>
                           </td>
                           <td className="hidden sm:table-cell py-3.5 px-4 sm:px-5">

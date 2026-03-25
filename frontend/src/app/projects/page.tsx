@@ -6,7 +6,7 @@ import ArticleCard from "@/components/ArticleCard";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuthStore } from "@/store/authStore";
 import Link from "next/link";
-import { Plus, LayoutDashboard } from "lucide-react";
+import { Plus, LayoutDashboard, ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 import apiClient from "@/lib/api-client";
 
@@ -26,8 +26,17 @@ const fadeUp = {
 export default function ProjectsPage() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { isAuthenticated } = useAuthStore();
   const t = useTranslations("Projects");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 100);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -131,19 +140,64 @@ export default function ProjectsPage() {
             ) : (
               <motion.div key="content" className="space-y-12">
                 {/* Featured Projects Section */}
-                {articles.filter(a => a.tags.includes("featured")).length > 0 && (
-                  <motion.div
-                    variants={stagger}
-                    initial="hidden"
-                    animate="visible"
-                    className="grid grid-cols-1 md:grid-cols-2 gap-6"
-                  >
-                    {articles.filter(a => a.tags.includes("featured")).map((article) => (
-                      <motion.div key={article.id} variants={fadeUp} className="h-full">
-                        <ArticleCard article={article} featured={true} />
+                {articles.filter(a => a.tags.includes("featured") || a.tags.includes("hero")).length > 0 && (() => {
+                  const priorityArticles = articles.filter(a => a.tags.includes("featured") || a.tags.includes("hero"));
+                  // Explicitly pick the 'hero' tagged article first; fallback to the newest 'featured'
+                  const heroArticle = priorityArticles.find(a => a.tags.includes("hero")) || priorityArticles[0];
+                  const otherFeatured = priorityArticles.filter(a => a.id !== heroArticle.id);
+
+                  return (
+                    <div className="space-y-6">
+                      <motion.div variants={fadeUp}>
+                        <ArticleCard article={heroArticle} featured={true} hero={true} />
                       </motion.div>
-                    ))}
-                  </motion.div>
+                      
+                      {otherFeatured.length > 0 && (
+                        <motion.div
+                          variants={stagger}
+                          initial="hidden"
+                          animate="visible"
+                          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                        >
+                          {otherFeatured.map((article) => (
+                            <motion.div key={article.id} variants={fadeUp} className="h-full">
+                              <ArticleCard article={article} featured={true} hero={false} />
+                            </motion.div>
+                          ))}
+                        </motion.div>
+                      )}
+                    </div>
+                  );
+                })()}
+
+                {/* Scroll Indicator Divider */}
+                {articles.filter(a => !a.tags.includes("featured") && !a.tags.includes("hero")).length > 0 && 
+                 articles.filter(a => a.tags.includes("featured") || a.tags.includes("hero")).length > 0 && (
+                  <AnimatePresence>
+                    {!isScrolled && (
+                      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
+                        <motion.button
+                          onClick={() => window.scrollBy({ top: window.innerHeight * 0.7, behavior: "smooth" })}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 20, transition: { duration: 0.2 } }}
+                          transition={{ delay: 1.5, duration: 0.8 }}
+                          className="flex flex-col items-center justify-center shadow-xl bg-background/80 hover:bg-background transition-all backdrop-blur-md px-5 py-1.5 rounded-full border border-border/50 cursor-pointer group"
+                        >
+                          <span className="text-[9px] font-bold tracking-[0.2em] uppercase text-center text-foreground/80 group-hover:text-foreground transition-colors mt-0.5">
+                            {t("moreProjects")}
+                          </span>
+                          <motion.div
+                            animate={{ y: [0, 4, 0] }}
+                            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                            className="-mt-1"
+                          >
+                            <ChevronDown size={16} className="text-primary opacity-80 group-hover:opacity-100 transition-opacity" />
+                          </motion.div>
+                        </motion.button>
+                      </div>
+                    )}
+                  </AnimatePresence>
                 )}
 
                 {/* All Other Projects Grid */}
@@ -153,7 +207,7 @@ export default function ProjectsPage() {
                   animate="visible"
                   className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6"
                 >
-                  {articles.filter(a => !a.tags.includes("featured")).map((article) => (
+                  {articles.filter(a => !a.tags.includes("featured") && !a.tags.includes("hero")).map((article) => (
                     <motion.div key={article.id} variants={fadeUp}>
                       <ArticleCard article={article} />
                     </motion.div>

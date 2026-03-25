@@ -12,9 +12,10 @@ interface ArticleCardProps {
   article: Article;
   isAdmin?: boolean;
   featured?: boolean;
+  hero?: boolean;
 }
 
-export default function ArticleCard({ article, featured = false }: ArticleCardProps) {
+export default function ArticleCard({ article, featured = false, hero = false }: ArticleCardProps) {
   const locale = useLocale() as "en-US" | "fr-FR";
   const dateFnsLocale = locale === "fr-FR" ? fr : enUS;
   const t = useTranslations("Projects");
@@ -22,11 +23,11 @@ export default function ArticleCard({ article, featured = false }: ArticleCardPr
   const snippet = article.snippet?.[locale] || article.snippet?.["en-US"] || "";
 
   return (
-    <Link href={`/projects/${article.slug}`} className={`block break-inside-avoid ${featured ? "h-full" : "mb-6"}`}>
+    <Link href={`/projects/${article.slug}`} className={`block break-inside-avoid ${featured || hero ? "h-full" : "mb-6"}`}>
       <motion.article
         whileHover={{ y: -4 }}
         transition={{ type: "spring", stiffness: 400, damping: 25 }}
-        className={`group relative bg-card border rounded-xl overflow-hidden hover:shadow-lg hover:shadow-foreground/5 transition-shadow duration-300 cursor-pointer flex flex-col ${
+        className={`group relative bg-card border rounded-xl overflow-hidden hover:shadow-lg hover:shadow-foreground/5 transition-shadow duration-300 cursor-pointer flex ${hero ? "flex-col md:flex-row md:h-80" : "flex-col"} ${
           featured ? "border-primary/50 shadow-primary/10 h-full" : "border-border hover:border-border/80"
         }`}
       >
@@ -39,7 +40,9 @@ export default function ArticleCard({ article, featured = false }: ArticleCardPr
 
         {/* Cover image */}
         {article.cover_image && (
-          <div className={`relative w-full overflow-hidden bg-secondary shrink-0 ${featured ? "h-56 md:h-64" : "h-44"}`}>
+          <div className={`relative overflow-hidden bg-secondary shrink-0 ${
+            hero ? "w-full md:w-2/5 lg:w-1/2 h-56 md:h-auto border-b md:border-b-0 md:border-r border-border" : "w-full h-44"
+          }`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={article.cover_image}
@@ -51,7 +54,7 @@ export default function ArticleCard({ article, featured = false }: ArticleCardPr
           </div>
         )}
 
-        <div className="p-5 space-y-3 flex flex-col flex-1">
+        <div className={`space-y-3 flex flex-col ${hero ? "p-6 md:p-8 lg:p-10 flex-1 md:justify-center" : "p-5 flex-1"}`}>
           {/* Tags */}
           {article.tags.length > 0 && (
             <div className="flex gap-1.5 flex-wrap">
@@ -68,15 +71,15 @@ export default function ArticleCard({ article, featured = false }: ArticleCardPr
 
           {/* Title */}
           <h3 className={`font-bold text-foreground leading-snug group-hover:text-primary transition-colors duration-200 ${
-            featured ? "text-xl md:text-2xl" : "text-base"
+            hero ? "text-2xl md:text-3xl lg:text-4xl mb-2" : "text-base lg:text-lg"
           }`}>
             {title}
           </h3>
 
           {/* Snippet */}
           {snippet && (
-            <p className={`text-muted-foreground line-clamp-2 leading-relaxed flex-1 ${
-              featured ? "text-base" : "text-sm"
+            <p className={`text-muted-foreground leading-relaxed flex-1 ${
+              hero ? "text-base md:text-lg line-clamp-3 md:line-clamp-4" : "text-sm line-clamp-2"
             }`}>
               {snippet}
             </p>

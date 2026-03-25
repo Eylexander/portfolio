@@ -49,6 +49,7 @@ export default function ArticleEditor({
     is_visible: initialData?.is_visible ?? true,
     project_date: initialData?.project_date ? initialData.project_date.substring(0, 7) : new Date().toISOString().substring(0, 7),
     project_end_date: initialData?.project_end_date ? initialData.project_end_date.substring(0, 7) : "",
+    external_link: initialData?.external_link || "",
   });
   const [isSaving, setIsSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<"en-US" | "fr-FR">("en-US");
@@ -358,6 +359,16 @@ export default function ArticleEditor({
             <div>
               <label className={labelCls}>End Month <span className="normal-case font-normal text-muted-foreground">(optional)</span></label>
               <input type="month" name="project_end_date" value={formData.project_end_date} onChange={handleChange} className={inputCls} />
+            </div>
+            <div>
+              <label className={labelCls}>External Link <span className="normal-case font-normal text-muted-foreground">(optional)</span></label>
+              <input
+                name="external_link"
+                value={formData.external_link}
+                onChange={handleChange}
+                className={inputCls}
+                placeholder="https://github.com/..."
+              />
             </div>
           </div>
         </div>

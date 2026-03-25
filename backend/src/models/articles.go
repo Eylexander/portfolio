@@ -24,6 +24,7 @@ type Article struct {
 	UpdatedAt      time.Time          `bson:"updated_at" json:"updated_at"`
 	ProjectDate    time.Time          `bson:"project_date" json:"project_date"`
 	ProjectEndDate *time.Time         `bson:"project_end_date,omitempty" json:"project_end_date,omitempty"`
+	ExternalLink   string             `bson:"external_link,omitempty" json:"external_link,omitempty"`
 }
 
 type ContactMessage struct {

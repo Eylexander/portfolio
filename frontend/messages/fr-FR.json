@@ -13,9 +13,11 @@
     "title": "projets",
     "subtitle": "Une vitrine de mes réalisations en développement logiciel et autres loisirs.",
     "readMore": "Voir le Projet",
+    "externalLink": "Consulter le Projet",
     "noProjects": "Aucun projet à afficher pour le moment.",
     "addProject": "Ajouter un projet",
-    "featured": "En vedette"
+    "featured": "En vedette",
+    "moreProjects": "Plus de projets"
   },
   "Contact": {
     "header": "contact",

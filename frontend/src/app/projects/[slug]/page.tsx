@@ -9,10 +9,10 @@ import MarkdownRenderer from "@/components/MarkdownRenderer";
 import apiClient from "@/lib/api-client";
 import { PageLoader } from "@/components/Loader";
 import { motion } from "framer-motion";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useAuthStore } from "@/store/authStore";
 import Link from "next/link";
-import { Edit2 } from "lucide-react";
+import { Edit2, ExternalLink } from "lucide-react";
 
 export default function ArticlePage() {
   const { slug } = useParams();
@@ -20,6 +20,7 @@ export default function ArticlePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const locale = useLocale() as "en-US" | "fr-FR";
+  const t = useTranslations("Projects");
   const dateFnsLocale = locale === "fr-FR" ? fr : enUS;
   const { isAuthenticated } = useAuthStore();
 
@@ -113,12 +114,25 @@ export default function ArticlePage() {
                 </Link>
               )}
             </div>
-            <time className="text-sm text-muted-foreground">
-              {format(new Date(article.project_date || article.created_at), "MMMM yyyy", { locale: dateFnsLocale })}
-              {article.project_end_date && (
-                <> &ndash; {format(new Date(article.project_end_date), "MMMM yyyy", { locale: dateFnsLocale })}</>
+            <div className="flex items-center gap-4 flex-wrap">
+              <time className="text-sm text-muted-foreground">
+                {format(new Date(article.project_date || article.created_at), "MMMM yyyy", { locale: dateFnsLocale })}
+                {article.project_end_date && (
+                  <> &ndash; {format(new Date(article.project_end_date), "MMMM yyyy", { locale: dateFnsLocale })}</>
+                )}
+              </time>
+              {article.external_link && (
+                <a 
+                  href={article.external_link} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-all shadow-sm group"
+                >
+                  <ExternalLink size={13} className="transition-transform group-hover:scale-110" />
+                  {t("externalLink")}
+                </a>
               )}
-            </time>
+            </div>
           </header>
 
           {/* Divider */}

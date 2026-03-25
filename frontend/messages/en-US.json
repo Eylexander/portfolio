@@ -13,9 +13,11 @@
     "title": "projects",
     "subtitle": "A showcase of my software development journey and other hobbies.",
     "readMore": "View Project",
+    "externalLink": "Visit Project",
     "noProjects": "No projects to display at the moment.",
     "addProject": "Add a project",
-    "featured": "Featured"
+    "featured": "Featured",
+    "moreProjects": "More projects"
   },
   "Contact": {
     "header": "contact",
