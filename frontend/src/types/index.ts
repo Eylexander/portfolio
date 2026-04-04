@@ -60,6 +60,7 @@ export interface AboutData {
   education_title: LocalizedString;
   education_experiences: Experience[];
   stack_tools: StackItem[];
+  section_order?: string[];
 }
 
 

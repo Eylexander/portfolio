@@ -29,4 +29,5 @@ type AboutData struct {
 	EducationTitle         LocalizedString    `bson:"education_title" json:"education_title"`
 	EducationExperiences   []Experience       `bson:"education_experiences" json:"education_experiences"`
 	StackTools             []StackItem        `bson:"stack_tools" json:"stack_tools"`
+	SectionOrder           []string           `bson:"section_order,omitempty" json:"section_order,omitempty"`
 }

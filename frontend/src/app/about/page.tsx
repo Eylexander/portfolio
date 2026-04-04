@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useLocale } from "next-intl";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import apiClient from "@/lib/api-client";
 import { AboutData } from "@/types";
 import Loader from "@/components/Loader";
@@ -80,143 +80,145 @@ export default function AboutPage() {
           {/* Divider */}
           <motion.div variants={fadeUp} className="h-px w-full bg-border" />
 
-          {/* Experience */}
-          {data.experiences && data.experiences.length > 0 && (
-            <motion.div variants={fadeUp} className="space-y-8">
-              <h2 className="text-sm font-semibold tracking-[0.2em] uppercase text-muted-foreground">
-                {data.experience_title?.[locale] || "Experience"}
-              </h2>
-              <div className="space-y-8">
-                {data.experiences.map((exp) => (
-                  <div key={exp.id} className="relative pl-6 border-l border-border/60">
-                    <div className="absolute w-3 h-3 bg-primary rounded-full -left-[6.5px] top-1.5 ring-4 ring-background" />
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-                      <h3 className="text-lg font-bold text-foreground">
-                        {exp.role?.[locale]}
-                      </h3>
-                      <span className="text-sm font-medium text-muted-foreground bg-secondary/50 px-3 py-1 rounded-full w-fit">
-                        {exp.period?.[locale]}
-                      </span>
+          {/* Dynamic Sections (Experiences, Associative, Education) */}
+          {(data.section_order || ["experiences", "associative_experiences", "education_experiences"]).map((sectionType) => {
+            if (sectionType === "experiences" && data.experiences && data.experiences.length > 0) {
+              return (
+                <Fragment key="experiences">
+                  <motion.div variants={fadeUp} className="space-y-8">
+                    <h2 className="text-sm font-semibold tracking-[0.2em] uppercase text-muted-foreground">
+                      {data.experience_title?.[locale] || "Experience"}
+                    </h2>
+                    <div className="space-y-8">
+                      {data.experiences.map((exp) => (
+                        <div key={exp.id} className="relative pl-6 border-l border-border/60">
+                          <div className="absolute w-3 h-3 bg-primary rounded-full -left-[6.5px] top-1.5 ring-4 ring-background" />
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                            <h3 className="text-lg font-bold text-foreground">
+                              {exp.role?.[locale]}
+                            </h3>
+                            <span className="text-sm font-medium text-muted-foreground bg-secondary/50 px-3 py-1 rounded-full w-fit">
+                              {exp.period?.[locale]}
+                            </span>
+                          </div>
+                          {exp.url ? (
+                            <a 
+                              href={exp.url.startsWith('http') ? exp.url : `https://${exp.url}`}
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-primary font-medium mb-3 hover:underline inline-block"
+                            >
+                              {exp.company}
+                            </a>
+                          ) : (
+                            <p className="text-primary font-medium mb-3">
+                              {exp.company}
+                            </p>
+                          )}
+                          <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                            {exp.description?.[locale]}
+                          </p>
+                        </div>
+                      ))}
                     </div>
-                    {exp.url ? (
-                      <a 
-                        href={exp.url.startsWith('http') ? exp.url : `https://${exp.url}`}
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-primary font-medium mb-3 hover:underline inline-block"
-                      >
-                        {exp.company}
-                      </a>
-                    ) : (
-                      <p className="text-primary font-medium mb-3">
-                        {exp.company}
-                      </p>
-                    )}
-                    <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
-                      {exp.description?.[locale]}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          )}
+                  </motion.div>
+                  <motion.div variants={fadeUp} className="h-px w-full bg-border" />
+                </Fragment>
+              );
+            }
 
-          {/* Divider */}
-          {data.experiences && data.experiences.length > 0 && (
-            <motion.div variants={fadeUp} className="h-px w-full bg-border" />
-          )}
-
-          {/* Associative Experience */}
-          {data.associative_experiences && data.associative_experiences.length > 0 && (
-            <motion.div variants={fadeUp} className="space-y-8">
-              <h2 className="text-sm font-semibold tracking-[0.2em] uppercase text-muted-foreground">
-                {data.associative_title?.[locale] || "Associative Experience"}
-              </h2>
-              <div className="space-y-8">
-                {data.associative_experiences.map((exp) => (
-                  <div key={exp.id} className="relative pl-6 border-l border-border/60">
-                    <div className="absolute w-3 h-3 bg-primary rounded-full -left-[6.5px] top-1.5 ring-4 ring-background" />
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-                      <h3 className="text-lg font-bold text-foreground">
-                        {exp.role?.[locale]}
-                      </h3>
-                      <span className="text-sm font-medium text-muted-foreground bg-secondary/50 px-3 py-1 rounded-full w-fit">
-                        {exp.period?.[locale]}
-                      </span>
+            if (sectionType === "associative_experiences" && data.associative_experiences && data.associative_experiences.length > 0) {
+              return (
+                <Fragment key="associative_experiences">
+                  <motion.div variants={fadeUp} className="space-y-8">
+                    <h2 className="text-sm font-semibold tracking-[0.2em] uppercase text-muted-foreground">
+                      {data.associative_title?.[locale] || "Associative Experience"}
+                    </h2>
+                    <div className="space-y-8">
+                      {data.associative_experiences.map((exp) => (
+                        <div key={exp.id} className="relative pl-6 border-l border-border/60">
+                          <div className="absolute w-3 h-3 bg-primary rounded-full -left-[6.5px] top-1.5 ring-4 ring-background" />
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                            <h3 className="text-lg font-bold text-foreground">
+                              {exp.role?.[locale]}
+                            </h3>
+                            <span className="text-sm font-medium text-muted-foreground bg-secondary/50 px-3 py-1 rounded-full w-fit">
+                              {exp.period?.[locale]}
+                            </span>
+                          </div>
+                          {exp.url ? (
+                            <a 
+                              href={exp.url.startsWith('http') ? exp.url : `https://${exp.url}`}
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-primary font-medium mb-3 hover:underline inline-block"
+                            >
+                              {exp.company}
+                            </a>
+                          ) : (
+                            <p className="text-primary font-medium mb-3">
+                              {exp.company}
+                            </p>
+                          )}
+                          <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                            {exp.description?.[locale]}
+                          </p>
+                        </div>
+                      ))}
                     </div>
-                    {exp.url ? (
-                      <a 
-                        href={exp.url.startsWith('http') ? exp.url : `https://${exp.url}`}
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-primary font-medium mb-3 hover:underline inline-block"
-                      >
-                        {exp.company}
-                      </a>
-                    ) : (
-                      <p className="text-primary font-medium mb-3">
-                        {exp.company}
-                      </p>
-                    )}
-                    <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
-                      {exp.description?.[locale]}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          )}
+                  </motion.div>
+                  <motion.div variants={fadeUp} className="h-px w-full bg-border" />
+                </Fragment>
+              );
+            }
 
-          {/* Divider */}
-          {data.associative_experiences && data.associative_experiences.length > 0 && (
-            <motion.div variants={fadeUp} className="h-px w-full bg-border" />
-          )}
-
-          {/* Education Experience */}
-          {data.education_experiences && data.education_experiences.length > 0 && (
-            <motion.div variants={fadeUp} className="space-y-8">
-              <h2 className="text-sm font-semibold tracking-[0.2em] uppercase text-muted-foreground">
-                {data.education_title?.[locale] || "Education"}
-              </h2>
-              <div className="space-y-8">
-                {data.education_experiences.map((exp) => (
-                  <div key={exp.id} className="relative pl-6 border-l border-border/60">
-                    <div className="absolute w-3 h-3 bg-primary rounded-full -left-[6.5px] top-1.5 ring-4 ring-background" />
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-                      <h3 className="text-lg font-bold text-foreground">
-                        {exp.role?.[locale]}
-                      </h3>
-                      <span className="text-sm font-medium text-muted-foreground bg-secondary/50 px-3 py-1 rounded-full w-fit">
-                        {exp.period?.[locale]}
-                      </span>
+            if (sectionType === "education_experiences" && data.education_experiences && data.education_experiences.length > 0) {
+              return (
+                <Fragment key="education_experiences">
+                  <motion.div variants={fadeUp} className="space-y-8">
+                    <h2 className="text-sm font-semibold tracking-[0.2em] uppercase text-muted-foreground">
+                      {data.education_title?.[locale] || "Education"}
+                    </h2>
+                    <div className="space-y-8">
+                      {data.education_experiences.map((exp) => (
+                        <div key={exp.id} className="relative pl-6 border-l border-border/60">
+                          <div className="absolute w-3 h-3 bg-primary rounded-full -left-[6.5px] top-1.5 ring-4 ring-background" />
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                            <h3 className="text-lg font-bold text-foreground">
+                              {exp.role?.[locale]}
+                            </h3>
+                            <span className="text-sm font-medium text-muted-foreground bg-secondary/50 px-3 py-1 rounded-full w-fit">
+                              {exp.period?.[locale]}
+                            </span>
+                          </div>
+                          {exp.url ? (
+                            <a 
+                              href={exp.url.startsWith('http') ? exp.url : `https://${exp.url}`}
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-primary font-medium mb-3 hover:underline inline-block"
+                            >
+                              {exp.company}
+                            </a>
+                          ) : (
+                            <p className="text-primary font-medium mb-3">
+                              {exp.company}
+                            </p>
+                          )}
+                          <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                            {exp.description?.[locale]}
+                          </p>
+                        </div>
+                      ))}
                     </div>
-                    {exp.url ? (
-                      <a 
-                        href={exp.url.startsWith('http') ? exp.url : `https://${exp.url}`}
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-primary font-medium mb-3 hover:underline inline-block"
-                      >
-                        {exp.company}
-                      </a>
-                    ) : (
-                      <p className="text-primary font-medium mb-3">
-                        {exp.company}
-                      </p>
-                    )}
-                    <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
-                      {exp.description?.[locale]}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          )}
+                  </motion.div>
+                  <motion.div variants={fadeUp} className="h-px w-full bg-border" />
+                </Fragment>
+              );
+            }
 
-          {/* Divider */}
-          {data.education_experiences && data.education_experiences.length > 0 && (
-            <motion.div variants={fadeUp} className="h-px w-full bg-border" />
-          )}
+            return null;
+          })}
 
           {/* Stack */}
           {data.stack_tools && data.stack_tools.length > 0 && (

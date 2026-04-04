@@ -3,7 +3,7 @@ import AutoTranslateButton from "@/components/AutoTranslateButton";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Save, Languages, ArrowLeft, Plus, Trash2 } from "lucide-react";
+import { Save, Languages, ArrowLeft, Plus, Trash2, ArrowUp, ArrowDown } from "lucide-react";
 import toast from "react-hot-toast";
 import apiClient from "@/lib/api-client";
 import { AboutData, Experience, StackItem, LocalizedString } from "@/types";
@@ -39,6 +39,7 @@ export default function AdminAboutPage() {
         education_title: res.education_title || { "en-US": "", "fr-FR": "" },
         education_experiences: res.education_experiences || [],
         stack_tools: res.stack_tools || [],
+        section_order: res.section_order?.length ? res.section_order : ["experiences", "associative_experiences", "education_experiences"],
       });
     } catch (error) {
       console.error(error);
@@ -95,6 +96,38 @@ export default function AdminAboutPage() {
         ...prev,
         [type]: prev[type].filter((exp) => exp.id !== id),
       };
+    });
+  };
+
+  const handleMoveExperience = (
+    type: "experiences" | "associative_experiences" | "education_experiences",
+    index: number,
+    direction: "up" | "down"
+  ) => {
+    setData((prev) => {
+      if (!prev) return prev;
+      const list = [...prev[type]];
+      if (direction === "up" && index > 0) {
+        [list[index - 1], list[index]] = [list[index], list[index - 1]];
+      } else if (direction === "down" && index < list.length - 1) {
+        [list[index], list[index + 1]] = [list[index + 1], list[index]];
+      } else {
+        return prev;
+      }
+      return { ...prev, [type]: list };
+    });
+  };
+
+  const handleMoveSection = (index: number, direction: "up" | "down") => {
+    setData((prev) => {
+      if (!prev) return prev;
+      const list = [...(prev.section_order || ["experiences", "associative_experiences", "education_experiences"])];
+      if (direction === "up" && index > 0) {
+        [list[index - 1], list[index]] = [list[index], list[index - 1]];
+      } else if (direction === "down" && index < list.length - 1) {
+        [list[index], list[index + 1]] = [list[index + 1], list[index]];
+      }
+      return { ...prev, section_order: list };
     });
   };
 
@@ -235,10 +268,19 @@ export default function AdminAboutPage() {
           </div>
         </section>
 
-        {/* Professional Experience */}
-        <section className="space-y-4 bg-card p-6 rounded-xl border border-border">
+        {/* Render sections in dynamic order */}
+        {(data.section_order || ["experiences", "associative_experiences", "education_experiences"]).map((sectionType, index) => {
+          if (sectionType === "experiences") {
+            return (
+        <section key="experiences" className="space-y-4 bg-card p-6 rounded-xl border border-border">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Professional Experience</h2>
+            <div className="flex items-center gap-3">
+              <h2 className="text-xl font-semibold">Professional Experience</h2>
+              <div className="flex flex-col gap-0.5">
+                <button onClick={() => handleMoveSection(index, "up")} disabled={index === 0} className="p-0.5 bg-secondary text-secondary-foreground rounded disabled:opacity-30"><ArrowUp className="w-3 h-3" /></button>
+                <button onClick={() => handleMoveSection(index, "down")} disabled={index === 2} className="p-0.5 bg-secondary text-secondary-foreground rounded disabled:opacity-30"><ArrowDown className="w-3 h-3" /></button>
+              </div>
+            </div>
             <button
               onClick={() => handleAddExperience("experiences")}
               className="flex items-center gap-2 px-3 py-1.5 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 text-sm"
@@ -256,15 +298,31 @@ export default function AdminAboutPage() {
             />
           </div>
           <div className="space-y-4">
-            {data.experiences?.map((exp) => (
+            {data.experiences?.map((exp, expIndex) => (
               <div key={exp.id} className="p-4 border border-border/50 rounded-lg space-y-4 bg-background/50 relative">
+                <div className="absolute top-4 right-12 flex gap-1">
+                  <button
+                    onClick={() => handleMoveExperience("experiences", expIndex, "up")}
+                    disabled={expIndex === 0}
+                    className="p-1 bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded disabled:opacity-50"
+                  >
+                    <ArrowUp className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => handleMoveExperience("experiences", expIndex, "down")}
+                    disabled={expIndex === (data.experiences?.length || 0) - 1}
+                    className="p-1 bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded disabled:opacity-50"
+                  >
+                    <ArrowDown className="w-4 h-4" />
+                  </button>
+                </div>
                 <button
                   onClick={() => handleRemoveExperience("experiences", exp.id)}
                   className="absolute top-4 right-4 p-1 text-destructive hover:bg-destructive/10 rounded"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
-                <div className="grid grid-cols-2 gap-4 mr-8">
+                <div className="grid grid-cols-2 gap-4 mr-24">
                   <div>
                     <label className="block text-xs text-muted-foreground mb-1">Company</label>
                     <input
@@ -316,11 +374,20 @@ export default function AdminAboutPage() {
             ))}
           </div>
         </section>
+            );
+          }
 
-        {/* Associative Experience */}
-        <section className="space-y-4 bg-card p-6 rounded-xl border border-border">
+          if (sectionType === "associative_experiences") {
+            return (
+        <section key="associative_experiences" className="space-y-4 bg-card p-6 rounded-xl border border-border">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Associative Experience</h2>
+            <div className="flex items-center gap-3">
+              <h2 className="text-xl font-semibold">Associative Experience</h2>
+              <div className="flex flex-col gap-0.5">
+                <button onClick={() => handleMoveSection(index, "up")} disabled={index === 0} className="p-0.5 bg-secondary text-secondary-foreground rounded disabled:opacity-30"><ArrowUp className="w-3 h-3" /></button>
+                <button onClick={() => handleMoveSection(index, "down")} disabled={index === 2} className="p-0.5 bg-secondary text-secondary-foreground rounded disabled:opacity-30"><ArrowDown className="w-3 h-3" /></button>
+              </div>
+            </div>
             <button
               onClick={() => handleAddExperience("associative_experiences")}
               className="flex items-center gap-2 px-3 py-1.5 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 text-sm"
@@ -338,15 +405,31 @@ export default function AdminAboutPage() {
             />
           </div>
           <div className="space-y-4">
-            {data.associative_experiences?.map((exp) => (
+            {data.associative_experiences?.map((exp, expIndex) => (
               <div key={exp.id} className="p-4 border border-border/50 rounded-lg space-y-4 bg-background/50 relative">
+                <div className="absolute top-4 right-12 flex gap-1">
+                  <button
+                    onClick={() => handleMoveExperience("associative_experiences", expIndex, "up")}
+                    disabled={expIndex === 0}
+                    className="p-1 bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded disabled:opacity-50"
+                  >
+                    <ArrowUp className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => handleMoveExperience("associative_experiences", expIndex, "down")}
+                    disabled={expIndex === (data.associative_experiences?.length || 0) - 1}
+                    className="p-1 bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded disabled:opacity-50"
+                  >
+                    <ArrowDown className="w-4 h-4" />
+                  </button>
+                </div>
                 <button
                   onClick={() => handleRemoveExperience("associative_experiences", exp.id)}
                   className="absolute top-4 right-4 p-1 text-destructive hover:bg-destructive/10 rounded"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
-                <div className="grid grid-cols-2 gap-4 mr-8">
+                <div className="grid grid-cols-2 gap-4 mr-24">
                   <div>
                     <label className="block text-xs text-muted-foreground mb-1">Organization / Event</label>
                     <input
@@ -398,11 +481,20 @@ export default function AdminAboutPage() {
             ))}
           </div>
         </section>
+            );
+          }
 
-        {/* Education Experience */}
-        <section className="space-y-4 bg-card p-6 rounded-xl border border-border">
+          if (sectionType === "education_experiences") {
+            return (
+        <section key="education_experiences" className="space-y-4 bg-card p-6 rounded-xl border border-border">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Education</h2>
+            <div className="flex items-center gap-3">
+              <h2 className="text-xl font-semibold">Education</h2>
+              <div className="flex flex-col gap-0.5">
+                <button onClick={() => handleMoveSection(index, "up")} disabled={index === 0} className="p-0.5 bg-secondary text-secondary-foreground rounded disabled:opacity-30"><ArrowUp className="w-3 h-3" /></button>
+                <button onClick={() => handleMoveSection(index, "down")} disabled={index === 2} className="p-0.5 bg-secondary text-secondary-foreground rounded disabled:opacity-30"><ArrowDown className="w-3 h-3" /></button>
+              </div>
+            </div>
             <button
               onClick={() => handleAddExperience("education_experiences")}
               className="flex items-center gap-2 px-3 py-1.5 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 text-sm"
@@ -420,15 +512,31 @@ export default function AdminAboutPage() {
             />
           </div>
           <div className="space-y-4">
-            {data.education_experiences?.map((exp) => (
+            {data.education_experiences?.map((exp, expIndex) => (
               <div key={exp.id} className="p-4 border border-border/50 rounded-lg space-y-4 bg-background/50 relative">
+                <div className="absolute top-4 right-12 flex gap-1">
+                  <button
+                    onClick={() => handleMoveExperience("education_experiences", expIndex, "up")}
+                    disabled={expIndex === 0}
+                    className="p-1 bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded disabled:opacity-50"
+                  >
+                    <ArrowUp className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => handleMoveExperience("education_experiences", expIndex, "down")}
+                    disabled={expIndex === (data.education_experiences?.length || 0) - 1}
+                    className="p-1 bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded disabled:opacity-50"
+                  >
+                    <ArrowDown className="w-4 h-4" />
+                  </button>
+                </div>
                 <button
                   onClick={() => handleRemoveExperience("education_experiences", exp.id)}
                   className="absolute top-4 right-4 p-1 text-destructive hover:bg-destructive/10 rounded"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
-                <div className="grid grid-cols-2 gap-4 mr-8">
+                <div className="grid grid-cols-2 gap-4 mr-24">
                   <div>
                     <label className="block text-xs text-muted-foreground mb-1">School / Institution</label>
                     <input
@@ -480,6 +588,10 @@ export default function AdminAboutPage() {
             ))}
           </div>
         </section>
+            );
+          }
+          return null;
+        })}
 
         {/* Stack & Tools */}
         <section className="space-y-4 bg-card p-6 rounded-xl border border-border">
