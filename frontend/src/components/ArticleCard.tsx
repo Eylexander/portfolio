@@ -35,7 +35,7 @@ export default function ArticleCard({ article, featured = false, hero = false }:
       >
         {/* Featured Badge */}
         {featured && (
-          <div className="absolute top-3 right-3 z-10 bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm">
+          <div className="absolute top-3 right-3 z-30 bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm">
             {t("featured")}
           </div>
         )}
