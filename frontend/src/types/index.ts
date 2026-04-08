@@ -38,6 +38,7 @@ export interface Experience {
   role: LocalizedString;
   company: string;
   url?: string;
+  project_slug?: string;
   period: LocalizedString;
   description: LocalizedString;
 }

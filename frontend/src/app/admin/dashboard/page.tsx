@@ -40,6 +40,7 @@ export default function AdminDashboard() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [updatingCredentials, setUpdatingCredentials] = useState(false);
+  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
 
   const [ollama_model, setOllamaModel] = useState("");
   const [updatingSettings, setUpdatingSettings] = useState(false);
@@ -574,7 +575,7 @@ export default function AdminDashboard() {
                 >
                   {uploads.map((url, index) => (
                     <motion.div
-                      key={index}
+                      key={url}
                       variants={fadeUp}
                       className="group relative aspect-square rounded-lg overflow-hidden border border-border bg-secondary/20 cursor-pointer"
                     >
@@ -582,15 +583,21 @@ export default function AdminDashboard() {
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block w-full h-full"
+                        className="block w-full h-full relative"
                       >
+                        {!loadedImages[url] && (
+                          <div className="absolute inset-0 bg-muted animate-pulse" />
+                        )}
                         <Image
                           src={url}
                           alt={`Upload ${index}`}
                           width={400}
                           height={400}
                           unoptimized
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          onLoad={() => setLoadedImages((prev) => ({ ...prev, [url]: true }))}
+                          className={`w-full h-full object-cover transition-all duration-300 group-hover:scale-105 ${
+                            loadedImages[url] ? "opacity-100" : "opacity-0"
+                          }`}
                         />
                       </a>
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">

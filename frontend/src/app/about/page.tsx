@@ -8,7 +8,7 @@ import { AboutData } from "@/types";
 import Loader from "@/components/Loader";
 import { useAuthStore } from "@/store/authStore";
 import Link from "next/link";
-import { Edit } from "lucide-react";
+import { Edit, ExternalLink } from "lucide-react";
 
 const stagger = {
   hidden: {},
@@ -94,9 +94,20 @@ export default function AboutPage() {
                         <div key={exp.id} className="relative pl-6 border-l border-border/60">
                           <div className="absolute w-3 h-3 bg-primary rounded-full -left-[6.5px] top-1.5 ring-4 ring-background" />
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-                            <h3 className="text-lg font-bold text-foreground">
-                              {exp.role?.[locale]}
-                            </h3>
+                            {exp.project_slug ? (
+                              <Link 
+                                href={`/projects/${exp.project_slug}`}
+                                className="text-lg font-bold text-foreground hover:underline flex items-center gap-1.5 group"
+                                target="_blank"
+                              >
+                                {exp.role?.[locale]}
+                                <ExternalLink size={18} className="text-muted-foreground ml-1 group-hover:text-foreground transition-colors" />
+                              </Link>
+                            ) : (
+                              <h3 className="text-lg font-bold text-foreground">
+                                {exp.role?.[locale]}
+                              </h3>
+                            )}
                             <span className="text-sm font-medium text-muted-foreground bg-secondary/50 px-3 py-1 rounded-full w-fit">
                               {exp.period?.[locale]}
                             </span>
@@ -139,9 +150,20 @@ export default function AboutPage() {
                         <div key={exp.id} className="relative pl-6 border-l border-border/60">
                           <div className="absolute w-3 h-3 bg-primary rounded-full -left-[6.5px] top-1.5 ring-4 ring-background" />
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-                            <h3 className="text-lg font-bold text-foreground">
-                              {exp.role?.[locale]}
-                            </h3>
+                            {exp.project_slug ? (
+                              <Link 
+                                href={`/projects/${exp.project_slug}`}
+                                className="text-lg font-bold text-foreground hover:underline flex items-center gap-1.5 group"
+                                target="_blank"
+                              >
+                                {exp.role?.[locale]}
+                                <ExternalLink size={18} className="text-muted-foreground ml-1 group-hover:text-foreground transition-colors" />
+                              </Link>
+                            ) : (
+                              <h3 className="text-lg font-bold text-foreground">
+                                {exp.role?.[locale]}
+                              </h3>
+                            )}
                             <span className="text-sm font-medium text-muted-foreground bg-secondary/50 px-3 py-1 rounded-full w-fit">
                               {exp.period?.[locale]}
                             </span>
@@ -184,9 +206,20 @@ export default function AboutPage() {
                         <div key={exp.id} className="relative pl-6 border-l border-border/60">
                           <div className="absolute w-3 h-3 bg-primary rounded-full -left-[6.5px] top-1.5 ring-4 ring-background" />
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-                            <h3 className="text-lg font-bold text-foreground">
-                              {exp.role?.[locale]}
-                            </h3>
+                            {exp.project_slug ? (
+                              <Link 
+                                href={`/projects/${exp.project_slug}`}
+                                className="text-lg font-bold text-foreground hover:underline flex items-center gap-1.5 group"
+                                target="_blank"
+                              >
+                                {exp.role?.[locale]}
+                                <ExternalLink size={18} className="text-muted-foreground ml-1 group-hover:text-foreground transition-colors" />
+                              </Link>
+                            ) : (
+                              <h3 className="text-lg font-bold text-foreground">
+                                {exp.role?.[locale]}
+                              </h3>
+                            )}
                             <span className="text-sm font-medium text-muted-foreground bg-secondary/50 px-3 py-1 rounded-full w-fit">
                               {exp.period?.[locale]}
                             </span>

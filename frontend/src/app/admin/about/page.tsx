@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Save, Languages, ArrowLeft, Plus, Trash2, ArrowUp, ArrowDown } from "lucide-react";
 import toast from "react-hot-toast";
 import apiClient from "@/lib/api-client";
-import { AboutData, Experience, StackItem, LocalizedString } from "@/types";
+import { AboutData, Experience, StackItem, LocalizedString, Article } from "@/types";
 import Loader from "@/components/Loader";
 import { useOllama } from "@/hooks/useOllama";
 
@@ -16,6 +16,7 @@ export default function AdminAboutPage() {
   const router = useRouter();
   const { isConfigured: isTranslateConfigured } = useOllama();
   const [data, setData] = useState<AboutData | null>(null);
+  const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [activeLang, setActiveLang] = useState<Locale>("en-US");
@@ -26,7 +27,11 @@ export default function AdminAboutPage() {
 
   const fetchData = async () => {
     try {
-      const res = await apiClient.getAboutData();
+      const [res, articlesRes] = await Promise.all([
+        apiClient.getAboutData(),
+        apiClient.getArticles(true)
+      ]);
+      setArticles(articlesRes || []);
       // Provide defaults if no data
       setData({
         id: res.id,
@@ -141,7 +146,7 @@ export default function AdminAboutPage() {
       if (!prev) return prev;
       const newList = prev[type].map((exp) => {
         if (exp.id === id) {
-          if (field === "company" || field === "url") {
+          if (field === "company" || field === "url" || field === "project_slug") {
             return { ...exp, [field]: val };
           } else {
             const locField = exp[field] as LocalizedString;
@@ -352,6 +357,19 @@ export default function AdminAboutPage() {
                     />
                   </div>
                   <div>
+                    <label className="block text-xs text-muted-foreground mb-1">Linked Project</label>
+                    <select
+                      value={exp.project_slug || ""}
+                      onChange={(e) => handleExperienceChange("experiences", exp.id, "project_slug", e.target.value)}
+                      className="w-full px-3 py-1.5 bg-background border border-border rounded text-sm"
+                    >
+                      <option value="">None</option>
+                      {articles.map(a => (
+                        <option key={a.id} value={a.slug}>{a.title?.["en-US"] || a.slug}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
                     <label className="block text-xs text-muted-foreground mb-1">Period</label>
                     <input
                       type="text"
@@ -459,6 +477,19 @@ export default function AdminAboutPage() {
                     />
                   </div>
                   <div>
+                    <label className="block text-xs text-muted-foreground mb-1">Linked Project</label>
+                    <select
+                      value={exp.project_slug || ""}
+                      onChange={(e) => handleExperienceChange("associative_experiences", exp.id, "project_slug", e.target.value)}
+                      className="w-full px-3 py-1.5 bg-background border border-border rounded text-sm"
+                    >
+                      <option value="">None</option>
+                      {articles.map(a => (
+                        <option key={a.id} value={a.slug}>{a.title?.["en-US"] || a.slug}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
                     <label className="block text-xs text-muted-foreground mb-1">Period</label>
                     <input
                       type="text"
@@ -564,6 +595,19 @@ export default function AdminAboutPage() {
                       className="w-full px-3 py-1.5 bg-background border border-border rounded text-sm"
                       placeholder="https://..."
                     />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-muted-foreground mb-1">Linked Project</label>
+                    <select
+                      value={exp.project_slug || ""}
+                      onChange={(e) => handleExperienceChange("education_experiences", exp.id, "project_slug", e.target.value)}
+                      className="w-full px-3 py-1.5 bg-background border border-border rounded text-sm"
+                    >
+                      <option value="">None</option>
+                      {articles.map(a => (
+                        <option key={a.id} value={a.slug}>{a.title?.["en-US"] || a.slug}</option>
+                      ))}
+                    </select>
                   </div>
                   <div>
                     <label className="block text-xs text-muted-foreground mb-1">Period</label>

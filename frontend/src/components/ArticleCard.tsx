@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Article } from "@/types";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -21,6 +22,7 @@ export default function ArticleCard({ article, featured = false, hero = false }:
   const t = useTranslations("Projects");
   const title = article.title?.[locale] || article.title?.["en-US"] || "Untitled";
   const snippet = article.snippet?.[locale] || article.snippet?.["en-US"] || "";
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   return (
     <Link href={`/projects/${article.slug}`} className={`block break-inside-avoid ${featured || hero ? "h-full" : "mb-6"}`}>
@@ -43,14 +45,20 @@ export default function ArticleCard({ article, featured = false, hero = false }:
           <div className={`relative overflow-hidden bg-secondary shrink-0 ${
             hero ? "w-full md:w-2/5 lg:w-1/2 h-56 md:h-auto border-b md:border-b-0 md:border-r border-border" : "w-full h-44"
           }`}>
+            {!isImageLoaded && (
+              <div className="absolute inset-0 bg-muted animate-pulse" />
+            )}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={article.cover_image}
               alt={title}
-              className="w-full h-full object-contain transition-transform duration-500 will-change-transform group-hover:scale-105"
+              onLoad={() => setIsImageLoaded(true)}
+              className={`w-full h-full object-contain transition-all duration-500 will-change-transform group-hover:scale-105 relative z-10 ${
+                isImageLoaded ? "opacity-100" : "opacity-0"
+              }`}
             />
             {/* Subtle gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t dark:from-card/60 dark:to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t dark:from-card/60 dark:to-transparent z-20 pointer-events-none" />
           </div>
         )}
 
