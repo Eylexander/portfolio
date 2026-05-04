@@ -20,7 +20,7 @@ for arg in "$@"; do
 done
 
 if [ $DEV = true ]; then
-    DOCKER_BUILDKIT=1 docker build $OPTIONS -f ../docker/Dockerfile.frontend.dev --tag backend-dev .
+    DOCKER_BUILDKIT=1 docker build $OPTIONS -f ../docker/Dockerfile.frontend.dev --tag frontend-old-dev .
 else
-    DOCKER_BUILDKIT=1 docker build $OPTIONS -f ../docker/Dockerfile.frontend --tag portfolio-frontend ..
+    DOCKER_BUILDKIT=1 docker build $OPTIONS -f ../docker/Dockerfile.frontend --tag portfolio-old-frontend ..
 fi

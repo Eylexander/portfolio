@@ -1,49 +1,48 @@
 services:
-  proxy:
+  proxy_old:
     image: nginx:latest
-    container_name: portfolio_nginx
+    container_name: portfolio_old_nginx
     restart: always
     ports:
       - "80:80"
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ${ROOT}/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - portfolio_frontend
-      - portfolio_backend
+      - portfolio_old_frontend
+      - portfolio_old_backend
     networks:
-      - portfolio_network
+      - portfolio_old_network
 
-  portfolio_frontend:
-    image: portfolio-frontend:latest
-    container_name: portfolio_frontend
+  portfolio_old_frontend:
+    image: eylexander/portfolio-old-frontend:latest
+    container_name: portfolio_old_frontend
     restart: always
     depends_on:
-      - portfolio_backend
+      - portfolio_old_backend
     networks:
-      - portfolio_network
+      - portfolio_old_network
 
-  portfolio_backend:
-    image: portfolio-backend:latest
-    container_name: portfolio_backend
+  portfolio_old_backend:
+    image: eylexander/portfolio-old-backend:latest
+    container_name: portfolio_old_backend
     restart: always
     environment:
-      - MONGODB_URI=mongodb://database:27017/
+      - MONGODB_URI=mongodb://database_old:27017/
       - APP_VERSION=0.2.0
     depends_on:
-      - database
+      - database_old
     networks:
-      - portfolio_network
+      - portfolio_old_network
 
-  database:
+  database_old:
     image: mongo:latest
-    container_name: portfolio_mongo
-    ports:
-      - "27017:27017"
+    container_name: portfolio_old_mongo
+    restart: always
     volumes:
       - ../data:/data/db
     networks:
-      - portfolio_network
+      - portfolio_old_network
 
 networks:
-  portfolio_network:
+  portfolio_old_network:
     driver: bridge
