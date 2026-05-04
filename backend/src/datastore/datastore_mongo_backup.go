@@ -45,7 +45,7 @@ func (m *MongoDatastore) RestoreBackup(ctx context.Context, data *models.BackupD
 
 	// Restore messages
 	if data.Messages != nil {
-		_, err := m.db.Collection("contact").DeleteMany(ctx, bson.M{})
+		_, err := m.db.Collection("messages").DeleteMany(ctx, bson.M{})
 		if err != nil {
 			log.Printf("Error clearing messages: %v", err)
 			return err
@@ -55,7 +55,7 @@ func (m *MongoDatastore) RestoreBackup(ctx context.Context, data *models.BackupD
 			for _, msg := range data.Messages {
 				docs = append(docs, msg)
 			}
-			_, err = m.db.Collection("contact").InsertMany(ctx, docs)
+			_, err = m.db.Collection("messages").InsertMany(ctx, docs)
 			if err != nil {
 				log.Printf("Error inserting messages: %v", err)
 				return err

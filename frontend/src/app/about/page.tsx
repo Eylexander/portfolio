@@ -33,7 +33,13 @@ export default function AboutPage() {
     apiClient.getAboutData().then(setData).catch(console.error);
   }, []);
 
-  if (!data) return <Loader />;
+  if (!data) {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen relative overflow-hidden">
