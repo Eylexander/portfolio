@@ -11,6 +11,8 @@ services:
     environment:
       - NODE_ENV=development
       - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - SITE_URL=https://eylexander.fr
+      - PLAUSIBLE_ENDPOINT=https://plausible.eylexander.fr/api/event
     ports:
       - "3000:3000"
     depends_on:

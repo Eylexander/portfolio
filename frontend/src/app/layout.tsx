@@ -33,12 +33,19 @@ export default async function RootLayout({
 	const messages = await getMessages();
 	const locale = await getLocale();
 
+	let plausibleDomain: string | undefined;
+	try {
+		plausibleDomain = process.env.SITE_URL ? new URL(process.env.SITE_URL).host : undefined;
+	} catch {
+		plausibleDomain = undefined;
+	}
+
 	return (
 		<html lang={locale} suppressHydrationWarning className={inter.variable}>
 			<body className={`antialiased min-h-screen bg-background text-foreground transition-colors duration-300 font-sans`}>
 				<NextIntlClientProvider locale={locale} messages={messages}>
 					<ThemeProvider>
-						<PlausibleProvider />
+						<PlausibleProvider domain={plausibleDomain} endpoint={process.env.PLAUSIBLE_ENDPOINT} />
 						<CustomCursor />
 						<BoidsWrapper />
 						<ToasterProvider />

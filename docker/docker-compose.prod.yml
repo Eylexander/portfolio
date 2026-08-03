@@ -20,6 +20,9 @@ services:
     depends_on:
       portfolio_backend:
         condition: service_healthy
+    environment:
+      - SITE_URL=https://eylexander.fr
+      - PLAUSIBLE_ENDPOINT=https://eylexander.fr/relay
     networks:
       - portfolio_network
     healthcheck:

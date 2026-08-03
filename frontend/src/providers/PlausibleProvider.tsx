@@ -1,20 +1,23 @@
 'use client';
 
 import { useEffect } from 'react';
-import { init } from '@plausible-analytics/tracker';
 
-export function PlausibleProvider() {
+let initialized = false;
+
+export function PlausibleProvider({ domain, endpoint }: { domain?: string; endpoint?: string }) {
   useEffect(() => {
-    const domain = "eylexander.fr";
-    if (!domain) return;
+    if (initialized || !domain) return;
+    initialized = true;
 
-    init({
-      domain,
-      endpoint: process.env.NEXT_PUBLIC_PLAUSIBLE_ENDPOINT,
-      outboundLinks: true,
-      fileDownloads: true,
+    import('@plausible-analytics/tracker').then(({ init }) => {
+      init({
+        domain,
+        endpoint,
+        outboundLinks: true,
+        fileDownloads: true,
+      });
     });
-  }, []);
+  }, [domain, endpoint]);
 
   return null;
 }
