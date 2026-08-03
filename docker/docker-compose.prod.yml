@@ -43,6 +43,14 @@ services:
       - OLLAMA_URL=${OLLAMA_URL}
       - OLLAMA_MODEL=${OLLAMA_MODEL}
       - JWT_TOKEN={JWT_TOKEN}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SMTP_FROM=${SMTP_FROM}
+      - DIGEST_EMAIL_TO=${DIGEST_EMAIL_TO}
+      - DIGEST_DAYS=${DIGEST_DAYS:-1,4}
+      - DIGEST_HOUR=${DIGEST_HOUR:-9}
     depends_on:
       portfolio_database:
         condition: service_healthy

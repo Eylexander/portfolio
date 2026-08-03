@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Article } from "@/types";
 import Link from "next/link";
-import { Edit, Trash2, Plus, Eye, EyeOff, Image as ImageIcon, Copy, Check, Code, Star, Download, Upload, Search } from "lucide-react";
+import { Edit, Trash2, Plus, Eye, EyeOff, Image as ImageIcon, Copy, Check, Code, Star, Download, Upload, Search, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import Loader from "@/components/Loader";
@@ -41,6 +41,7 @@ export default function AdminDashboard() {
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [updatingCredentials, setUpdatingCredentials] = useState(false);
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
+  const [isUploadingMedia, setIsUploadingMedia] = useState(false);
 
   const [ollama_model, setOllamaModel] = useState("");
   const [updatingSettings, setUpdatingSettings] = useState(false);
@@ -114,6 +115,22 @@ export default function AdminDashboard() {
       fetchData();
     } catch {
       toast.error("Failed to delete upload");
+    }
+  };
+
+  const handleUploadMedia = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    setIsUploadingMedia(true);
+    try {
+      await Promise.all(files.map((file) => apiClient.uploadImage(file)));
+      toast.success(files.length > 1 ? "Images uploaded!" : "Image uploaded!");
+      fetchData();
+    } catch {
+      toast.error("Failed to upload image");
+    } finally {
+      setIsUploadingMedia(false);
+      e.target.value = "";
     }
   };
 
@@ -561,6 +578,23 @@ export default function AdminDashboard() {
             </div>
           ) : activeTab === "uploads" ? (
             <div className="p-4 sm:p-6">
+              <div className="flex justify-end mb-4">
+                <label
+                  className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-muted-foreground hover:text-foreground bg-background border border-border rounded-lg hover:bg-secondary transition-colors shadow-sm cursor-pointer ${isUploadingMedia ? "opacity-60 pointer-events-none" : ""}`}
+                  title="Upload image"
+                >
+                  {isUploadingMedia ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
+                  <span>Upload</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    onChange={handleUploadMedia}
+                    disabled={isUploadingMedia}
+                  />
+                </label>
+              </div>
               {uploads.length === 0 ? (
                 <div className="py-16 text-center text-sm text-muted-foreground flex flex-col items-center gap-3">
                   <ImageIcon size={32} className="opacity-20" />

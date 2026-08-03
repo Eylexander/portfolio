@@ -5,7 +5,6 @@ import { useLocale } from "next-intl";
 import { useEffect, useState, Fragment } from "react";
 import apiClient from "@/lib/api-client";
 import { AboutData } from "@/types";
-import Loader from "@/components/Loader";
 import { useAuthStore } from "@/store/authStore";
 import Link from "next/link";
 import { Edit, ExternalLink } from "lucide-react";
@@ -24,6 +23,73 @@ const fadeUp = {
   },
 };
 
+const shimmerStyle = {
+  background: "linear-gradient(90deg, hsl(var(--secondary)) 25%, hsl(var(--muted)) 50%, hsl(var(--secondary)) 75%)",
+  backgroundSize: "200% 100%",
+  animation: "shimmer 1.8s infinite linear",
+};
+
+function AboutSkeleton() {
+  return (
+    <div className="min-h-screen relative overflow-hidden">
+      <main className="pt-28 pb-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center overflow-hidden relative z-10">
+        <motion.div
+          className="max-w-3xl w-full space-y-14"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+            <div className="h-11 w-64 rounded-lg" style={shimmerStyle} />
+          </div>
+
+          {/* Bio paragraph */}
+          <div className="space-y-3">
+            <div className="h-4 w-full rounded" style={shimmerStyle} />
+            <div className="h-4 w-full rounded" style={shimmerStyle} />
+            <div className="h-4 w-2/3 rounded" style={shimmerStyle} />
+          </div>
+
+          <div className="h-px w-full bg-border" />
+
+          {/* Sections */}
+          {[0, 1].map((section) => (
+            <div key={section} className="space-y-8">
+              <div className="h-3.5 w-32 rounded" style={shimmerStyle} />
+              <div className="space-y-8">
+                {[0, 1].map((item) => (
+                  <div key={item} className="relative pl-6 border-l border-border/60 space-y-3">
+                    <div className="absolute w-3 h-3 bg-secondary rounded-full -left-[6.5px] top-1.5 ring-4 ring-background" />
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div className="h-5 w-40 rounded" style={shimmerStyle} />
+                      <div className="h-5 w-24 rounded-full" style={shimmerStyle} />
+                    </div>
+                    <div className="h-4 w-28 rounded" style={shimmerStyle} />
+                    <div className="h-4 w-full rounded" style={shimmerStyle} />
+                    <div className="h-4 w-4/5 rounded" style={shimmerStyle} />
+                  </div>
+                ))}
+              </div>
+              <div className="h-px w-full bg-border" />
+            </div>
+          ))}
+
+          {/* Stack */}
+          <div className="space-y-6 w-full">
+            <div className="h-3.5 w-28 rounded" style={shimmerStyle} />
+            <div className="flex flex-wrap gap-3">
+              {[0, 1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="h-9 w-24 rounded-full" style={shimmerStyle} />
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </main>
+    </div>
+  );
+}
+
 export default function AboutPage() {
   const locale = useLocale() as "en-US" | "fr-FR";
   const [data, setData] = useState<AboutData | null>(null);
@@ -33,7 +99,7 @@ export default function AboutPage() {
     apiClient.getAboutData().then(setData).catch(console.error);
   }, []);
 
-  if (!data) return <Loader />;
+  if (!data) return <AboutSkeleton />;
 
   return (
     <div className="min-h-screen relative overflow-hidden">
