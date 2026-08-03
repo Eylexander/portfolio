@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import ToasterProvider from "@/providers/ToasterProvider";
+import PlausibleProvider from "@/providers/PlausibleProvider";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getLocale } from "next-intl/server";
 import AdminLoginButton from "@/components/AdminLoginButton";
@@ -37,6 +38,7 @@ export default async function RootLayout({
 			<body className={`antialiased min-h-screen bg-background text-foreground transition-colors duration-300 font-sans`}>
 				<NextIntlClientProvider locale={locale} messages={messages}>
 					<ThemeProvider>
+						<PlausibleProvider />
 						<CustomCursor />
 						<BoidsWrapper />
 						<ToasterProvider />
