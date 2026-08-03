@@ -54,3 +54,30 @@ func (ds *MongoDatastore) DeleteContactMessage(ctx context.Context, id primitive
 	_, err := ds.db.Collection("messages").DeleteOne(ctx, bson.M{"_id": id})
 	return err
 }
+
+func (ds *MongoDatastore) GetUnnotifiedContactMessages(ctx context.Context) ([]*models.ContactMessage, error) {
+	opts := options.Find().SetSort(bson.D{{Key: "created_at", Value: 1}})
+	cursor, err := ds.db.Collection("messages").Find(ctx, bson.M{"notified": bson.M{"$ne": true}}, opts)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var messages []*models.ContactMessage
+	if err := cursor.All(ctx, &messages); err != nil {
+		return nil, err
+	}
+	return messages, nil
+}
+
+func (ds *MongoDatastore) MarkContactMessagesNotified(ctx context.Context, ids []primitive.ObjectID) error {
+	if len(ids) == 0 {
+		return nil
+	}
+	_, err := ds.db.Collection("messages").UpdateMany(
+		ctx,
+		bson.M{"_id": bson.M{"$in": ids}},
+		bson.M{"$set": bson.M{"notified": true}},
+	)
+	return err
+}

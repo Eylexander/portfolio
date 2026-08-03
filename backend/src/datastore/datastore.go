@@ -25,6 +25,8 @@ type DataStore interface {
 	GetLastContactMessageTime(ctx context.Context, ip string) (time.Time, error)
 	GetContactMessages(ctx context.Context) ([]*models.ContactMessage, error)
 	DeleteContactMessage(ctx context.Context, id primitive.ObjectID) error
+	GetUnnotifiedContactMessages(ctx context.Context) ([]*models.ContactMessage, error)
+	MarkContactMessagesNotified(ctx context.Context, ids []primitive.ObjectID) error
 
 	// Auth
 	GetUserByUsername(ctx context.Context, username string) (*models.User, error)

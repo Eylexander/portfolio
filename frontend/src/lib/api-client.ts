@@ -94,6 +94,11 @@ class ApiClient {
 		return `${API_URL}${response.data.url}`;
 	}
 
+	async uploadImageFromUrl(url: string): Promise<string> {
+		const response = await this.client.post<{ url: string }>('/upload/from-url', { url });
+		return `${API_URL}${response.data.url}`;
+	}
+
 	async getUploads(): Promise<string[]> {
 		const response = await this.client.get<string[]>('/uploads');
 		return response.data.map(url => `${API_URL}${url}`);

@@ -34,6 +34,13 @@ services:
       - GOTIFY_TOKEN=${GOTIFY_TOKEN:-your_gotify_token_here}
       - OLLAMA_URL=${OLLAMA_URL:-http://localhost:11434}
       - OLLAMA_MODEL=${OLLAMA_MODEL:-gpt-4}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - DIGEST_EMAIL_TO=${DIGEST_EMAIL_TO}
+      - DIGEST_DAYS=${DIGEST_DAYS:-1,4}
+      - DIGEST_HOUR=${DIGEST_HOUR:-9}
     depends_on:
       database:
         condition: service_healthy

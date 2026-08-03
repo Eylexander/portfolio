@@ -44,6 +44,7 @@ func main() {
 
 	// Initialize and start server
 	srv := server.NewServer(ds)
+	srv.StartBackgroundJobs(context.Background())
 
 	// Initialize Admin User if provided
 	adminUser := os.Getenv("ADMIN_USERNAME")

@@ -36,6 +36,7 @@ type ContactMessage struct {
 	CreatedAt time.Time          `bson:"created_at" json:"created_at"`
 	IPAddress string             `bson:"ip_address" json:"-"` // Internal use for rate limiting
 	Honeypot  string             `bson:"-" json:"website"`    // Honeypot field for spam protection
+	Notified  bool               `bson:"notified" json:"-"`   // Whether this message was included in a digest email
 }
 
 type User struct {

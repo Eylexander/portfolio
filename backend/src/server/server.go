@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"eylexander/portfolio/backend/src/api"
 	"eylexander/portfolio/backend/src/controller"
 	"eylexander/portfolio/backend/src/datastore"
@@ -75,6 +76,7 @@ func (s *Server) registerRoutes() {
 
 			// File uploads
 			protected.POST("/upload", s.api.UploadImage)
+			protected.POST("/upload/from-url", s.api.UploadFromURL)
 			protected.GET("/uploads", s.api.ListUploads)
 			protected.DELETE("/uploads/:filename", s.api.DeleteUpload)
 
@@ -104,6 +106,10 @@ func (s *Server) registerRoutes() {
 	}
 
 	s.router.NoRoute(s.DefaultResponse)
+}
+
+func (s *Server) StartBackgroundJobs(ctx context.Context) {
+	s.ctrl.StartDigestScheduler(ctx)
 }
 
 func (s *Server) Run(addr string) error {

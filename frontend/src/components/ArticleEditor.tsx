@@ -9,6 +9,7 @@ import Link from "next/link";
 import apiClient from "@/lib/api-client";
 import toast from "react-hot-toast";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
+import { rehostImageUrl, rehostMarkdownImages } from "@/lib/imageRehost";
 import { Image as ImageIcon, Loader2, ArrowLeft } from "lucide-react";
 
 const inputCls =
@@ -105,13 +106,26 @@ export default function ArticleEditor({
       .split(",")
       .map((t) => t.trim())
       .filter(Boolean);
-    
+
     // Convert YYYY-MM to full ISO string for Go time.Time
     const projectDateIso = formData.project_date ? new Date(`${formData.project_date}-01T00:00:00Z`).toISOString() : new Date().toISOString();
     const projectEndDateIso = formData.project_end_date ? new Date(`${formData.project_end_date}-01T00:00:00Z`).toISOString() : undefined;
-    
+
+    // Re-host any externally-hosted images so we never depend on a third-party host
+    const [coverImage, contentEn, contentFr] = await Promise.all([
+      rehostImageUrl(formData.cover_image),
+      rehostMarkdownImages(formData.content["en-US"]),
+      rehostMarkdownImages(formData.content["fr-FR"]),
+    ]);
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const payload: any = { ...formData, tags: tagsArray, project_date: projectDateIso };
+    const payload: any = {
+      ...formData,
+      tags: tagsArray,
+      project_date: projectDateIso,
+      cover_image: coverImage,
+      content: { "en-US": contentEn, "fr-FR": contentFr },
+    };
     if (projectEndDateIso !== undefined) {
       payload.project_end_date = projectEndDateIso;
     } else {
