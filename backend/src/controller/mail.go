@@ -9,32 +9,29 @@ import (
 )
 
 // sendEmail sends a plain-text email using SMTP settings from the environment.
+// The authenticated user is also used as the From address, since submission
+// servers (e.g. Mailu) typically require them to match.
 // It silently no-ops if SMTP isn't configured, mirroring sendGotifyNotification.
 func sendEmail(to, subject, body string) error {
 	host := os.Getenv("SMTP_HOST")
 	port := os.Getenv("SMTP_PORT")
 	username := os.Getenv("SMTP_USERNAME")
 	password := os.Getenv("SMTP_PASSWORD")
-	from := os.Getenv("SMTP_FROM")
 
-	if host == "" || port == "" || from == "" {
+	if host == "" || port == "" || username == "" {
 		return nil
 	}
 
 	addr := fmt.Sprintf("%s:%s", host, port)
-	msg := buildEmailMessage(from, to, subject, body)
-
-	var auth smtp.Auth
-	if username != "" {
-		auth = smtp.PlainAuth("", username, password, host)
-	}
+	msg := buildEmailMessage(username, to, subject, body)
+	auth := smtp.PlainAuth("", username, password, host)
 
 	// Port 465 uses implicit TLS; net/smtp.SendMail only handles STARTTLS (587/25).
 	if port == "465" {
-		return sendEmailImplicitTLS(addr, host, auth, from, to, msg)
+		return sendEmailImplicitTLS(addr, host, auth, username, to, msg)
 	}
 
-	return smtp.SendMail(addr, auth, from, []string{to}, msg)
+	return smtp.SendMail(addr, auth, username, []string{to}, msg)
 }
 
 func buildEmailMessage(from, to, subject, body string) []byte {
