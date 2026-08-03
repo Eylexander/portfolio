@@ -137,14 +137,20 @@ class ApiClient {
 
 	// Backup
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	async exportBackup(): Promise<any> {
-		const response = await this.client.get('/backup/export');
+	async exportBackup(): Promise<Blob> {
+		const response = await this.client.get('/backup/export', { responseType: 'blob' });
 		return response.data;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	async importBackup(data: any): Promise<void> {
-		await this.client.post('/backup/import', data);
+	async importBackup(file: File): Promise<void> {
+		const formData = new FormData();
+		formData.append('file', file);
+		await this.client.post('/backup/import', formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			}
+		});
 	}
 
 	// Settings

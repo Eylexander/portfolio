@@ -206,13 +206,11 @@ export default function AdminDashboard() {
 
   const handleExportBackup = async () => {
     try {
-      const data = await apiClient.exportBackup();
-      const dataStr = JSON.stringify(data, null, 2);
-      const blob = new Blob([dataStr], { type: "application/json" });
+      const blob = await apiClient.exportBackup();
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `portfolio_backup_${new Date().toISOString().split('T')[0]}.json`;
+      link.download = `portfolio_backup_${new Date().toISOString().split('T')[0]}.zip`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -227,28 +225,21 @@ export default function AdminDashboard() {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      try {
-        const content = e.target?.result as string;
-        const backupData = JSON.parse(content);
-
-        if (!confirm(`Are you sure you want to restore this backup? This will overwrite current database collections (Articles, About, and Messages)!`)) {
-          event.target.value = '';
-          return;
-        }
-
-        await apiClient.importBackup(backupData);
-        toast.success(`Backup restored successfully.`);
-        fetchData();
-      } catch {
-        toast.error("Failed to import backup");
-      }
-
-      // Reset the input
+    if (!confirm(`Are you sure you want to restore this backup? This will overwrite current database collections (Articles, About, and Messages) and your uploads database folder!`)) {
       event.target.value = '';
-    };
-    reader.readAsText(file);
+      return;
+    }
+
+    const restorePromise = apiClient.importBackup(file).then(() => {
+      fetchData();
+      event.target.value = '';
+    });
+
+    toast.promise(restorePromise, {
+      loading: 'Restoring backup...',
+      success: 'Backup restored successfully.',
+      error: 'Failed to import backup'
+    });
   };
 
   const getSnippet = (content: string, query: string) => {
@@ -355,7 +346,7 @@ export default function AdminDashboard() {
                     <Upload size={14} /> <span className="hidden sm:inline">Import</span>
                     <input
                       type="file"
-                      accept=".json"
+                      accept=".zip"
                       className="hidden"
                       onChange={handleImportBackup}
                     />
