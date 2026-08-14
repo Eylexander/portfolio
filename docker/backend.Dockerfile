@@ -23,6 +23,9 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o portfolio-server 
 
 FROM debian:bookworm-slim
 
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /opt/app
 
 COPY --from=builder /go/src/portfolio-server /opt/app/portfolio-server

@@ -12,14 +12,14 @@ import apiClient from "@/lib/api-client";
 
 const stagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+  visible: { transition: { staggerChildren: 0.04, delayChildren: 0.05 } },
 };
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 12 },
   visible: {
     opacity: 1, y: 0,
-    transition: { duration: 0.5, ease: "easeOut" as const },
+    transition: { duration: 0.3, ease: "easeOut" as const },
   },
 };
 
@@ -101,13 +101,12 @@ export default function ProjectsPage() {
           </motion.div>
 
           {/* Grid */}
-          <AnimatePresence mode="wait">
+          <>
             {isLoading ? (
               <motion.div
                 key="skeleton"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                exit={{ opacity: 0, y: -20, filter: "blur(5px)" }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
               >
@@ -132,7 +131,6 @@ export default function ProjectsPage() {
                 key="empty"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
                 className="text-center text-muted-foreground py-24 text-sm tracking-wide"
               >
                 {t("noProjects")}
@@ -215,7 +213,7 @@ export default function ProjectsPage() {
                 </motion.div>
               </motion.div>
             )}
-          </AnimatePresence>
+          </>
         </div>
       </main>
     </div>
