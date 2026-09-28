@@ -8,20 +8,7 @@ import { AboutData } from "@/types";
 import { useAuthStore } from "@/store/authStore";
 import Link from "next/link";
 import { Edit, ExternalLink } from "lucide-react";
-
-const stagger = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.12, delayChildren: 0.15 } },
-};
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: "easeOut" as const },
-  },
-};
+import { pageStagger as stagger, pageFadeUp as fadeUp } from "@/lib/animations";
 
 const shimmerStyle = {
   background: "linear-gradient(90deg, hsl(var(--secondary)) 25%, hsl(var(--muted)) 50%, hsl(var(--secondary)) 75%)",

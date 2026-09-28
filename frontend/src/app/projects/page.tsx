@@ -9,25 +9,18 @@ import Link from "next/link";
 import { Plus, LayoutDashboard, ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 import apiClient from "@/lib/api-client";
+import { pageStagger as stagger, pageFadeUp as fadeUp } from "@/lib/animations";
 
-const stagger = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.04, delayChildren: 0.05 } },
-};
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 12 },
-  visible: {
-    opacity: 1, y: 0,
-    transition: { duration: 0.3, ease: "easeOut" as const },
-  },
-};
+// Module-level cache so re-visiting /projects (e.g. after opening a project and
+// navigating back) doesn't replay the full skeleton loading animation for data
+// we already have; it's revalidated silently in the background instead.
+const articlesCache = new Map<boolean, Article[]>();
 
 export default function ProjectsPage() {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isScrolled, setIsScrolled] = useState(false);
   const { isAuthenticated } = useAuthStore();
+  const [articles, setArticles] = useState<Article[]>(() => articlesCache.get(isAuthenticated) || []);
+  const [isLoading, setIsLoading] = useState(() => !articlesCache.has(isAuthenticated));
+  const [isScrolled, setIsScrolled] = useState(false);
   const t = useTranslations("Projects");
 
   useEffect(() => {
@@ -39,9 +32,16 @@ export default function ProjectsPage() {
   }, []);
 
   useEffect(() => {
+    const cached = articlesCache.get(isAuthenticated);
+    if (cached) {
+      setArticles(cached);
+      setIsLoading(false);
+    }
+
     const fetchArticles = async () => {
       try {
         const data = await apiClient.getArticles(isAuthenticated);
+        articlesCache.set(isAuthenticated, data || []);
         setArticles(data || []);
       } catch (error) {
         console.error("Failed to fetch articles", error);

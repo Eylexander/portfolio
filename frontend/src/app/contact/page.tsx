@@ -6,19 +6,7 @@ import apiClient from "@/lib/api-client";
 import { Github, AtSign, Mail, Twitter } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
-
-const stagger = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
-};
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1, y: 0,
-    transition: { duration: 0.55, ease: "easeOut" as const },
-  },
-};
+import { pageStagger as stagger, pageFadeUp as fadeUp } from "@/lib/animations";
 
 const inputClass =
   "w-full px-4 py-3 bg-transparent border border-input rounded-lg text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200";
