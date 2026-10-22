@@ -21,10 +21,6 @@ export default function AdminAboutPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [activeLang, setActiveLang] = useState<Locale>("en-US");
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = async () => {
     try {
       const [res, articlesRes] = await Promise.all([
@@ -53,6 +49,11 @@ export default function AdminAboutPage() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- setState only runs after await
+    fetchData();
+  }, []);
 
   const handleSave = async () => {
     if (!data) return;

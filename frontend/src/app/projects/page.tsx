@@ -23,6 +23,17 @@ export default function ProjectsPage() {
   const [isScrolled, setIsScrolled] = useState(false);
   const t = useTranslations("Projects");
 
+  // Swap in cached articles during render when auth changes (avoids setState in effect)
+  const [prevAuth, setPrevAuth] = useState(isAuthenticated);
+  if (prevAuth !== isAuthenticated) {
+    setPrevAuth(isAuthenticated);
+    const cached = articlesCache.get(isAuthenticated);
+    if (cached) {
+      setArticles(cached);
+      setIsLoading(false);
+    }
+  }
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 100);
@@ -32,12 +43,6 @@ export default function ProjectsPage() {
   }, []);
 
   useEffect(() => {
-    const cached = articlesCache.get(isAuthenticated);
-    if (cached) {
-      setArticles(cached);
-      setIsLoading(false);
-    }
-
     const fetchArticles = async () => {
       try {
         const data = await apiClient.getArticles(isAuthenticated);

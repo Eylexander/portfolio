@@ -1,28 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useSyncExternalStore } from 'react';
 import { Toaster } from 'react-hot-toast';
 
+const subscribeResize = (cb: () => void) => {
+  window.addEventListener('resize', cb);
+  return () => window.removeEventListener('resize', cb);
+};
+
 export default function ToasterProvider() {
-  const [isMobile, setIsMobile] = useState(false);
-  const [isClient, setIsClient] = useState(false);
+  // null on the server so nothing renders until the client knows the viewport
+  const isMobile = useSyncExternalStore(subscribeResize, () => window.innerWidth < 768, () => null);
 
-  useEffect(() => {
-    setIsClient(true);
-    
-    // Check initial viewport size
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    
-    // Listen for resize events
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  if (!isClient) {
+  if (isMobile === null) {
     return null;
   }
 

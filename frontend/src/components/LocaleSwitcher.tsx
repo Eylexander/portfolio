@@ -9,12 +9,17 @@ const locales: { code: "en-US" | "fr-FR"; label: string }[] = [
   { code: "fr-FR", label: "FR" },
 ];
 
+// Outside the component: the React compiler flags global mutation inside components
+function setLocaleCookie(locale: "en-US" | "fr-FR") {
+  document.cookie = `locale=${locale}; path=/; max-age=31536000`;
+}
+
 export default function LocaleSwitcher() {
   const locale = useLocale();
   const router = useRouter();
 
   const handleLocaleChange = (newLocale: "en-US" | "fr-FR") => {
-    document.cookie = `locale=${newLocale}; path=/; max-age=31536000`;
+    setLocaleCookie(newLocale);
     router.refresh();
   };
 

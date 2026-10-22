@@ -27,7 +27,9 @@ export default function AdminNavbar() {
           aria-label="Toggle theme"
           className="p-1.5 sm:p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors duration-200"
         >
-          {resolvedTheme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
+          {/* CSS picks the icon so server and client markup match */}
+          <Sun size={14} className="hidden dark:block" />
+          <Moon size={14} className="dark:hidden" />
         </button>
         <Link
           href="/about"

@@ -93,7 +93,9 @@ export default function Home() {
             transition={{ duration: 0.25 }}
             className="block"
           >
-            {resolvedTheme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
+            {/* CSS picks the icon so server and client markup match */}
+            <Sun size={14} className="hidden dark:block" />
+            <Moon size={14} className="dark:hidden" />
           </motion.span>
         </button>
       </motion.div>

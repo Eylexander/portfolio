@@ -25,9 +25,11 @@ export default function PageNav({ backLabel, backHref = "/", onBack }: PageNavPr
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Close mobile menu when route changes
-  useEffect(() => {
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
     setIsMobileMenuOpen(false);
-  }, [pathname]);
+  }
 
   // Prevent scrolling when mobile menu is open
   useEffect(() => {
@@ -148,7 +150,9 @@ export default function PageNav({ backLabel, backHref = "/", onBack }: PageNavPr
               transition={{ duration: 0.25 }}
               className="block"
             >
-              {resolvedTheme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+              {/* CSS picks the icon so server and client markup match */}
+              <Sun size={16} className="hidden dark:block" />
+              <Moon size={16} className="dark:hidden" />
             </motion.span>
           </button>
           

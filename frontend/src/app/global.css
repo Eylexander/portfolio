@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+/* Tailwind v4 compat: keep using the v3 JS config */
+@config "../../tailwind.config.ts";
 
 html {
   scroll-behavior: smooth;

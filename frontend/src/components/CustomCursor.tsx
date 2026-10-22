@@ -1,10 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
+const noopSubscribe = () => () => {};
+
 export default function CustomCursor() {
-  const [isVisible, setIsVisible] = useState(false);
+  // Only show on devices with a fine pointer (like a mouse); false on the server
+  const isVisible = useSyncExternalStore(
+    noopSubscribe,
+    () => window.matchMedia("(pointer: fine)").matches,
+    () => false
+  );
   const [isHovering, setIsHovering] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
 
@@ -16,9 +23,7 @@ export default function CustomCursor() {
   const cursorYOuter = useSpring(cursorY, { damping: 25, stiffness: 300, mass: 0.5 });
 
   useEffect(() => {
-    // Only show on devices with a fine pointer (like a mouse)
-    if (!window.matchMedia("(pointer: fine)").matches) return;
-    setIsVisible(true);
+    if (!isVisible) return;
 
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX);
@@ -51,7 +56,7 @@ export default function CustomCursor() {
       window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [cursorX, cursorY]);
+  }, [isVisible, cursorX, cursorY]);
 
   if (!isVisible) return null;
 

@@ -49,10 +49,6 @@ export default function AdminDashboard() {
 
   const t = useTranslations("Admin");
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = async () => {
     try {
       const [articlesData, uploadsData, messagesData, settingsData] = await Promise.all([
@@ -73,6 +69,11 @@ export default function AdminDashboard() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- setState only runs after await
+    fetchData();
+  }, []);
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this article?")) return;

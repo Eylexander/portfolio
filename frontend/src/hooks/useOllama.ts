@@ -16,10 +16,8 @@ export function useOllama(): OllamaState {
   );
 
   useEffect(() => {
-    if (cachedModels !== undefined) {
-      setModels(cachedModels);
-      return;
-    }
+    // Already in state via the initializer
+    if (cachedModels !== undefined) return;
     if (!pendingPromise) {
       pendingPromise = apiClient.getOllamaModels().then((result) => {
         cachedModels = result;
