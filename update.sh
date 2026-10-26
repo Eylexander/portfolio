@@ -62,5 +62,6 @@ fi
 
 echo "Done! Review with: git diff --stat"
 if [ "$FRONTEND" = true ]; then
-    echo "Then run 'npm install' in ./frontend to refresh your local node_modules."
+    # npm install on Windows rewrites the lockfile and drops Linux-only deps; npm ci never touches it
+    echo "Then run 'npm ci' (NOT npm install) in ./frontend to refresh your local node_modules."
 fi
